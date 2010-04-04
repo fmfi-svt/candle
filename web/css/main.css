@@ -1,0 +1,422 @@
+
+html, body {
+    margin: 0;
+    padding: 0;
+    color: white;   
+    background: #4e546a url("../images/bg-body.png") left top repeat-y;
+    font-size: 10pt;
+    font-family: sans-serif;
+    min-width: 700px;
+}
+
+html.panel_hidden, body.panel_hidden {
+    background-position: -290px top;
+}
+
+#vrch {
+    height: 90px;
+    color: white;
+    background: #1a1a1a;
+    position: relative;
+}
+
+#vrch_riadok1 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    min-width: 600px;
+}
+
+#vrch_riadok1 ul {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+#vrch_riadok1 ul li {
+    display: inline-block;
+}
+
+#vrch_riadok1 ul li+li, #vrch_riadok1_vpravo ul li {
+    border-left: 1px solid #999;
+    margin-left: 0.5em;
+    padding-left: 0.5em;
+}
+
+#vrch_riadok1 a {
+    color: white;
+}
+
+#vrch_riadok1 .selected {
+    font-weight: bold;
+}
+
+#vrch_riadok1 .username {
+    font-weight: bold;
+    color: #999;
+}
+
+#vrch_riadok1_vlavo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-left: 10px;
+}
+
+#vrch_riadok1_vpravo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-right: 10px;
+}
+
+#vrch_riadok2 {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    min-width: 800px;
+}
+
+#vrch_riadok2 ul {
+    display: block;
+    margin: 0;
+    padding: 0;
+    margin-left: 290px;
+    padding-right: 10px;
+}
+
+#vrch_riadok2 li {
+    display: inline-block;
+    
+}
+
+#vrch2 {
+    position: absolute;
+    left: 0;
+    top: 90px;
+    width: 100%;
+    min-width: 700px;
+}
+
+#vrch_riadok2 a {
+    text-decoration: none;
+    color: white;
+}
+
+#rozvrh_taby a {
+    display: inline-block;
+    padding: 0.3em 0.5em;
+}
+
+#rozvrh_taby a.selected {
+    font-weight: bold;
+}
+
+#rozvrh_taby a.selected, #rozvrh_taby a:hover {
+    background: #343846;
+}
+
+#rozvrh_taby a.rozvrh_taby_novy{
+    font-style: italic;
+}
+
+#vrch2 a:hover,
+#vrch2 a:focus,
+#vrch2 a:active {
+    text-decoration: underline;
+}
+
+#rozvrh_akcie {
+    background: #343846;
+    text-align: right;
+}
+
+#rozvrh_akcie li {
+    padding: 0.3em;
+}
+
+#rozvrh_akcie li+li {
+    margin-left: 0.3em;
+}
+
+
+
+#vrch_logo {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 10px;
+    bottom: 2px;
+    font-size: 150%;
+    z-index: 100;
+}
+
+#vrch_logo a {
+    display: block;
+    line-height: 64px;
+    padding-left: 85px;
+    background: #1A1A1A url("../images/logo3.png") bottom left no-repeat;
+    font-weight: normal;
+    color: white;
+    text-decoration: none;
+}
+
+#vrch_logo a:hover {
+    text-decoration: underline;
+}
+
+.rozvrh_stav {
+    color: yellow;
+}
+
+#hlavny {
+    position: relative;
+}
+
+#panel {
+    width: 290px;
+    color: white;
+    background: #808080;
+    position: absolute;
+    left: 0;
+    top: 90px;
+}
+
+.panel_hidden #panel {
+    display: none;
+}
+
+#panel_in {
+    padding: 5px;
+}
+
+.panel_cast h2 {
+    font-size: 100%;
+    background: #333;
+    color: white;
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+.jsactive .panel_cast h2 {
+    background-image: url("../images/bg-collapse-group.png");
+}
+
+.panel_cast.collapsed h2 {
+    background-image: url("../images/bg-expand-group.png");
+    
+}
+
+.panel_cast h2 a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 0.3em;
+}
+
+.panel_cast h2 a:hover,
+.panel_cast h2 a:focus,
+.panel_cast h2 a:active {
+    text-decoration: underline;
+}
+
+.panel_search input {
+    width: 200px;
+}
+
+.panel_search button {
+    width: 70px;
+}
+
+#panel_schovat {
+    width: 32px;
+    height: 30px;
+    background: #808080 url("../images/bg-schovavac-panelu.png") top left no-repeat;
+    position: absolute;
+    top: 90px;
+    left: 290px;
+}
+
+#panel_schovat.hidden {
+    display: none;
+}
+
+.panel_hidden #panel_schovat {
+    left: 0;
+    background-image: url("../images/bg-zobrazovac-panelu.png");
+}
+
+#panel_schovat a {
+    display: block;
+    padding: 0;
+    margin: 0;
+    width: 24px;
+    height: 21px;
+}
+
+.panel_cast.collapsed .panel_cast_obsah {
+    display: none;
+}
+
+ul.vysledky_hladania {
+    padding: 0;
+    margin: 0;
+    margin-top: 0.5em;
+    max-height: 400px;
+    overflow: auto;
+}
+
+ul.vysledky_hladania li {
+    color: black;
+    background: white;
+    display: block;
+    margin: 0;
+    padding: 3px;
+}
+
+ul.vysledky_hladania li+li {
+    margin-top: 0.4em;
+}
+
+.predmet_header {
+    display: block;
+    background: #333;
+    color: white;
+    padding: 3px;
+    position: relative;
+}
+
+.predmet_nazov {
+    display: block;
+    font-weight: bold;
+}
+
+.predmet_kod {
+    display: block;
+    font-size: 90%;
+}
+
+.predmet_check {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+}
+
+.predmet table {
+    border-collapse: collapse;
+    width: 100%;
+    background: white;
+    color: black;
+}
+
+.predmet table th, .pristupnost, .panel_search label {
+    display: block;
+    position: absolute;
+    left: -5000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.predmet table tr+tr+tr {
+    border-top: 1px solid #999;
+}
+
+.predmet table td {
+    padding: 1px;
+}
+
+.predmet table td.last {
+    text-align: right;
+    padding-right: 2px;
+}
+
+#obsah_wrap {
+    padding-left: 290px;
+}
+
+.panel_hidden #obsah_wrap {
+    padding-left: 0;
+}
+
+#obsah_vrch {
+    background: transparent url("../images/bg-obsah-top.png") top repeat-x;
+}
+
+#obsah_vrch_lavy {
+    background: transparent url("../images/bg-obsah-top-left.png") top left no-repeat;
+}
+
+
+#obsah_in {
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+#rozvrh {
+    border-collapse: separate;
+    border-spacing: 3px;
+    width: 100%;
+}
+
+#rozvrh th {
+    background: #D3D5DD;
+    color: black;
+    padding: 0.5em;
+    font-weight: normal;
+    width: 20%;
+}
+
+#rozvrh td {
+    background-color: #666B7E;
+    color: white;
+    height: 3em;
+    vertical-align: top;
+    padding: 2px;
+}
+
+#rozvrh td.zaciatok {
+    width: 4em;
+    text-align: center;
+}
+
+#rozvrh td.hodina {
+    background: #D3D5DD;
+    color: black;
+    text-align: center;
+    position: relative;
+}
+
+#rozvrh td.hodina .wrap {
+    position: relative;
+    height: 100%;
+}
+
+#rozvrh td.hodina .miestnost {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+}
+
+#rozvrh td.hodina .typ {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+#rozvrh td.hodina .predmet {
+    padding-top: 1em;
+}
+
+#rozvrh td.hodina .vybrany {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+}
+
+.jshidden {
+    display: none;
+}

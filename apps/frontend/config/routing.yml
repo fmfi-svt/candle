@@ -1,0 +1,31 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+# default rules
+homepage:
+  url:   /
+  param: { module: timetable, action: show, id: 0 }
+
+# zobrazenie vsetkych hodin
+lesson_list_all:
+    url: /lesson/list
+    param: { module: lesson, action: index }
+
+lesson_search_all:
+    url: /lesson/search
+    param: { module: lesson, action: query }
+
+timetable_show:
+    url: /timetable/:id
+    param: { module: timetable, action: show }
+    requirements:
+        id: \d+
+
+# generic rules
+# please, remove them by adding more specific rules
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*

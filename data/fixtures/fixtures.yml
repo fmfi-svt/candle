@@ -1,0 +1,128 @@
+# # Populate this file with data to be loaded by your ORM's *:data-load task.
+# # You can create multiple files in this directory (i.e. 010_users.yml,
+# # 020_articles.yml, etc) which will be loaded in alphabetical order.
+# # 
+# # See documentation for your ORM's *:data-load task for more information.
+# 
+# User:
+#   fabien:
+#     username: fabien
+#     password: changeme
+#     name:     Fabien Potencier
+#     email:    fabien.potencier@symfony-project.com
+#   kris:
+#     username: Kris.Wallsmith
+#     password: changeme
+#     name:     Kris Wallsmith
+#     email:    kris.wallsmith@symfony-project.com
+
+RoomType:
+    velka:
+        name: Veľká
+        code: V
+    akvarko:
+        name: Akvárium
+        code: A
+    seminarna:
+        name: Seminárna
+        code: S
+
+Room:
+    acko:
+        name: A
+        RoomType: velka
+    bcko:
+        name: B
+        RoomType: velka
+    akv4:
+        name: IV
+        RoomType: akvarko
+    akv5:
+        name: V
+        RoomType: akvarko
+    m218:
+        name: M-218
+        RoomType: seminarna
+
+LessonType:
+    prednaska:
+        name: Prednáška
+        code: P
+    cviko:
+        name: Cvičenie
+        code: C
+
+Teacher:
+    ucitel1:
+        given_name: Nejaký
+        family_name: Učiteľ
+        iniciala: nu
+        katedra: KZVI
+    ucitel2:
+        given_name: Všestranný
+        family_name: Učiteľ
+        iniciala: vu
+        katedra: KZC
+    externista1:
+        given_name: Externý
+        family_name: Cvičiaci
+        iniciala: ec
+
+StudentGroup:
+    1ai1:
+        name: 1ai1
+    1ai2:
+        name: 1ai2
+    1inf1:
+        name: 1inf1
+
+Subject:
+    zahadologia:
+        name: Záhadológia (1)
+        code: blabla/1-WTF-579/jksdj
+        short_code: 1-WTF-579
+    chrobakologia1:
+        name: Chrobákológia (1)
+        code: blabla/1-BIO-666/dksl
+        short_code: 1-BIO-666
+    chrobakologia2:
+        name: Chrobákológia (2)
+        code: blabla/1-BIO-667/dksl
+        short_code: 1-BIO-667
+
+Lesson:
+    zahadologia_stv_1810:
+        day: 3
+        start: 1090
+        end: 1140
+        LessonType: prednaska
+        Room: acko
+        Subject: zahadologia
+    chrobakologia1_ut_1130:
+        day: 1
+        start: 690
+        end: 790
+        LessonType: prednaska
+        Room: acko
+        Subject: chrobakologia1
+    chrobakologia1_ut_1630:
+        day: 1
+        start: 990
+        end: 1090
+        LessonType: cviko
+        Room: akv4
+        Subject: chrobakologia1
+
+TeacherLessons:
+    a:
+        Teacher: ucitel1
+        Lesson: zahadologia_stv_1810
+    b:
+        Teacher: ucitel1
+        Lesson: chrobakologia1_ut_1130
+    c:
+        Teacher: ucitel2
+        Lesson: chrobakologia1_ut_1130
+    d:
+        Teacher: ucitel2
+        Lesson: chrobakologia1_ut_1630

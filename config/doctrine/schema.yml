@@ -1,0 +1,76 @@
+RoomType:
+    columns:
+        name: { type: string(30), notnull: true }
+        code: { type: string(1), notnull: true }
+
+Room:
+    columns:
+        name: { type: string(30), notnull: true }
+        room_type_id: { type: integer, notnull: true }
+    relations:
+        RoomType: { onDelete: CASCADE, local: room_type_id, foreign: id }
+
+LessonType:
+    columns:
+        name: { type: string(30), notnull: true }
+        code: { type: string(1), notnull: true }
+
+Teacher:
+    columns:
+        given_name: { type: string(50) }
+        family_name: { type: string(50), notnull: true }
+        iniciala: { type: string(50) }
+        oddelenie: { type: string(50) }
+        katedra: { type: string(50) }
+
+StudentGroup:
+    columns:
+        name: { type: string(30), notnull: true }        
+
+Lesson:
+    columns:
+        day: { type: integer, notnull: true }
+        start: { type: integer, notnull: true }
+        end: { type: integer, notnull: true }
+        lesson_type_id: { type: integer, notnull: true }
+        room_id: { type: integer, notnull: true }
+        subject_id: { type: integer, notnull: true }
+    relations:
+        LessonType: { onDelete: CASCADE, local: lesson_type_id, foreign: id }
+        Room: { onDelete: CASCADE, local: room_id, foreign: id }
+        Subject: { onDelete: CASCADE, local: subject_id, foreign: id }
+
+StudentGroupLessons:
+    columns:
+        student_group_id: { type: integer, notnull: true }
+        lesson_id: { type: integer, notnull: true }
+    relations:
+        StudentGroup: { onDelete: CASCADE, local: student_group_id, foreign: id }
+        Lesson: { onDelete: CASCADE, local: lesson_id, foreign: id }
+
+TeacherLessons:
+    columns:
+        teacher_id: { type: integer, notnull: true }
+        lesson_id: { type: integer, notnull: true }
+    relations:
+        Teacher: { onDelete: CASCADE, local: teacher_id, foreign: id }
+        Lesson: { onDelete: CASCADE, local: lesson_id, foreign: id }
+
+Subject:
+    columns:
+        name: { type: string(50), notnull: true }
+        code: { type: string(30), notnull: true }
+        short_code: {type: string(10), notnull: true }
+
+UserTimetable:
+    columns:
+        name: { type: string(50), notnull: true }
+        published: { type: boolean, notnull: true }
+        slug: { type: string(30), notnull: true }
+
+UserTimetableLessons:
+    columns:
+        user_timetable_id: { type: integer, notnull: true }
+        lesson_id: { type: integer, notnull: true }
+        selected: { type: boolean, notnull: true }
+
