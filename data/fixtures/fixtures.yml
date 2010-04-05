@@ -112,6 +112,21 @@ Lesson:
         LessonType: cviko
         Room: akv4
         Subject: chrobakologia1
+    chrobakologia2_ut_1720:
+        day: 1
+        start: 1040
+        end: 1140
+        LessonType: cviko
+        Room: akv5
+        Subject: chrobakologia2
+    zahadologia_ut_1810:
+        day: 1
+        start: 1090
+        end: 1140
+        LessonType: cviko
+        Room: m218
+        Subject: zahadologia
+    
 
 TeacherLessons:
     a:
@@ -126,3 +141,12 @@ TeacherLessons:
     d:
         Teacher: ucitel2
         Lesson: chrobakologia1_ut_1630
+    e:
+        Teacher: externista1
+        Lesson: chrobakologia2_ut_1720
+    f:
+        Teacher: ucitel1
+        Lesson: zahadologia_ut_1810
+    g:
+        Teacher: ucitel2
+        Lesson: zahadologia_ut_1810
