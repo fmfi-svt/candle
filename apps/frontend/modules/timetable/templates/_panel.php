@@ -11,7 +11,12 @@
         </div></form>
         <?php if ($subjects): ?>
             <div class="pristupnost">Výsledky hľadania:</div>
-            <?php include_partial('lesson/list_panel', array('form' => $lessonForm, 'subjects' => $subjects)); ?>
+            <?php include_partial('lesson/list_panel', array(
+                        'form' => $lessonForm,
+                        'subjects' => $subjects,
+                        'timetable' => $timetable,
+                        'timetable_id' => $timetable_id
+                    )); ?>
         <?php endif; ?>
     </div>
 </div>

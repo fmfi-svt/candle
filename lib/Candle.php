@@ -11,4 +11,9 @@ class Candle {
         $days = array('Po', 'Ut', 'St', 'Št', 'Pi');
         return $days[$dayNum];
     }
+    
+    static public function formatLongDay($dayNum) {
+        $days = array('Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok');
+        return $days[$dayNum];
+    }
 }

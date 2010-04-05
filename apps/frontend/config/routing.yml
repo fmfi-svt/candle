@@ -21,6 +21,22 @@ timetable_show:
     requirements:
         id: \d+
 
+timetable_new:
+    url: /timetable/new
+    param: { module: timetable, action: new }
+
+timetable_create:
+    url: /timetable
+    param: { module: timetable, action: create }
+    requirements:
+        sf_method: get
+
+timetable_change_lessons:
+    url: /timetable/:id/change_lessons
+    param: { module: timetable, action: changeLessons }
+    requirements:
+        sf_method: post
+
 # generic rules
 # please, remove them by adding more specific rules
 default_index:

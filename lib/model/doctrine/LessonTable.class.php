@@ -10,4 +10,11 @@ class LessonTable extends Doctrine_Table
         
         return $q->execute();
     }
+    
+    public function getLessonById($id) {
+        $q = Doctrine_Query::create()
+            ->from('Lesson l')
+            ->andWhere('l.id = ?', $id);
+        return $q->fetchOne();
+    }
 }

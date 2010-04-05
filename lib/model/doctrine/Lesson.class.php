@@ -23,6 +23,7 @@ class Lesson extends BaseLesson
         return $q->execute();
     }
     
+    // FIXME refactor!
     public function getRoom() {
         $q = Doctrine_Query::create()
             ->from('Room r')
@@ -35,5 +36,9 @@ class Lesson extends BaseLesson
             ->from('LessonType t')
             ->andWhere('t.id = ?', $this->getLessonTypeId());
         return $q->fetchOne();
+    }
+    
+    public function getSubject() {
+        return Doctrine::getTable('Subject')->getSubjectById($this->getId());
     }
 }

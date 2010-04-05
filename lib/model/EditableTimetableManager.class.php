@@ -11,7 +11,7 @@ class EditableTimetableManager {
     }
     
     public function addTimetable(EditableTimetable $timetable) {
-        // TODO
+        $this->timetables[] = $timetable;
     }
     
     public function removeTimetable($index) {

@@ -1,15 +1,30 @@
-<form action="" method="post">
+<?php echo form_tag('@timetable_change_lessons?id='.$timetable_id); ?>
 
 <ul class="vysledky_hladania">
 
-<?php foreach ($subjects as $subject): ?>
+<?php foreach ($subjects as $subject):
+
+$lessons = $subject->getLessons();
+
+$allSelected = true;
+foreach ($lessons as $lesson) {
+    if (!$timetable->hasLesson($lesson->getId())) {
+        $allSelected = false;
+        break;
+    }
+}
+
+?>
 
 <li class="predmet">
     <div class="predmet_header">
         <div class="predmet_nazov"><?php echo $subject->getName() ?></div>
         <div class="predmet_kod"><?php echo $subject->getShortCode() ?></div>
-        <input type="hidden" name="subjectBefore[<?php echo $subject->getId()?>]" value="" />
-        <input class="predmet_check" type="checkbox" name="subject[<?php echo $subject->getId()?>]"/>
+        <?php if ($allSelected): ?>
+        <input type="hidden" name="subjectBefore[]" value="<?php echo $subject->getId()?>" />
+        <?php endif; ?>
+        <input class="predmet_check" type="checkbox" name="subject[]" value="<?php echo $subject->getId()?>" <?php
+                if ($allSelected) echo 'checked="checked"' ?>/>
     </div>
 
     <table>
@@ -20,7 +35,7 @@
       </thead>
         
       <tbody>
-        <?php foreach ($subject->getLessons() as $lesson): ?>
+        <?php foreach ($lessons as $lesson): ?>
         <tr>
           <td><?php echo $lesson->getType()->getCode() ?></td>
           <td><?php echo Candle::formatShortDay($lesson->getDay()) ?></td>
@@ -32,8 +47,12 @@
                     endforeach; ?>
           </td>
           <td class="last">
-            <input type="hidden" name="lessonBefore[<?php echo $lesson->getId()?>]" value="" />
-            <input type="checkbox" name="lesson[<?php echo $lesson->getId()?>]"/></td>
+            <?php if ($timetable->hasLesson($lesson->getId())): ?>
+                <input type="hidden" name="lessonBefore[]" value="<?php echo $lesson->getId()?>" />
+            <?php endif; ?>
+            <input type="checkbox" name="lesson[]" value="<?php echo $lesson->getId()?>" <?php
+                if ($timetable->hasLesson($lesson->getId())) echo ' checked="checked"';
+            ?> /></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
@@ -44,5 +63,7 @@
 <?php endforeach; ?>
 
 </ul>
+
+<button type="submit" class="jshide">Zmeniť hodiny</button>
 
 </form>

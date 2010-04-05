@@ -23,4 +23,11 @@ class SubjectTable extends Doctrine_Table
             ->andWhere('t.name LIKE ?', $queryString);*/
         return $q->execute();
     }
+    
+    public function getSubjectById($subjectId) {
+        $q = Doctrine_Query::create()
+            ->from('Subject s')
+            ->andWhere('s.id = ?', $subjectId);
+        return $q->fetchOne();
+    }
 }
