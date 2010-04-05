@@ -39,6 +39,6 @@ class Lesson extends BaseLesson
     }
     
     public function getSubject() {
-        return Doctrine::getTable('Subject')->getSubjectById($this->getId());
+        return Doctrine::getTable('Subject')->getSubjectById($this->getSubjectId());
     }
 }
