@@ -23,7 +23,7 @@ abstract class BaseSubjectForm extends BaseFormDoctrine
 
     $this->setValidators(array(
       'id'         => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
-      'name'       => new sfValidatorString(array('max_length' => 50)),
+      'name'       => new sfValidatorString(array('max_length' => 100)),
       'code'       => new sfValidatorString(array('max_length' => 30)),
       'short_code' => new sfValidatorString(array('max_length' => 10)),
     ));

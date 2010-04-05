@@ -89,6 +89,10 @@ Subject:
         name: Chrobákológia (2)
         code: blabla/1-BIO-667/dksl
         short_code: 1-BIO-667
+    velmi_dlhy_predmet:
+        name: Skúmanie vesmíru, medziplanetárnych diplomatických vzťahov a cestovného ruchu
+        code: ojojoj/1-FYZ-123/2010
+        short_code: 1-FYZ-123
 
 Lesson:
     zahadologia_stv_1810:
@@ -126,6 +130,13 @@ Lesson:
         LessonType: cviko
         Room: m218
         Subject: zahadologia
+    velmi_dlhy_predmet_st:
+        day: 2
+        start: 1040
+        end: 1140
+        LessonType: prednaska
+        Room: acko
+        Subject: velmi_dlhy_predmet
     
 
 TeacherLessons:

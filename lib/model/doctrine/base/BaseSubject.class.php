@@ -29,10 +29,10 @@ abstract class BaseSubject extends sfDoctrineRecord
     public function setTableDefinition()
     {
         $this->setTableName('subject');
-        $this->hasColumn('name', 'string', 50, array(
+        $this->hasColumn('name', 'string', 100, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '50',
+             'length' => '100',
              ));
         $this->hasColumn('code', 'string', 30, array(
              'type' => 'string',
