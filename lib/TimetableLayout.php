@@ -3,8 +3,11 @@
 class TimetableLayout {
 
     private $timetable = null;
-    private $minTime = 0;
-    private $maxTime = 0;
+    private $lessonMinTime = 0;
+    private $lessonMaxTime = 1440;
+    private $layoutStartTime = 0;
+    private $layoutEndTime = 1440;
+    
 
     /** Pole dni v rozvrhu
     *
@@ -21,6 +24,11 @@ class TimetableLayout {
         $this->timetable = $timetable;
         $this->doLayout();
     }
+
+    private static function compareLessonsByStartTime($a, $b) {
+        if ($a->getStart() == $b->getStart()) return 0;
+        return ($a->getStart() < $b->getStart()) ? -1 : 1 ;
+    }
     
     public function doLayout() {
         $byDays = array();
@@ -29,13 +37,17 @@ class TimetableLayout {
             $byDays[] = array();
             $layout[] = array(array());
         }
-        // Najprv rozdelim hodiny podla dni
+        // Najprv rozdelim hodiny podla dni a spocitam niektore statistiky
+        $this->minTime = 24*60;
+        $this->maxTime = 0;
         foreach($this->timetable->getLessons() as $lesson) {
             $byDays[$lesson->getDay()][] = $lesson;
+            $this->minTime = min($this->minTime, $lesson->getStart());
+            $this->maxTime = max($this->maxTime, $lesson->getEnd());
         }
         // Potom utriedim hodiny v dnoch podla casu
         for ($day = 0; $day < 5; $day++) {
-            sort($byDays[$day]); //FIXME
+            usort($byDays[$day], array('TimetableLayout', 'compareLessonsByStartTime')); // TODO mozno presunut porovnavaciu funkciu do lesson?
         }
         // Dalej rozhodim hodiny do stlpcov v dnoch
         for ($day = 0; $day < 5; $day++) {
