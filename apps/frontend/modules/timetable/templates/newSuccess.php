@@ -1,9 +1,5 @@
 <?php
 
-slot('panel');
-include_component('timetable','panel');
-end_slot();
-
 slot('top');
 include_component('timetable','top',array('newSelected'=>true));
 end_slot();

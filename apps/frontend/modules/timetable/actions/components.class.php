@@ -17,6 +17,9 @@ class timetableComponents extends sfComponents {
         else {
             $this->subjects = null;
         }
+        
+        if (!isset($this->timetable)) $this->timetable = null;
+        if (!isset($this->timetable_id)) $this->timetable_id = null;
     }
     
     public function executeTop(sfWebRequest $request) {

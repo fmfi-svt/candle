@@ -22,7 +22,8 @@ class timetableActions extends sfActions {
         if ($this->form->isValid()) {
             $newTimetable = new EditableTimetable();
             $newTimetable->setName($request->getParameter('name'));
-            $this->getUser()->getTimetableManager()->addTimetable($newTimetable);
+            $newId = $this->getUser()->getTimetableManager()->addTimetable($newTimetable);
+            $this->redirect('@timetable_show?id='.$newId);
         }
     }
     
