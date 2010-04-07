@@ -43,7 +43,7 @@ class EditableTimetableManager {
         $timetable = false;
         if (isset($this->timetables[$index])) {
             $timetable = $this->timetables[$index];
-            unset($this->timetables[$index];
+            unset($this->timetables[$index]);
         }
         return $timetable;
     }
