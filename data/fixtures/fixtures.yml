@@ -98,45 +98,52 @@ Lesson:
     zahadologia_stv_1810:
         day: 3
         start: 1090
-        end: 1140
+        end: 1135
         LessonType: prednaska
         Room: acko
         Subject: zahadologia
     chrobakologia1_ut_1130:
         day: 1
         start: 690
-        end: 790
+        end: 780
         LessonType: prednaska
         Room: acko
         Subject: chrobakologia1
     chrobakologia1_ut_1630:
         day: 1
         start: 990
-        end: 1090
+        end: 1080
         LessonType: cviko
         Room: akv4
         Subject: chrobakologia1
     chrobakologia2_ut_1720:
         day: 1
         start: 1040
-        end: 1140
+        end: 1130
         LessonType: cviko
         Room: akv5
         Subject: chrobakologia2
     zahadologia_ut_1810:
         day: 1
         start: 1090
-        end: 1140
+        end: 1135
         LessonType: cviko
         Room: m218
         Subject: zahadologia
     velmi_dlhy_predmet_st:
         day: 2
         start: 1040
-        end: 1140
+        end: 1130
         LessonType: prednaska
         Room: acko
         Subject: velmi_dlhy_predmet
+    nematfyzacka_hodina_ut_1100:
+        day: 1
+        start: 660
+        end: 780
+        LessonType: prednaska
+        Room: bcko
+        Subject: chrobakologia2
     
 
 TeacherLessons:
@@ -161,3 +168,6 @@ TeacherLessons:
     g:
         Teacher: ucitel2
         Lesson: zahadologia_ut_1810
+    h:
+        Teacher: externista1
+        Lesson: nematfyzacka_hodina_ut_1100

@@ -19,4 +19,22 @@ class Candle {
         $days = array('Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok');
         return $days[$dayNum];
     }
+    
+    static public function formatRowspan($rowspan) {
+        if ($rowspan <= 1) {
+            return '';
+        }
+        else {
+            return ' rowspan="'.$rowspan.'" ';
+        }
+    }
+    
+    static public function floorTo($number, $precision) {
+        return $number - ($number % $precision);
+    }
+    
+    static public function ceilTo($number, $precision) {
+        if (($number % $precision) == 0) return $number;
+        return Candle::floorTo($number, $precision) + $precision;
+    }
 }

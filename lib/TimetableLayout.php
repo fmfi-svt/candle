@@ -5,9 +5,7 @@ class TimetableLayout {
     private $timetable = null;
     private $lessonMinTime = 0;
     private $lessonMaxTime = 1440;
-    private $layoutStartTime = 0;
-    private $layoutEndTime = 1440;
-    
+    private $isFMPHlike = false;
 
     /** Pole dni v rozvrhu
     *
@@ -38,12 +36,17 @@ class TimetableLayout {
             $layout[] = array(array());
         }
         // Najprv rozdelim hodiny podla dni a spocitam niektore statistiky
-        $this->minTime = 24*60;
-        $this->maxTime = 0;
+        $this->lessonMinTime = 24*60;
+        $this->lessonMaxTime = 0;
+        $this->isFMPHLike = true; // kazda hodina nespravnej dlzky a casu to moze pokazit
         foreach($this->timetable->getLessons() as $lesson) {
             $byDays[$lesson->getDay()][] = $lesson;
-            $this->minTime = min($this->minTime, $lesson->getStart());
-            $this->maxTime = max($this->maxTime, $lesson->getEnd());
+            $this->lessonMinTime = min($this->lessonMinTime, $lesson->getStart());
+            $this->lessonMaxTime = max($this->lessonMaxTime, $lesson->getEnd());
+            if (($lesson->getStart() % 50) != 40 || ($lesson->getLength() % 45 != 0)) {
+                // toto nie je FMFI hodina
+                $this->isFMPHLike = false;
+            }
         }
         // Potom utriedim hodiny v dnoch podla casu
         for ($day = 0; $day < 5; $day++) {
@@ -65,6 +68,8 @@ class TimetableLayout {
                 }
             }
         }
+        
+        // Dokoncenie layoutu
         $this->days = $layout;
     }   
 
@@ -72,7 +77,19 @@ class TimetableLayout {
         return $this->days;
     }
     
-    public function isFree($column, $lesson) {
+    public function isFMPHLike() {
+        return $this->isFMPHLike;
+    }
+    
+    public function getLessonMinTime() {
+        return $this->lessonMinTime;
+    }
+    
+    public function getLessonMaxTime() {
+        return $this->lessonMaxTime;
+    }
+    
+    private function isFree($column, $lesson) {
         // iba posledna vec, musi byt utriedene podla casu!
         if (count($column) == 0) return True;
         $last = $column[count($column)-1];

@@ -378,6 +378,10 @@ ul.vysledky_hladania li+li {
     padding: 2px;
 }
 
+#rozvrh.precise td {
+    height: 0.3em;
+}
+
 #rozvrh td.zaciatok {
     width: 4em;
     text-align: center;

@@ -22,13 +22,23 @@ for ($i = 0; $i < 5; $i++) {
     $counters[] = $col_counters;
 }
 
-$rowmins = 50; // pocet minut na jeden riadok tabulky
-$mintime = 490; // TODO zmenit casy generovania tabuliek
-$maxtime = 1190; 
+if ($layout->isFMPHLike()) {
+    $rowmins = 50; // pocet minut na jeden riadok tabulky
+    $rowspanmins = 45; // pocet minut dlzky, za ktore sa ma vygenerovat jeden rowspan
+    $mintime = 490; // TODO zmenit casy generovania tabuliek
+    $maxtime = 1190;
+    $time_header_spans = 1; // kolko riadkov zabera hlavicka s casom 
+}
+else {
+    $rowmins = $rowspanmins = 5;
+    $time_header_spans = 12; // na kazdu hodinu
+    $mintime = Candle::floorTo($layout->getLessonMinTime(), 60);
+    $maxtime = Candle::ceilTo($layout->getLessonMaxTime(), 60);
+}
 
 ?>
 <form method="post" action=""><div>
-<table id="rozvrh">
+<table id="rozvrh" <?php if (!$layout->isFMPHLike()) echo 'class="precise"' ?>>
     <tr>
         <th class="pristupnost">Začiatok</th>
         <?php
@@ -46,9 +56,11 @@ $maxtime = 1190;
         ?>
     </tr>
     <?php
-        for ($time = $mintime; $time < $maxtime; $time += $rowmins) {
+        for ($time = $mintime, $row_number = 0; $time < $maxtime; $time += $rowmins, $row_number++) {
             echo '<tr>';
-            echo '<td>'.Candle::formatTime($time).'</td>';
+            if (($row_number % $time_header_spans) == 0) {
+                echo '<td '.Candle::formatRowspan($time_header_spans).'>'.Candle::formatTime($time).'</td>';
+            }
             for ($day = 0; $day < 5; $day++) {
                 foreach ($days[$day] as $ix=>$col) {
                     $pos = $counters[$day][$ix];
@@ -71,13 +83,8 @@ $maxtime = 1190;
                     }
                     // treba vypisat bunku?
                     if ($lesson->getStart()==$time) {
-                        $rowspan = intval(($lesson->getEnd()-$lesson->getStart())/$rowmins);
-                        if ($rowspan <= 1) {
-                            echo '<td class="hodina">';
-                        }
-                        else {
-                            echo '<td class="hodina" rowspan="'.$rowspan.'">';
-                        }
+                        $rowspan = intval($lesson->getLength()/$rowspanmins);
+                        echo '<td class="hodina" '.Candle::formatRowspan($rowspan).'>';
                         echo $lesson->getSubject();
                         echo '<br />';
                         echo Candle::formatTime($lesson->getEnd());

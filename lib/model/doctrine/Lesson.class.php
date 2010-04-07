@@ -41,4 +41,8 @@ class Lesson extends BaseLesson
     public function getSubject() {
         return Doctrine::getTable('Subject')->getSubjectById($this->getSubjectId());
     }
+    
+    public function getLength() {
+        return $this->getEnd()-$this->getStart();
+    }
 }
