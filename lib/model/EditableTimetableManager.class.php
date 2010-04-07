@@ -40,7 +40,12 @@ class EditableTimetableManager {
     }
     
     public function removeTimetable($index) {
-        // TODO
+        $timetable = false;
+        if (isset($this->timetables[$index])) {
+            $timetable = $this->timetables[$index];
+            unset($this->timetables[$index];
+        }
+        return $timetable;
     }
     
     public function getTimetable($index) {
