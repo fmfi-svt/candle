@@ -6,6 +6,18 @@ homepage:
   url:   /
   param: { module: timetable, action: show, id: 0 }
 
+sf_guard_signin:
+    url: /login
+    param: { module: sfGuardAuth, action: signin }
+
+sf_guard_signout:
+    url: /logout
+    param: { module: sfGuardAuth, action: signout }
+
+sf_guard_password:
+    url: /request_password
+    param: { module: sfGuardAuth, action: password }
+
 # zobrazenie vsetkych hodin
 lesson_list_all:
     url: /lesson/list

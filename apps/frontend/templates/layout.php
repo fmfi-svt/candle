@@ -53,13 +53,7 @@
 </div>
 <div id="vrch_riadok1">
     <div id="vrch_riadok1_vpravo">
-        <h2 class="pristupnost">Menu používateľa</h2>
-        <span class="username">používateľ</span><!--
-        --><ul><!--
-            --><li><a href="#">Nastavenia</a></li><!--
-            --><li><a href="#">Administrácia</a></li><!--
-            --><li><a href="#">Odhlásiť</a></li><!--
-        --></ul>
+        <?php include_component('user','menu'); ?>
     </div>
     <div id="vrch_riadok1_vlavo">
         <h2 class="pristupnost">Užitočné stránky</h2>

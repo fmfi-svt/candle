@@ -33,3 +33,12 @@ all:
 
     # Enable the database manager
     use_database:           true
+    
+    # Nastav sfDoctrineGuard
+    enabled_modules:    [default, sfGuardAuth]
+  .actions:
+    login_module: sfGuardAuth
+    login_action: signin
+    
+    secure_module: sfGuardAuth
+    secure_action: secure
