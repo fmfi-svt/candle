@@ -9,6 +9,13 @@ CREATE TABLE teacher (id BIGINT AUTO_INCREMENT, given_name VARCHAR(50), family_n
 CREATE TABLE teacher_lessons (id BIGINT AUTO_INCREMENT, teacher_id BIGINT NOT NULL, lesson_id BIGINT NOT NULL, INDEX teacher_id_idx (teacher_id), INDEX lesson_id_idx (lesson_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE user_timetable (id BIGINT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, published TINYINT(1) NOT NULL, slug VARCHAR(30) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE user_timetable_lessons (id BIGINT AUTO_INCREMENT, user_timetable_id BIGINT NOT NULL, lesson_id BIGINT NOT NULL, selected TINYINT(1) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE sf_guard_group (id INT AUTO_INCREMENT, name VARCHAR(255) UNIQUE, description TEXT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE sf_guard_group_permission (group_id INT, permission_id INT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(group_id, permission_id)) ENGINE = INNODB;
+CREATE TABLE sf_guard_permission (id INT AUTO_INCREMENT, name VARCHAR(255) UNIQUE, description TEXT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE sf_guard_remember_key (id INT AUTO_INCREMENT, user_id INT, remember_key VARCHAR(32), ip_address VARCHAR(50), created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX user_id_idx (user_id), PRIMARY KEY(id, ip_address)) ENGINE = INNODB;
+CREATE TABLE sf_guard_user (id INT AUTO_INCREMENT, username VARCHAR(128) NOT NULL UNIQUE, algorithm VARCHAR(128) DEFAULT 'sha1' NOT NULL, salt VARCHAR(128), password VARCHAR(128), is_active TINYINT(1) DEFAULT '1', is_super_admin TINYINT(1) DEFAULT '0', last_login DATETIME, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX is_active_idx_idx (is_active), PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE sf_guard_user_group (user_id INT, group_id INT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(user_id, group_id)) ENGINE = INNODB;
+CREATE TABLE sf_guard_user_permission (user_id INT, permission_id INT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(user_id, permission_id)) ENGINE = INNODB;
 ALTER TABLE lesson ADD CONSTRAINT lesson_subject_id_subject_id FOREIGN KEY (subject_id) REFERENCES subject(id) ON DELETE CASCADE;
 ALTER TABLE lesson ADD CONSTRAINT lesson_room_id_room_id FOREIGN KEY (room_id) REFERENCES room(id) ON DELETE CASCADE;
 ALTER TABLE lesson ADD CONSTRAINT lesson_lesson_type_id_lesson_type_id FOREIGN KEY (lesson_type_id) REFERENCES lesson_type(id) ON DELETE CASCADE;
@@ -17,3 +24,10 @@ ALTER TABLE student_group_lessons ADD CONSTRAINT student_group_lessons_student_g
 ALTER TABLE student_group_lessons ADD CONSTRAINT student_group_lessons_lesson_id_lesson_id FOREIGN KEY (lesson_id) REFERENCES lesson(id) ON DELETE CASCADE;
 ALTER TABLE teacher_lessons ADD CONSTRAINT teacher_lessons_teacher_id_teacher_id FOREIGN KEY (teacher_id) REFERENCES teacher(id) ON DELETE CASCADE;
 ALTER TABLE teacher_lessons ADD CONSTRAINT teacher_lessons_lesson_id_lesson_id FOREIGN KEY (lesson_id) REFERENCES lesson(id) ON DELETE CASCADE;
+ALTER TABLE sf_guard_group_permission ADD CONSTRAINT sf_guard_group_permission_permission_id_sf_guard_permission_id FOREIGN KEY (permission_id) REFERENCES sf_guard_permission(id) ON DELETE CASCADE;
+ALTER TABLE sf_guard_group_permission ADD CONSTRAINT sf_guard_group_permission_group_id_sf_guard_group_id FOREIGN KEY (group_id) REFERENCES sf_guard_group(id) ON DELETE CASCADE;
+ALTER TABLE sf_guard_remember_key ADD CONSTRAINT sf_guard_remember_key_user_id_sf_guard_user_id FOREIGN KEY (user_id) REFERENCES sf_guard_user(id) ON DELETE CASCADE;
+ALTER TABLE sf_guard_user_group ADD CONSTRAINT sf_guard_user_group_user_id_sf_guard_user_id FOREIGN KEY (user_id) REFERENCES sf_guard_user(id) ON DELETE CASCADE;
+ALTER TABLE sf_guard_user_group ADD CONSTRAINT sf_guard_user_group_group_id_sf_guard_group_id FOREIGN KEY (group_id) REFERENCES sf_guard_group(id) ON DELETE CASCADE;
+ALTER TABLE sf_guard_user_permission ADD CONSTRAINT sf_guard_user_permission_user_id_sf_guard_user_id FOREIGN KEY (user_id) REFERENCES sf_guard_user(id) ON DELETE CASCADE;
+ALTER TABLE sf_guard_user_permission ADD CONSTRAINT sf_guard_user_permission_permission_id_sf_guard_permission_id FOREIGN KEY (permission_id) REFERENCES sf_guard_permission(id) ON DELETE CASCADE;

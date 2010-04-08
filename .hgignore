@@ -1,4 +1,10 @@
 ~$
-config/databases.yml
+config/databases\.yml
 ^cache/
 ^log/
+^plugins/\.channels/
+^plugins/\.registry/
+^plugins/\.depdb
+^plugins/\.filemap
+^plugins/\.lock
+^plugins/.*/\.DS_Store$
