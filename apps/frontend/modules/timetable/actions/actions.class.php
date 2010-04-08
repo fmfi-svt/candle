@@ -3,17 +3,19 @@
 class timetableActions extends sfActions {
     
     public function executeShow(sfWebRequest $request) {
-        $manager = $this->getUser()->getTimetableManager();
-        $id = $request->getParameter('id');
-        $timetable = $manager->getTimetable($id);
-        $this->forward404Unless($timetable);
-        $this->timetable = $timetable;
-        $this->timetable_id = $id;
-        $this->layout = new TimetableLayout($timetable);
+        $this->fetchTimetable($request);
+        $this->layout = new TimetableLayout($this->timetable);
     }
     
     public function executeNew(sfWebRequest $request) {
         $this->form = new EditableTimetableForm();
+    }
+    
+    private function fetchTimetable(sfWebRequest $request) {
+        $this->manager = $this->getUser()->getTimetableManager();
+        $this->timetable_id = $request->getParameter('id');
+        $this->timetable = $this->manager->getTimetable($this->timetable_id);
+        $this->forward404Unless($this->timetable);
     }
     
     public function executeCreate(sfWebRequest $request) {
@@ -27,6 +29,12 @@ class timetableActions extends sfActions {
         }
     }
     
+    public function executeDuplicate(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+        $newId = $this->manager->duplicateTimetable($this->timetable);
+        $this->redirect('@timetable_show?id='.$newId);
+    }
+    
     public function processForm(EditableTimetableForm $form, sfWebRequest $request) {
         $form->bind(array(
             'name' => $request->getParameter('name'),
@@ -35,11 +43,8 @@ class timetableActions extends sfActions {
     }
     
     public function executeChangeLessons(sfWebRequest $request) {
-        $manager = $this->getUser()->getTimetableManager();
-        $id = $request->getParameter('id');
-        $timetable = $manager->getTimetable($id);
-        $this->forward404Unless($timetable);
-        
+        $this->fetchTimetable($request);
+                
         // odstranim hodiny, ktore boli zaciarknute
         // a teraz nie su a naopak
         $subjectBefore = $request->getParameter('subjectBefore', array());
@@ -71,32 +76,32 @@ class timetableActions extends sfActions {
         foreach ($lesson as $lesid) {
             $before = isset($subjectLessonSet[$lesid]);
             if (!$before) {
-                $timetable->addLessonById($lesid);
+                $this->timetable->addLessonById($lesid);
             }
         }
         
         foreach ($lessonBefore as $lesid) {
             $now = isset($lessonSet[$lesid]);
             if (!$now) {
-                $timetable->removeLessonById($lesid);
+                $this->timetable->removeLessonById($lesid);
             }
         }
 
         foreach ($subject as $subid) {
             $before = isset($subjectBeforeSet[$subid]);
             if (!$before) {
-                $timetable->addSubjectById($subid);
+                $this->timetable->addSubjectById($subid);
             }
         }
         
         foreach ($subjectBefore as $subid) {
             $now = isset($subjectSet[$subid]);
             if (!$now) {
-                $timetable->removeSubjectById($subid);
+                $this->timetable->removeSubjectById($subid);
             }
         }
 
-        $this->redirect('@timetable_show?id='.$id);
+        $this->redirect('@timetable_show?id='.$this->timetable_id);
     }
 
 }

@@ -16,7 +16,7 @@
 <h2 class="pristupnost">Akcie aktívneho rozvrhu</h2>
 <ul id="rozvrh_akcie">
     <li><a href="#">Uložiť</a></li><!--
-    --><li><a href="#">Duplikovať</a></li><!--
+    --><li><?php echo link_to('Duplikovať', '@timetable_duplicate?id='.$timetable_id); ?></li><!--
     --><li><a href="#">Importovať</a></li><!--
     --><li><a href="#">Exportovať</a></li><!--
     --><li><a href="#">Publikovať</a></li><!--

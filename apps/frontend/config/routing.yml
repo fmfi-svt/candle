@@ -37,6 +37,12 @@ timetable_change_lessons:
     requirements:
         sf_method: post
 
+timetable_duplicate:
+    url: /timetable/:id/duplicate
+    param: { module: timetable, action: duplicate }
+    requirements:
+        sf_method: post
+
 # generic rules
 # please, remove them by adding more specific rules
 default_index:

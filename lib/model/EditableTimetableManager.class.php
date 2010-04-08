@@ -11,28 +11,36 @@ class EditableTimetableManager {
     }
     
     public function addTimetable(EditableTimetable $timetable) {
-        $this->ensureUniqueName($timetable);
+        $timetable->setName($this->getUniqueName($timetable->getName()));
         $this->timetables[] = $timetable;
         return key($this->timetables);
+    }
+    
+    public function duplicateTimetable(EditableTimetable $timetable) {
+        $duplicate = clone $timetable;
+        return $this->addTimetable($duplicate);
     }
     
 
     /**
      * Zaisti, aby tento rozvrh nemal rovnaky nazov ako nejaky iny
-     * @param timetable rozvrh, ktory sa nenachadza v tomto manageri
+     * @param string nazov rozvrhu, ktory ma byt upraveny, aby bol unikatny
     */
-    public function ensureUniqueName($timetable) {
+    public function getUniqueName($name) {
+        $matches = array();
+        if (preg_match('/^(.*) \\(\\d+\\)$/', $name, $matches)) {
+            $name = $matches[1];
+        }
         $names = array();
         foreach($this->timetables as $existingTimetable) {
-            $names[$existingTimetable->getName()] = $timetable;
+            $names[$existingTimetable->getName()] = true;
         }
-        if (!isset($names[$timetable->getName()])) return false;
+        if (!isset($names[$name])) return $name;
         $index = 2;
         while (true) {
-            $newName = $timetable->getName().' ('.$index.')';
+            $newName = $name.' ('.$index.')';
             if (!isset($names[$newName])) {
-                $timetable->setName($newName);
-                return true;
+                return $newName;
             }
             $index++;
         }

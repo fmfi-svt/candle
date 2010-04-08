@@ -25,6 +25,7 @@ class timetableComponents extends sfComponents {
     public function executeTop(sfWebRequest $request) {
         $this->all_timetables = $this->getUser()->getTimetableManager()->getTimetables();
         if (!isset($this->timetable)) $this->timetable = null;
+        if (!isset($this->timetable_id)) $this->timetable_id = null;
         if (!isset($this->newSelected)) $this->newSelected = false;
     }
 }

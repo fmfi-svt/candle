@@ -5,7 +5,7 @@ include_component('timetable','panel',array('timetable'=>$timetable, 'timetable_
 end_slot();
 
 slot('top');
-include_component('timetable','top', array('timetable'=>$timetable));
+include_component('timetable','top', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
 end_slot();
 
 // pocitadla pre stlpce
