@@ -1,5 +1,7 @@
 <?php
 
+slot('title', $timetable->getName());
+
 slot('panel');
 include_component('timetable','panel',array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
 end_slot();
