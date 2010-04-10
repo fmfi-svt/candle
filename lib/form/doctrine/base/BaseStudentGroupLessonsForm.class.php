@@ -15,15 +15,13 @@ abstract class BaseStudentGroupLessonsForm extends BaseFormDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'id'               => new sfWidgetFormInputHidden(),
-      'student_group_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('StudentGroup'), 'add_empty' => false)),
-      'lesson_id'        => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Lesson'), 'add_empty' => false)),
+      'student_group_id' => new sfWidgetFormInputHidden(),
+      'lesson_id'        => new sfWidgetFormInputHidden(),
     ));
 
     $this->setValidators(array(
-      'id'               => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
-      'student_group_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('StudentGroup'))),
-      'lesson_id'        => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Lesson'))),
+      'student_group_id' => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'student_group_id', 'required' => false)),
+      'lesson_id'        => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'lesson_id', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('student_group_lessons[%s]');

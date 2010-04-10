@@ -7,15 +7,18 @@
  * 
  * @property string $name
  * @property integer $room_type_id
+ * @property integer $capacity
  * @property RoomType $RoomType
  * @property Doctrine_Collection $Lesson
  * 
  * @method string              getName()         Returns the current record's "name" value
  * @method integer             getRoomTypeId()   Returns the current record's "room_type_id" value
+ * @method integer             getCapacity()     Returns the current record's "capacity" value
  * @method RoomType            getRoomType()     Returns the current record's "RoomType" value
  * @method Doctrine_Collection getLesson()       Returns the current record's "Lesson" collection
  * @method Room                setName()         Sets the current record's "name" value
  * @method Room                setRoomTypeId()   Sets the current record's "room_type_id" value
+ * @method Room                setCapacity()     Sets the current record's "capacity" value
  * @method Room                setRoomType()     Sets the current record's "RoomType" value
  * @method Room                setLesson()       Sets the current record's "Lesson" collection
  * 
@@ -35,6 +38,10 @@ abstract class BaseRoom extends sfDoctrineRecord
              'length' => '30',
              ));
         $this->hasColumn('room_type_id', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => true,
+             ));
+        $this->hasColumn('capacity', 'integer', null, array(
              'type' => 'integer',
              'notnull' => true,
              ));

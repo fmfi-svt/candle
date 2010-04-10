@@ -15,11 +15,13 @@ abstract class BaseRoomFormFilter extends BaseFormFilterDoctrine
     $this->setWidgets(array(
       'name'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'room_type_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('RoomType'), 'add_empty' => true)),
+      'capacity'     => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
     $this->setValidators(array(
       'name'         => new sfValidatorPass(array('required' => false)),
       'room_type_id' => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('RoomType'), 'column' => 'id')),
+      'capacity'     => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
     $this->widgetSchema->setNameFormat('room_filters[%s]');
@@ -42,6 +44,7 @@ abstract class BaseRoomFormFilter extends BaseFormFilterDoctrine
       'id'           => 'Number',
       'name'         => 'Text',
       'room_type_id' => 'ForeignKey',
+      'capacity'     => 'Number',
     );
   }
 }

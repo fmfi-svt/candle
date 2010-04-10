@@ -18,12 +18,14 @@ abstract class BaseRoomForm extends BaseFormDoctrine
       'id'           => new sfWidgetFormInputHidden(),
       'name'         => new sfWidgetFormInputText(),
       'room_type_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('RoomType'), 'add_empty' => false)),
+      'capacity'     => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
       'id'           => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
       'name'         => new sfValidatorString(array('max_length' => 30)),
       'room_type_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('RoomType'))),
+      'capacity'     => new sfValidatorInteger(),
     ));
 
     $this->widgetSchema->setNameFormat('room[%s]');

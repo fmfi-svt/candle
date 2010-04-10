@@ -18,6 +18,8 @@ abstract class BaseTeacherFormFilter extends BaseFormFilterDoctrine
       'iniciala'    => new sfWidgetFormFilterInput(),
       'oddelenie'   => new sfWidgetFormFilterInput(),
       'katedra'     => new sfWidgetFormFilterInput(),
+      'external_id' => new sfWidgetFormFilterInput(),
+      'lesson_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Lesson')),
     ));
 
     $this->setValidators(array(
@@ -26,6 +28,8 @@ abstract class BaseTeacherFormFilter extends BaseFormFilterDoctrine
       'iniciala'    => new sfValidatorPass(array('required' => false)),
       'oddelenie'   => new sfValidatorPass(array('required' => false)),
       'katedra'     => new sfValidatorPass(array('required' => false)),
+      'external_id' => new sfValidatorPass(array('required' => false)),
+      'lesson_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Lesson', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('teacher_filters[%s]');
@@ -35,6 +39,22 @@ abstract class BaseTeacherFormFilter extends BaseFormFilterDoctrine
     $this->setupInheritance();
 
     parent::setup();
+  }
+
+  public function addLessonListColumnQuery(Doctrine_Query $query, $field, $values)
+  {
+    if (!is_array($values))
+    {
+      $values = array($values);
+    }
+
+    if (!count($values))
+    {
+      return;
+    }
+
+    $query->leftJoin('r.TeacherLessons TeacherLessons')
+          ->andWhereIn('TeacherLessons.lesson_id', $values);
   }
 
   public function getModelName()
@@ -51,6 +71,8 @@ abstract class BaseTeacherFormFilter extends BaseFormFilterDoctrine
       'iniciala'    => 'Text',
       'oddelenie'   => 'Text',
       'katedra'     => 'Text',
+      'external_id' => 'Text',
+      'lesson_list' => 'ManyKey',
     );
   }
 }

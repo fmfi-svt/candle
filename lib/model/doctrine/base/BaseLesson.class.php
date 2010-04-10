@@ -14,6 +14,9 @@
  * @property LessonType $LessonType
  * @property Room $Room
  * @property Subject $Subject
+ * @property Doctrine_Collection $StudentGroup
+ * @property Doctrine_Collection $Teacher
+ * @property Doctrine_Collection $Linked
  * @property Doctrine_Collection $StudentGroupLessons
  * @property Doctrine_Collection $TeacherLessons
  * 
@@ -26,6 +29,9 @@
  * @method LessonType          getLessonType()          Returns the current record's "LessonType" value
  * @method Room                getRoom()                Returns the current record's "Room" value
  * @method Subject             getSubject()             Returns the current record's "Subject" value
+ * @method Doctrine_Collection getStudentGroup()        Returns the current record's "StudentGroup" collection
+ * @method Doctrine_Collection getTeacher()             Returns the current record's "Teacher" collection
+ * @method Doctrine_Collection getLinked()              Returns the current record's "Linked" collection
  * @method Doctrine_Collection getStudentGroupLessons() Returns the current record's "StudentGroupLessons" collection
  * @method Doctrine_Collection getTeacherLessons()      Returns the current record's "TeacherLessons" collection
  * @method Lesson              setDay()                 Sets the current record's "day" value
@@ -37,6 +43,9 @@
  * @method Lesson              setLessonType()          Sets the current record's "LessonType" value
  * @method Lesson              setRoom()                Sets the current record's "Room" value
  * @method Lesson              setSubject()             Sets the current record's "Subject" value
+ * @method Lesson              setStudentGroup()        Sets the current record's "StudentGroup" collection
+ * @method Lesson              setTeacher()             Sets the current record's "Teacher" collection
+ * @method Lesson              setLinked()              Sets the current record's "Linked" collection
  * @method Lesson              setStudentGroupLessons() Sets the current record's "StudentGroupLessons" collection
  * @method Lesson              setTeacherLessons()      Sets the current record's "TeacherLessons" collection
  * 
@@ -93,6 +102,22 @@ abstract class BaseLesson extends sfDoctrineRecord
              'local' => 'subject_id',
              'foreign' => 'id',
              'onDelete' => 'CASCADE'));
+
+        $this->hasMany('StudentGroup', array(
+             'refClass' => 'StudentGroupLessons',
+             'local' => 'lesson_id',
+             'foreign' => 'group_id'));
+
+        $this->hasMany('Teacher', array(
+             'refClass' => 'TeacherLessons',
+             'local' => 'lesson_id',
+             'foreign' => 'teacher_id'));
+
+        $this->hasMany('Lesson as Linked', array(
+             'refClass' => 'LinkedLessons',
+             'local' => 'lesson1_id',
+             'foreign' => 'lesson2_id',
+             'equal' => true));
 
         $this->hasMany('StudentGroupLessons', array(
              'local' => 'id',

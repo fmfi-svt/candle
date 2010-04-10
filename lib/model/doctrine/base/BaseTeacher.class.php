@@ -10,6 +10,8 @@
  * @property string $iniciala
  * @property string $oddelenie
  * @property string $katedra
+ * @property string $external_id
+ * @property Doctrine_Collection $Lesson
  * @property Doctrine_Collection $TeacherLessons
  * 
  * @method string              getGivenName()      Returns the current record's "given_name" value
@@ -17,12 +19,16 @@
  * @method string              getIniciala()       Returns the current record's "iniciala" value
  * @method string              getOddelenie()      Returns the current record's "oddelenie" value
  * @method string              getKatedra()        Returns the current record's "katedra" value
+ * @method string              getExternalId()     Returns the current record's "external_id" value
+ * @method Doctrine_Collection getLesson()         Returns the current record's "Lesson" collection
  * @method Doctrine_Collection getTeacherLessons() Returns the current record's "TeacherLessons" collection
  * @method Teacher             setGivenName()      Sets the current record's "given_name" value
  * @method Teacher             setFamilyName()     Sets the current record's "family_name" value
  * @method Teacher             setIniciala()       Sets the current record's "iniciala" value
  * @method Teacher             setOddelenie()      Sets the current record's "oddelenie" value
  * @method Teacher             setKatedra()        Sets the current record's "katedra" value
+ * @method Teacher             setExternalId()     Sets the current record's "external_id" value
+ * @method Teacher             setLesson()         Sets the current record's "Lesson" collection
  * @method Teacher             setTeacherLessons() Sets the current record's "TeacherLessons" collection
  * 
  * @package    candle
@@ -56,11 +62,20 @@ abstract class BaseTeacher extends sfDoctrineRecord
              'type' => 'string',
              'length' => '50',
              ));
+        $this->hasColumn('external_id', 'string', 30, array(
+             'type' => 'string',
+             'length' => '30',
+             ));
     }
 
     public function setUp()
     {
         parent::setUp();
+        $this->hasMany('Lesson', array(
+             'refClass' => 'TeacherLessons',
+             'local' => 'teacher_id',
+             'foreign' => 'lesson_id'));
+
         $this->hasMany('TeacherLessons', array(
              'local' => 'id',
              'foreign' => 'teacher_id'));

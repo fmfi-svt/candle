@@ -31,11 +31,11 @@ abstract class BaseStudentGroupLessons extends sfDoctrineRecord
         $this->setTableName('student_group_lessons');
         $this->hasColumn('student_group_id', 'integer', null, array(
              'type' => 'integer',
-             'notnull' => true,
+             'primary' => true,
              ));
         $this->hasColumn('lesson_id', 'integer', null, array(
              'type' => 'integer',
-             'notnull' => true,
+             'primary' => true,
              ));
     }
 

@@ -13,15 +13,21 @@ abstract class BaseSubjectFormFilter extends BaseFormFilterDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'name'       => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'code'       => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'short_code' => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'name'        => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'code'        => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'short_code'  => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'creditValue' => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'rozsah'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'external_id' => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
-      'name'       => new sfValidatorPass(array('required' => false)),
-      'code'       => new sfValidatorPass(array('required' => false)),
-      'short_code' => new sfValidatorPass(array('required' => false)),
+      'name'        => new sfValidatorPass(array('required' => false)),
+      'code'        => new sfValidatorPass(array('required' => false)),
+      'short_code'  => new sfValidatorPass(array('required' => false)),
+      'creditValue' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'rozsah'      => new sfValidatorPass(array('required' => false)),
+      'external_id' => new sfValidatorPass(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('subject_filters[%s]');
@@ -41,10 +47,13 @@ abstract class BaseSubjectFormFilter extends BaseFormFilterDoctrine
   public function getFields()
   {
     return array(
-      'id'         => 'Number',
-      'name'       => 'Text',
-      'code'       => 'Text',
-      'short_code' => 'Text',
+      'id'          => 'Number',
+      'name'        => 'Text',
+      'code'        => 'Text',
+      'short_code'  => 'Text',
+      'creditValue' => 'Number',
+      'rozsah'      => 'Text',
+      'external_id' => 'Text',
     );
   }
 }

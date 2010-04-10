@@ -7,6 +7,7 @@ Room:
     columns:
         name: { type: string(30), notnull: true }
         room_type_id: { type: integer, notnull: true }
+        capacity: {type: integer, notnull: true }
     relations:
         RoomType: { onDelete: CASCADE, local: room_type_id, foreign: id }
 
@@ -22,10 +23,17 @@ Teacher:
         iniciala: { type: string(50) }
         oddelenie: { type: string(50) }
         katedra: { type: string(50) }
+        external_id: { type: string(30) }
 
 StudentGroup:
     columns:
         name: { type: string(30), notnull: true }        
+    relations:
+        Lessons:
+            class: Lesson
+            local: student_group_id
+            foreign: lesson_id
+            refClass: StudentGroupLessons
 
 Lesson:
     columns:
@@ -39,11 +47,19 @@ Lesson:
         LessonType: { onDelete: CASCADE, local: lesson_type_id, foreign: id }
         Room: { onDelete: CASCADE, local: room_id, foreign: id }
         Subject: { onDelete: CASCADE, local: subject_id, foreign: id }
+        StudentGroup: { local: lesson_id, foreign: group_id, refClass: StudentGroupLessons }
+        Teacher: { local: lesson_id, foreign: teacher_id, refClass: TeacherLessons }
+        Linked:
+            class: Lesson
+            local: lesson1_id
+            foreign: lesson2_id
+            refClass: LinkedLessons
+            equal: true
 
 StudentGroupLessons:
     columns:
-        student_group_id: { type: integer, notnull: true }
-        lesson_id: { type: integer, notnull: true }
+        student_group_id: { type: integer, primary: true }
+        lesson_id: { type: integer, primary: true }
     relations:
         StudentGroup: { onDelete: CASCADE, local: student_group_id, foreign: id }
         Lesson: { onDelete: CASCADE, local: lesson_id, foreign: id }
@@ -56,11 +72,19 @@ TeacherLessons:
         Teacher: { onDelete: CASCADE, local: teacher_id, foreign: id }
         Lesson: { onDelete: CASCADE, local: lesson_id, foreign: id }
 
+LinkedLessons:
+    columns:
+        lesson1_id: { type: integer, primary: true }
+        lesson2_id: { type: integer, primary: true }
+
 Subject:
     columns:
         name: { type: string(100), notnull: true }
         code: { type: string(30), notnull: true }
-        short_code: {type: string(10), notnull: true }
+        short_code: { type: string(10), notnull: true }
+        creditValue: { type: integer, notnull: true }
+        rozsah: { type: string(30), notnull: true }
+        external_id: { type: string(30) }
 
 UserTimetable:
     columns:
