@@ -37,4 +37,9 @@ class Candle {
         if (($number % $precision) == 0) return $number;
         return Candle::floorTo($number, $precision) + $precision;
     }
+    
+    static public function dayFromCode($code) {
+        $days = array('pon'=>0, 'uto'=>1, 'str'=>2, 'stv'=>3, 'pia'=>4);
+        return $days[$code];
+    }
 }

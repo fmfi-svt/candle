@@ -9,7 +9,7 @@ Room:
         room_type_id: { type: integer, notnull: true }
         capacity: {type: integer, notnull: true }
     relations:
-        RoomType: { onDelete: CASCADE, local: room_type_id, foreign: id }
+        RoomType: { local: room_type_id, foreign: id }
 
 LessonType:
     columns:
@@ -43,6 +43,7 @@ Lesson:
         lesson_type_id: { type: integer, notnull: true }
         room_id: { type: integer, notnull: true }
         subject_id: { type: integer, notnull: true }
+        external_id: { type: integer }
     relations:
         LessonType: { local: lesson_type_id, foreign: id }
         Room: { local: room_id, foreign: id }
@@ -82,7 +83,7 @@ Subject:
         name: { type: string(100), notnull: true }
         code: { type: string(30), notnull: true }
         short_code: { type: string(10), notnull: true }
-        creditValue: { type: integer, notnull: true }
+        credit_value: { type: integer, notnull: true }
         rozsah: { type: string(30), notnull: true }
         external_id: { type: string(30) }
 

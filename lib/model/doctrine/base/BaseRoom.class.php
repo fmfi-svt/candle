@@ -52,8 +52,7 @@ abstract class BaseRoom extends sfDoctrineRecord
         parent::setUp();
         $this->hasOne('RoomType', array(
              'local' => 'room_type_id',
-             'foreign' => 'id',
-             'onDelete' => 'CASCADE'));
+             'foreign' => 'id'));
 
         $this->hasMany('Lesson', array(
              'local' => 'id',

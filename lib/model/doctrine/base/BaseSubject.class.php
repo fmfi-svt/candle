@@ -8,25 +8,25 @@
  * @property string $name
  * @property string $code
  * @property string $short_code
- * @property integer $creditValue
+ * @property integer $credit_value
  * @property string $rozsah
  * @property string $external_id
  * @property Doctrine_Collection $Lessons
  * 
- * @method string              getName()        Returns the current record's "name" value
- * @method string              getCode()        Returns the current record's "code" value
- * @method string              getShortCode()   Returns the current record's "short_code" value
- * @method integer             getCreditValue() Returns the current record's "creditValue" value
- * @method string              getRozsah()      Returns the current record's "rozsah" value
- * @method string              getExternalId()  Returns the current record's "external_id" value
- * @method Doctrine_Collection getLessons()     Returns the current record's "Lessons" collection
- * @method Subject             setName()        Sets the current record's "name" value
- * @method Subject             setCode()        Sets the current record's "code" value
- * @method Subject             setShortCode()   Sets the current record's "short_code" value
- * @method Subject             setCreditValue() Sets the current record's "creditValue" value
- * @method Subject             setRozsah()      Sets the current record's "rozsah" value
- * @method Subject             setExternalId()  Sets the current record's "external_id" value
- * @method Subject             setLessons()     Sets the current record's "Lessons" collection
+ * @method string              getName()         Returns the current record's "name" value
+ * @method string              getCode()         Returns the current record's "code" value
+ * @method string              getShortCode()    Returns the current record's "short_code" value
+ * @method integer             getCreditValue()  Returns the current record's "credit_value" value
+ * @method string              getRozsah()       Returns the current record's "rozsah" value
+ * @method string              getExternalId()   Returns the current record's "external_id" value
+ * @method Doctrine_Collection getLessons()      Returns the current record's "Lessons" collection
+ * @method Subject             setName()         Sets the current record's "name" value
+ * @method Subject             setCode()         Sets the current record's "code" value
+ * @method Subject             setShortCode()    Sets the current record's "short_code" value
+ * @method Subject             setCreditValue()  Sets the current record's "credit_value" value
+ * @method Subject             setRozsah()       Sets the current record's "rozsah" value
+ * @method Subject             setExternalId()   Sets the current record's "external_id" value
+ * @method Subject             setLessons()      Sets the current record's "Lessons" collection
  * 
  * @package    candle
  * @subpackage model
@@ -53,7 +53,7 @@ abstract class BaseSubject extends sfDoctrineRecord
              'notnull' => true,
              'length' => '10',
              ));
-        $this->hasColumn('creditValue', 'integer', null, array(
+        $this->hasColumn('credit_value', 'integer', null, array(
              'type' => 'integer',
              'notnull' => true,
              ));
