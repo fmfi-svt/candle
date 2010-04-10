@@ -16,12 +16,14 @@ abstract class BaseUserTimetableFormFilter extends BaseFormFilterDoctrine
       'name'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'published' => new sfWidgetFormChoice(array('choices' => array('' => 'yes or no', 1 => 'yes', 0 => 'no'))),
       'slug'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'user_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('sfGuardUser'), 'add_empty' => true)),
     ));
 
     $this->setValidators(array(
       'name'      => new sfValidatorPass(array('required' => false)),
       'published' => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
       'slug'      => new sfValidatorPass(array('required' => false)),
+      'user_id'   => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('sfGuardUser'), 'column' => 'id')),
     ));
 
     $this->widgetSchema->setNameFormat('user_timetable_filters[%s]');
@@ -45,6 +47,7 @@ abstract class BaseUserTimetableFormFilter extends BaseFormFilterDoctrine
       'name'      => 'Text',
       'published' => 'Boolean',
       'slug'      => 'Text',
+      'user_id'   => 'ForeignKey',
     );
   }
 }

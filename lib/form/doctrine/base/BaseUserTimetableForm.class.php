@@ -19,6 +19,7 @@ abstract class BaseUserTimetableForm extends BaseFormDoctrine
       'name'      => new sfWidgetFormInputText(),
       'published' => new sfWidgetFormInputCheckbox(),
       'slug'      => new sfWidgetFormInputText(),
+      'user_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('sfGuardUser'), 'add_empty' => false)),
     ));
 
     $this->setValidators(array(
@@ -26,6 +27,7 @@ abstract class BaseUserTimetableForm extends BaseFormDoctrine
       'name'      => new sfValidatorString(array('max_length' => 50)),
       'published' => new sfValidatorBoolean(),
       'slug'      => new sfValidatorString(array('max_length' => 30)),
+      'user_id'   => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('sfGuardUser'))),
     ));
 
     $this->widgetSchema->setNameFormat('user_timetable[%s]');

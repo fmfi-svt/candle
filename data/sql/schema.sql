@@ -8,7 +8,7 @@ CREATE TABLE student_group_lessons (student_group_id BIGINT, lesson_id BIGINT, P
 CREATE TABLE subject (id BIGINT AUTO_INCREMENT, name VARCHAR(100) NOT NULL, code VARCHAR(30) NOT NULL, short_code VARCHAR(10) NOT NULL, creditvalue BIGINT NOT NULL, rozsah VARCHAR(30) NOT NULL, external_id VARCHAR(30), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE teacher (id BIGINT AUTO_INCREMENT, given_name VARCHAR(50), family_name VARCHAR(50) NOT NULL, iniciala VARCHAR(50), oddelenie VARCHAR(50), katedra VARCHAR(50), external_id VARCHAR(30), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE teacher_lessons (id BIGINT AUTO_INCREMENT, teacher_id BIGINT NOT NULL, lesson_id BIGINT NOT NULL, INDEX teacher_id_idx (teacher_id), INDEX lesson_id_idx (lesson_id), PRIMARY KEY(id)) ENGINE = INNODB;
-CREATE TABLE user_timetable (id BIGINT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, published TINYINT(1) NOT NULL, slug VARCHAR(30) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE user_timetable (id BIGINT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, published TINYINT(1) NOT NULL, slug VARCHAR(30) NOT NULL, user_id INT NOT NULL, INDEX user_id_idx (user_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE user_timetable_lessons (id BIGINT AUTO_INCREMENT, user_timetable_id BIGINT NOT NULL, lesson_id BIGINT NOT NULL, selected TINYINT(1) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE sf_guard_group (id INT AUTO_INCREMENT, name VARCHAR(255) UNIQUE, description TEXT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE sf_guard_group_permission (group_id INT, permission_id INT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(group_id, permission_id)) ENGINE = INNODB;
@@ -26,6 +26,7 @@ ALTER TABLE student_group_lessons ADD CONSTRAINT student_group_lessons_student_g
 ALTER TABLE student_group_lessons ADD CONSTRAINT student_group_lessons_lesson_id_lesson_id FOREIGN KEY (lesson_id) REFERENCES lesson(id) ON DELETE CASCADE;
 ALTER TABLE teacher_lessons ADD CONSTRAINT teacher_lessons_teacher_id_teacher_id FOREIGN KEY (teacher_id) REFERENCES teacher(id) ON DELETE CASCADE;
 ALTER TABLE teacher_lessons ADD CONSTRAINT teacher_lessons_lesson_id_lesson_id FOREIGN KEY (lesson_id) REFERENCES lesson(id) ON DELETE CASCADE;
+ALTER TABLE user_timetable ADD CONSTRAINT user_timetable_user_id_sf_guard_user_id FOREIGN KEY (user_id) REFERENCES sf_guard_user(id) ON DELETE CASCADE;
 ALTER TABLE sf_guard_group_permission ADD CONSTRAINT sf_guard_group_permission_permission_id_sf_guard_permission_id FOREIGN KEY (permission_id) REFERENCES sf_guard_permission(id) ON DELETE CASCADE;
 ALTER TABLE sf_guard_group_permission ADD CONSTRAINT sf_guard_group_permission_group_id_sf_guard_group_id FOREIGN KEY (group_id) REFERENCES sf_guard_group(id) ON DELETE CASCADE;
 ALTER TABLE sf_guard_remember_key ADD CONSTRAINT sf_guard_remember_key_user_id_sf_guard_user_id FOREIGN KEY (user_id) REFERENCES sf_guard_user(id) ON DELETE CASCADE;

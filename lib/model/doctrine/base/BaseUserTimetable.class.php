@@ -8,13 +8,19 @@
  * @property string $name
  * @property boolean $published
  * @property string $slug
+ * @property integer $user_id
+ * @property sfGuardUser $sfGuardUser
  * 
- * @method string        getName()      Returns the current record's "name" value
- * @method boolean       getPublished() Returns the current record's "published" value
- * @method string        getSlug()      Returns the current record's "slug" value
- * @method UserTimetable setName()      Sets the current record's "name" value
- * @method UserTimetable setPublished() Sets the current record's "published" value
- * @method UserTimetable setSlug()      Sets the current record's "slug" value
+ * @method string        getName()        Returns the current record's "name" value
+ * @method boolean       getPublished()   Returns the current record's "published" value
+ * @method string        getSlug()        Returns the current record's "slug" value
+ * @method integer       getUserId()      Returns the current record's "user_id" value
+ * @method sfGuardUser   getSfGuardUser() Returns the current record's "sfGuardUser" value
+ * @method UserTimetable setName()        Sets the current record's "name" value
+ * @method UserTimetable setPublished()   Sets the current record's "published" value
+ * @method UserTimetable setSlug()        Sets the current record's "slug" value
+ * @method UserTimetable setUserId()      Sets the current record's "user_id" value
+ * @method UserTimetable setSfGuardUser() Sets the current record's "sfGuardUser" value
  * 
  * @package    candle
  * @subpackage model
@@ -40,11 +46,19 @@ abstract class BaseUserTimetable extends sfDoctrineRecord
              'notnull' => true,
              'length' => '30',
              ));
+        $this->hasColumn('user_id', 'integer', 4, array(
+             'type' => 'integer',
+             'notnull' => true,
+             'length' => '4',
+             ));
     }
 
     public function setUp()
     {
         parent::setUp();
-        
+        $this->hasOne('sfGuardUser', array(
+             'local' => 'user_id',
+             'foreign' => 'id',
+             'onDelete' => 'CASCADE'));
     }
 }

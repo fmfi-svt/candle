@@ -91,6 +91,9 @@ UserTimetable:
         name: { type: string(50), notnull: true }
         published: { type: boolean, notnull: true }
         slug: { type: string(30), notnull: true }
+        user_id : { type: integer(4), notnull: true }
+    relations:
+        sfGuardUser: { onDelete: CASCADE, local: user_id, foreign: id }
 
 UserTimetableLessons:
     columns:
