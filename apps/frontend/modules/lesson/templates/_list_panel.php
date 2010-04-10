@@ -37,11 +37,11 @@ foreach ($lessons as $lesson) {
       <tbody>
         <?php foreach ($lessons as $lesson): ?>
         <tr>
-          <td><?php echo $lesson->getType()->getCode() ?></td>
+          <td><?php echo $lesson->getLessonType()->getCode() ?></td>
           <td><?php echo Candle::formatShortDay($lesson->getDay()) ?></td>
           <td><?php echo Candle::formatTime($lesson->getStart()) ?></td>
           <td><?php echo $lesson->getRoom() ?></td>
-          <td><?php foreach ($lesson->getTeachers() as $i => $teacher): 
+          <td><?php foreach ($lesson->getTeacher() as $i => $teacher): 
                         if ($i>0) echo ', ';
                         echo $teacher->getShortName();
                     endforeach; ?>

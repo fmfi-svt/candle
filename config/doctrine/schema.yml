@@ -44,9 +44,9 @@ Lesson:
         room_id: { type: integer, notnull: true }
         subject_id: { type: integer, notnull: true }
     relations:
-        LessonType: { onDelete: CASCADE, local: lesson_type_id, foreign: id }
-        Room: { onDelete: CASCADE, local: room_id, foreign: id }
-        Subject: { onDelete: CASCADE, local: subject_id, foreign: id }
+        LessonType: { local: lesson_type_id, foreign: id }
+        Room: { local: room_id, foreign: id }
+        Subject: { onDelete: CASCADE, local: subject_id, foreign: id, foreignAlias: Lessons }
         StudentGroup: { local: lesson_id, foreign: group_id, refClass: StudentGroupLessons }
         Teacher: { local: lesson_id, foreign: teacher_id, refClass: TeacherLessons }
         Linked:

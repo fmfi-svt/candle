@@ -90,13 +90,11 @@ abstract class BaseLesson extends sfDoctrineRecord
         parent::setUp();
         $this->hasOne('LessonType', array(
              'local' => 'lesson_type_id',
-             'foreign' => 'id',
-             'onDelete' => 'CASCADE'));
+             'foreign' => 'id'));
 
         $this->hasOne('Room', array(
              'local' => 'room_id',
-             'foreign' => 'id',
-             'onDelete' => 'CASCADE'));
+             'foreign' => 'id'));
 
         $this->hasOne('Subject', array(
              'local' => 'subject_id',

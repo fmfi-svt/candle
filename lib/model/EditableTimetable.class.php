@@ -48,8 +48,8 @@ class EditableTimetable {
     }
     
     public function isSubjectSelected($subjectId) {
-        $subject = Doctrine::getTable('Subject')->getSubjectById($subjectId);
-        foreach ($subject->getLessons() as $lesson) {
+        $lessons = Doctrine::getTable('Lesson')->listBySubjectId($subjectId);
+        foreach ($lessons as $lesson) {
             if (!$this->hasLesson($lesson->getId())) {
                 return false;
             }
@@ -66,20 +66,20 @@ class EditableTimetable {
     }
     
     public function addSubjectById($subjectId) {
-        $subject = Doctrine::getTable('Subject')->getSubjectById($subjectId);
-        foreach ($subject->getLessons() as $lesson) {
+        $lessons = Doctrine::getTable('Lesson')->listBySubjectId($subjectId);
+        foreach ($lessons as $lesson) {
             $this->addLesson($lesson);
         }
     }
     
     public function addLessonById($lessonId) {
-        $lesson = Doctrine::getTable('Lesson')->getLessonById($lessonId);
+        $lesson = Doctrine::getTable('Lesson')->find($lessonId);
         $this->addLesson($lesson);
     }
     
     public function removeSubjectById($subjectId) {
-        $subject = Doctrine::getTable('Subject')->getSubjectById($subjectId);
-        foreach ($subject->getLessons() as $lesson) {
+        $lessons = Doctrine::getTable('Lesson')->listBySubjectId($subjectId);
+        foreach ($lessons as $lesson) {
             $this->removeLesson($lesson);
         }
     }

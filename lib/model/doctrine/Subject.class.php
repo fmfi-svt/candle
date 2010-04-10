@@ -12,11 +12,5 @@
  */
 class Subject extends BaseSubject
 {
-    public function getLessons() {
-        $q = Doctrine_Query::create()
-            ->from('Lesson l')
-            ->where('l.subject_id = ?', $this->getId());
-        
-        return Doctrine_Core::getTable('Lesson')->getLessons($q);
-    }
+
 }

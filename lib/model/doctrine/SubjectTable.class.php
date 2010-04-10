@@ -14,20 +14,12 @@ class SubjectTable extends Doctrine_Table
     public function searchSubjectsByAll($queryString) {
         $q = Doctrine_Query::create()
             ->from('Subject s')
+            ->innerJoin('s.Lessons l')
+            ->leftJoin('l.Teacher t')
+            ->leftJoin('l.LessonType ty')
+            ->leftJoin('l.Room r')
             ->andWhere('s.name LIKE ?', '%'.$queryString.'%');
-            /*->union()
-            ->from('Subject s1')
-            ->innerJoin('s1.Lesson l')
-            ->innerJoin('l.TeacherLessons lt')
-            ->innerJoin('lt.Teacher t')
-            ->andWhere('t.name LIKE ?', $queryString);*/
         return $q->execute();
     }
     
-    public function getSubjectById($subjectId) {
-        $q = Doctrine_Query::create()
-            ->from('Subject s')
-            ->andWhere('s.id = ?', $subjectId);
-        return $q->fetchOne();
-    }
 }
