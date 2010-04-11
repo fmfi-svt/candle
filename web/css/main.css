@@ -396,7 +396,7 @@ ul.vysledky_hladania li+li {
 
 #rozvrh td.hodina .wrap {
     position: relative;
-    height: 100%;
+/*    height: 100%;*/
 }
 
 #rozvrh td.hodina .miestnost {
