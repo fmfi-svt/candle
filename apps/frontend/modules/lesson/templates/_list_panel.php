@@ -38,7 +38,7 @@ foreach ($lessons as $lesson) {
       <tbody>
         <?php foreach ($lessons as $lesson): ?>
         <tr>
-          <td><?php echo $lesson->getLessonType()->getCode() ?></td>
+          <td><abbr class="lesson-type lesson-type-<?php echo $lesson->getLessonType()->getCode() ?>" title="<?php echo $lesson->getLessonType()?>"><span class="lesson-type-in"><?php echo $lesson->getLessonType()->getCode() ?></span><span class="lesson-type-image"></span></abbr></td>
           <td><?php echo Candle::formatShortDay($lesson->getDay()) ?></td>
           <td><?php echo Candle::formatTime($lesson->getStart()) ?></td>
           <td><?php echo $lesson->getRoom() ?></td>
@@ -51,9 +51,10 @@ foreach ($lessons as $lesson) {
             <?php if ($timetable->hasLesson($lesson->getId())): ?>
                 <input type="hidden" name="lessonBefore[]" value="<?php echo $lesson->getId()?>" />
             <?php endif; ?>
-            <input type="checkbox" name="lesson[]" value="<?php echo $lesson->getId()?>" <?php
+            <?php $cb_id = 'panel_lesson_cb_'.$lesson->getId() ?>
+            <input type="checkbox" id="<?php echo $cb_id; ?>" name="lesson[]" value="<?php echo $lesson->getId()?>" <?php
                 if ($timetable->hasLesson($lesson->getId())) echo ' checked="checked"';
-            ?> /></td>
+            ?> /><label class="pristupnost" for="<?php echo $cb_id; ?>">Zobraziť v rozvrhu: <?php echo Candle::formatShortDay($lesson->getDay()) . ' ' . Candle::formatTime($lesson->getStart()) . ' ' . $lesson->getSubject() ?></label></td>
         </tr>
         <?php endforeach; ?>
       </tbody>

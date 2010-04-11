@@ -428,3 +428,50 @@ ul.vysledky_hladania li+li {
 .jshidden {
     display: none;
 }
+
+.lesson-type {
+    display: inline-block;
+    width: 23px;
+    height: 22px;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+.lesson-type-image {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 23px;
+    height: 22px;
+}
+
+.lesson-type-c .lesson-type-image {
+    background: transparent url("../images/ikona-typ-c.png") center center no-repeat;
+}
+
+.lesson-type-k .lesson-type-image {
+    background: transparent url("../images/ikona-typ-k.png") center center no-repeat;
+}
+
+.lesson-type-l .lesson-type-image {
+    background: transparent url("../images/ikona-typ-l.png") center center no-repeat;
+}
+
+.lesson-type-n .lesson-type-image {
+    background: transparent url("../images/ikona-typ-n.png") center center no-repeat;
+}
+
+.lesson-type-p .lesson-type-image {
+    background: transparent url("../images/ikona-typ-p.png") center center no-repeat;
+}
+
+.lesson-type-s .lesson-type-image {
+    background: transparent url("../images/ikona-typ-s.png") center center no-repeat;
+}
+
+.lesson-type-v .lesson-type-image {
+    background: transparent url("../images/ikona-typ-v.png") center center no-repeat;
+}
