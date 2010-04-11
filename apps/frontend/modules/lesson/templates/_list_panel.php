@@ -24,8 +24,10 @@ foreach ($lessons as $lesson) {
         <?php if ($allSelected): ?>
         <input type="hidden" name="subjectBefore[]" value="<?php echo $subject->getId()?>" />
         <?php endif; ?>
-        <input class="predmet_check" type="checkbox" name="subject[]" value="<?php echo $subject->getId()?>" <?php
+        <?php $cb_id = "panel_subject_cb_".$subject->getId(); ?>
+        <input id="<?php echo $cb_id; ?>" class="predmet_check" type="checkbox" name="subject[]" value="<?php echo $subject->getId()?>" <?php
                 if ($allSelected) echo 'checked="checked"' ?>/>
+        <label class="pristupnost" for="<?php echo $cb_id; ?>">Zobraziť v rozvrhu celý predmet: <?php echo $subject; ?></label>
     </div>
 
     <table>
