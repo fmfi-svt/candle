@@ -46,7 +46,7 @@ foreach ($lessons as $lesson) {
           <td><?php echo $lesson->getRoom() ?></td>
           <td><?php foreach ($lesson->getTeacher() as $i => $teacher): 
                         if ($i>0) echo ', ';
-                        echo $teacher->getShortName();
+                        echo Candle::nbsp($teacher->getShortName());
                     endforeach; ?>
           </td>
           <td class="last">
