@@ -60,7 +60,7 @@ abstract class BaseLessonFormFilter extends BaseFormFilterDoctrine
     }
 
     $query->leftJoin('r.StudentGroupLessons StudentGroupLessons')
-          ->andWhereIn('StudentGroupLessons.group_id', $values);
+          ->andWhereIn('StudentGroupLessons.student_group_id', $values);
   }
 
   public function addTeacherListColumnQuery(Doctrine_Query $query, $field, $values)

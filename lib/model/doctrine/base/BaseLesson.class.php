@@ -110,7 +110,7 @@ abstract class BaseLesson extends sfDoctrineRecord
         $this->hasMany('StudentGroup', array(
              'refClass' => 'StudentGroupLessons',
              'local' => 'lesson_id',
-             'foreign' => 'group_id'));
+             'foreign' => 'student_group_id'));
 
         $this->hasMany('Teacher', array(
              'refClass' => 'TeacherLessons',

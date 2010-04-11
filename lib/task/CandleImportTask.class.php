@@ -11,6 +11,7 @@ class CandleImportTask extends sfBaseTask
     $this->addOptions(array(
         new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application', 'frontend'),
         new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environement', 'prod'),
+        new sfCommandOption('skip-bad', null, sfCommandOption::PARAMETER_NONE, 'Whether to skip bad lessons'),
     ));
  
     $this->namespace = 'candle';
@@ -23,8 +24,22 @@ replacing any definitions currently there:
  
   [./symfony candle:import --env=prod ~/rozvrh.xml|INFO]
 EOF;
+    
+    $this->warnings = 0;
+    
   }
- 
+    
+  private function spit($message, $isError=true) {
+    if ($isError) {
+        throw new Exception($message);
+    }
+    else {
+        $this->logBlock($message, 'INFO');
+        $this->warnings++;
+        return true;
+    }
+  }
+    
   protected function execute($arguments = array(), $options = array())
   {
     
@@ -46,7 +61,7 @@ EOF;
     
     // Nacitat cele to xml-ko do pamate zere celkom vela...
     // FIXME prerobit skript tak, aby pouzival menej pamate
-    ini_set("memory_limit","160M");    
+    ini_set("memory_limit","320M");    
 
     $lessonTypes = array();
     $roomTypes = array();
@@ -82,7 +97,7 @@ EOF;
         return 1;
     }
     
-    $errors = 0;
+    $this->warnings = 0;
     
     $this->logSection('candle', 'Extracting data from xml');
 
@@ -92,15 +107,11 @@ EOF;
         $type->setName((string) $xmlTyp['popis']);
 
         if (strlen($type->getCode()) != 1) {
-            $this->logBlock('Incorrect typ.id length (should be 1): '.$type->getCode(), 'ERROR');
-            $errors++;
-            continue;
+            $this->spit('Incorrect typ.id length (should be 1): '.$type->getCode());
         }
         
         if (isset($lessonTypes[$type->getCode()])) {
-            $this->logBlock('Duplicate typ.id: '. $type->getCode(), 'ERROR');
-            $errors++;
-            continue;
+            $this->spit('Duplicate typ.id: '. $type->getCode());
         }
 
         $lessonTypes[$type->getCode()] = $type;
@@ -112,15 +123,11 @@ EOF;
         $roomType->setName((string) $xmlTypMiestnosti['popis']);
  
         if (strlen($roomType->getCode()) != 1) {
-            $this->logBlock('Incorrect typmiestnosti.id length (should be 1): '.$roomType->getCode(), 'ERROR');
-            $errors++;
-            continue;
+            $this->spit('Incorrect typmiestnosti.id length (should be 1): '.$roomType->getCode());
         }
         
         if (isset($roomTypes[$roomType->getCode()])) {
-            $this->logBlock('Duplicate typmiestnosti.id: '. $roomType->getCode(), 'ERROR');
-            $errors++;
-            continue;
+            $this->spit('Duplicate typmiestnosti.id: '. $roomType->getCode());
         }
 
        $roomTypes[$roomType->getCode()] = $roomType;
@@ -136,9 +143,7 @@ EOF;
         $teacher->setOddelenie((string) $xmlUcitel->oddelenie);
         
         if (isset($teachers[$teacher->getExternalId()])) {
-            $this->logBlock('Duplicate ucitel.id: '. $teacher->getExternalId(), 'ERROR');
-            $errors++;
-            continue;
+            $this->spit('Duplicate ucitel.id: '. $teacher->getExternalId());
         }
 
         $teachers[$teacher->getExternalId()] = $teacher;
@@ -151,9 +156,7 @@ EOF;
         $room->setRoomType($roomTypes[(string) $xmlMiestnost->typ]);
         
         if (isset($rooms[$room->getName()])) {
-            $this->logBlock('Duplicate miestnost.nazov: '. $room->getName(), 'ERROR');
-            $errors++;
-            continue;
+            $this->spit('Duplicate miestnost.nazov: '. $room->getName());
         }
         
         $rooms[$room->getName()] = $room;
@@ -176,19 +179,34 @@ EOF;
         $lesson->setDay(Candle::dayFromCode((string) $xmlHodina->den));
         $lesson->setStart((int) $xmlHodina->zaciatok);
         $lesson->setEnd((int) $xmlHodina->koniec);
+        
+        if (!$rooms[(string) $xmlHodina->miestnost]) {
+            $message = 'Undefined hodina.miestnost: '. (string) $xmlHodina->miestnost;
+            $message .= "\n  (hodina.id = ".$lesson->getExternalId().')';
+            $this->spit($message, !$options['skip-bad']);
+            continue;
+        }
         $lesson->setRoom($rooms[(string) $xmlHodina->miestnost]);
+        
         if (!$subjects[(string) $xmlHodina->predmet]) {
-            $this->logBlock('Undefined hodina.predmet: '. (string) $xmlHodina->predmet, 'ERROR');
-            $errors++;
+            $message = 'Undefined hodina.predmet: '. (string) $xmlHodina->predmet;
+            $message .= "\n  (hodina.id = ".$lesson->getExternalId().')';
+            $this->spit($message, !$options['skip-bad']);
             continue;
         }
         $lesson->setSubject($subjects[(string) $xmlHodina->predmet]);
-
+        
         $ucitelia = explode(',', (string) $xmlHodina->ucitelia);
         foreach ($ucitelia as $ucitel_id) {
-            $lesson->Teacher[] = $teachers[ucitel_id];
+            if (!$teachers[$ucitel_id]) {
+                $message = 'Undefined ucitel: '. $ucitel_id;
+                $message .= "\n  (hodina.id = ".$lesson->getExternalId().')';
+                $this->spit($message, !$options['skip-bad']);
+                continue;
+            }
+            $lesson->Teacher[] = $teachers[$ucitel_id];
         }
-
+        
         $kruzky = explode(',', (string) $xmlHodina->kruzky);
         foreach ($kruzky as $kruzok) {
             if (!isset($studentGroups[$kruzok])) {
@@ -197,12 +215,17 @@ EOF;
             }
             $lesson->StudentGroup[] = $studentGroups[$kruzok];
         }
+        
+        if (!$lessonTypes[(string) $xmlHodina->typ]) {
+            $message = 'Undefined hodina.typ: '. (string) $xmlHodina->typ;
+            $message .= "\n  (hodina.id = ".$lesson->getExternalId().')';
+            $this->spit($message, !$options['skip-bad']);
+            continue;
+        }
         $lesson->setLessonType($lessonTypes[(string) $xmlHodina->typ]);
 
         if (isset($lessons[$lesson->getExternalId()])) {
-            $this->logBlock('Duplicate hodina.id: '. $lesson->getExternalId(), 'ERROR');
-            $errors++;
-            continue;
+            $this->spit('Duplicate hodina.id: '. $lesson->getExternalId());
         }
 
         $zviazanehodiny = explode(',', (string) $xmlHodina->zviazanehodiny);
@@ -217,78 +240,92 @@ EOF;
     // Nastav zviazane hodiny (toto treba robit az ked mam vsetky hodiny)
     foreach ($lessons as $lesson) {
         foreach ($lessonsLinks[$lesson->getExternalId()] as $link) {
+            if (!$lessons[$link]) {
+                $message = sprintf('Lesson link from %d to undefined target: %d', $lesson->getExternalId(), $link);
+                $this->spit($message, !$options['skip-bad']);
+                continue;
+            }
             $lesson->Linked[] = $lessons[$link];
         }
     }
     
-    if ($errors) {
-        $this->logBlock(sprintf('Encountered %d errors, so not going forward', $errors), 'ERROR_LARGE');
-        return 1;
+    if ($this->warnings) {
+        $this->logSection('candle', sprintf('Data extracted with %d warnings', $this->warnings));
     }
-    
-    $this->logSection('candle', 'Data extracted successfully');
+    else {
+        $this->logSection('candle', 'Data extracted successfully');
+    }
  
     $connection->beginTransaction();
+    
+    try {
 
-    $this->logSection('candle', 'Deleting all data');    
-    
-    $deletedLessons = Doctrine::getTable('Lesson')->createQuery()
-                            ->delete()->execute();
+        $this->logSection('candle', 'Deleting all data');    
+        
+        $deletedLessons = Doctrine::getTable('Lesson')->createQuery()
+                                ->delete()->execute();
 
-    $deletedLessonTypes = Doctrine::getTable('LessonType')->createQuery()
-                            ->delete()->execute();
+        $deletedLessonTypes = Doctrine::getTable('LessonType')->createQuery()
+                                ->delete()->execute();
 
-    $deletedRooms = Doctrine::getTable('Room')->createQuery()
-                            ->delete()->execute();
+        $deletedRooms = Doctrine::getTable('Room')->createQuery()
+                                ->delete()->execute();
 
-    $deletedRoomTypes = Doctrine::getTable('RoomType')->createQuery()
-                            ->delete()->execute();
+        $deletedRoomTypes = Doctrine::getTable('RoomType')->createQuery()
+                                ->delete()->execute();
 
-    $deletedTeachers = Doctrine::getTable('Teacher')->createQuery()
-                            ->delete()->execute();
-    
-    $deletedSubjects = Doctrine::getTable('Subject')->createQuery()
-                            ->delete()->execute();
-    
-    $deletedStudentGroups = Doctrine::getTable('StudentGroup')->createQuery()
-                            ->delete()->execute();
-    
-    $this->logSection('candle', 'Saving lesson types');        
-    foreach ($lessonTypes as $lessonType) {
-        $lessonType->save();
-    }
+        $deletedTeachers = Doctrine::getTable('Teacher')->createQuery()
+                                ->delete()->execute();
+        
+        $deletedSubjects = Doctrine::getTable('Subject')->createQuery()
+                                ->delete()->execute();
+        
+        $deletedStudentGroups = Doctrine::getTable('StudentGroup')->createQuery()
+                                ->delete()->execute();
+        
+        $this->logSection('candle', 'Saving lesson types');        
+        foreach ($lessonTypes as $lessonType) {
+            $lessonType->save();
+        }
 
-    $this->logSection('candle', 'Saving room types');        
-    foreach ($roomTypes as $roomType) {
-        $roomType->save();
+        $this->logSection('candle', 'Saving room types');        
+        foreach ($roomTypes as $roomType) {
+            $roomType->save();
+        }
+        
+        $this->logSection('candle', 'Saving teachers');
+        foreach ($teachers as $teacher) {
+            $teacher->save();
+        }
+        
+        $this->logSection('candle', 'Saving rooms');
+        foreach ($rooms as $room) {
+            $room->save();
+        }
+        
+        $this->logSection('candle', 'Saving subjects');
+        foreach ($subjects as $subject) {
+            $subject->save();
+        }
+        
+        $this->logSection('candle', 'Saving student groups');
+        foreach ($studentGroups as $studentGroup) {
+            $studentGroup->save();
+        }
+        
+        $this->logSection('candle', 'Saving lessons');
+        foreach ($lessons as $lesson) {
+            $lesson->save();
+        }
+        
+        $connection->commit();
     }
-    
-    $this->logSection('candle', 'Saving teachers');
-    foreach ($teachers as $teacher) {
-        $teacher->save();
+    catch (Exception $e) {
+        $this->logSection('candle', 'Exception occured, executing rollback');
+        $connection->rollback();
+        throw $e;
     }
-    
-    $this->logSection('candle', 'Saving rooms');
-    foreach ($rooms as $room) {
-        $room->save();
-    }
-    
-    $this->logSection('candle', 'Saving subjects');
-    foreach ($subjects as $subject) {
-        $subject->save();
-    }
-    
-    $this->logSection('candle', 'Saving student groups');
-    foreach ($studentGroups as $studentGroup) {
-        $studentGroup->save();
-    }
-    
-    $this->logSection('candle', 'Saving lessons');
-    foreach ($lessons as $lesson) {
-        $lesson->save();
-    }
-    
-    $connection->commit();
+   
 
     $this->logSection('candle', sprintf('Replaced %d lesson types with %d new (%+d)', $deletedLessonTypes, count($lessonTypes), count($lessonTypes)-$deletedLessonTypes));
     $this->logSection('candle', sprintf('Replaced %d room types with %d new (%+d)', $deletedRoomTypes, count($roomTypes), count($roomTypes)-$deletedRoomTypes));

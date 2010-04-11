@@ -15,13 +15,11 @@ abstract class BaseStudentGroupFormFilter extends BaseFormFilterDoctrine
     $this->setWidgets(array(
       'name'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'lessons_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Lesson')),
-      'lesson_list'  => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Lesson')),
     ));
 
     $this->setValidators(array(
       'name'         => new sfValidatorPass(array('required' => false)),
       'lessons_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Lesson', 'required' => false)),
-      'lesson_list'  => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Lesson', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('student_group_filters[%s]');
@@ -49,22 +47,6 @@ abstract class BaseStudentGroupFormFilter extends BaseFormFilterDoctrine
           ->andWhereIn('StudentGroupLessons.lesson_id', $values);
   }
 
-  public function addLessonListColumnQuery(Doctrine_Query $query, $field, $values)
-  {
-    if (!is_array($values))
-    {
-      $values = array($values);
-    }
-
-    if (!count($values))
-    {
-      return;
-    }
-
-    $query->leftJoin('r.StudentGroupLessons StudentGroupLessons')
-          ->andWhereIn('StudentGroupLessons.lesson_id', $values);
-  }
-
   public function getModelName()
   {
     return 'StudentGroup';
@@ -76,7 +58,6 @@ abstract class BaseStudentGroupFormFilter extends BaseFormFilterDoctrine
       'id'           => 'Number',
       'name'         => 'Text',
       'lessons_list' => 'ManyKey',
-      'lesson_list'  => 'ManyKey',
     );
   }
 }
