@@ -6,7 +6,7 @@ html, body {
     background: #4e546a url("../images/bg-body.png") left top repeat-y;
     font-size: 10pt;
     font-family: sans-serif;
-    min-width:l 700px;
+    min-width: 700px;
 }
 
 html.panel_hidden, body.panel_hidden {
