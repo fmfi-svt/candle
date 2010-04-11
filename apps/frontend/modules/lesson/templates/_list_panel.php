@@ -1,4 +1,5 @@
 <?php echo form_tag('@timetable_change_lessons?id='.$timetable_id); ?>
+<div>
 
 <ul class="vysledky_hladania">
 
@@ -66,4 +67,5 @@ foreach ($lessons as $lesson) {
 
 <button type="submit" class="jshide">Zmeniť hodiny</button>
 
+</div>
 </form>

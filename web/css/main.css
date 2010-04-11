@@ -6,7 +6,7 @@ html, body {
     background: #4e546a url("../images/bg-body.png") left top repeat-y;
     font-size: 10pt;
     font-family: sans-serif;
-    min-width: 700px;
+    min-width:l 700px;
 }
 
 html.panel_hidden, body.panel_hidden {
@@ -321,7 +321,7 @@ ul.vysledky_hladania li+li {
     overflow: hidden;
 }
 
-.predmet table tr+tr+tr {
+.predmet table tr+tr {
     border-top: 1px solid #999;
 }
 

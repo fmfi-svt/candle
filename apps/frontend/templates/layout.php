@@ -10,7 +10,6 @@
     <?php include_stylesheets() ?>
     <?php include_javascripts() ?>
 </head>
-</head>
 <body class="<?php if(!$panelText) echo 'panel_hidden'?>">
 <div id="vrch">
 <h1 id="vrch_logo"><?php echo link_to('Rozvrh', '@homepage') ?></h1>
