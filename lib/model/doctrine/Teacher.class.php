@@ -17,6 +17,6 @@ class Teacher extends BaseTeacher
     }
     
     function getShortName() {
-        return substr($this->getGivenName(), 0, 1).'. '.$this->getFamilyName();
+        return ($this->getGivenName()?substr($this->getGivenName(), 0, 1).'. ':'').$this->getFamilyName();
     }
 }

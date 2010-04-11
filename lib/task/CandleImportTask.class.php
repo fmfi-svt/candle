@@ -136,11 +136,11 @@ EOF;
     foreach($xmlRoot->ucitelia->ucitel as $xmlUcitel) {
         $teacher = new Teacher();
         $teacher->setExternalId((string) $xmlUcitel['id']);
-        $teacher->setFamilyName((string) $xmlUcitel->priezvisko);
-        $teacher->setGivenName((string) $xmlUcitel->meno);
-        $teacher->setIniciala((string) $xmlUcitel->iniciala);
-        $teacher->setKatedra((string) $xmlUcitel->katedra);
-        $teacher->setOddelenie((string) $xmlUcitel->oddelenie);
+        $teacher->setFamilyName(trim((string) $xmlUcitel->priezvisko));
+        $teacher->setGivenName(trim((string) $xmlUcitel->meno));
+        $teacher->setIniciala(trim((string) $xmlUcitel->iniciala));
+        $teacher->setKatedra(trim((string) $xmlUcitel->katedra));
+        $teacher->setOddelenie(trim((string) $xmlUcitel->oddelenie));
         
         if (isset($teachers[$teacher->getExternalId()])) {
             $this->spit('Duplicate ucitel.id: '. $teacher->getExternalId());
