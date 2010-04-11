@@ -87,9 +87,7 @@ else {
                     if ($lesson->getStart()==$time) {
                         $rowspan = intval($lesson->getLength()/$rowspanmins);
                         echo '<td class="hodina" '.Candle::formatRowspan($rowspan).'>';
-                        echo $lesson->getSubject();
-                        echo '<br />';
-                        echo Candle::formatTime($lesson->getEnd());
+                        include_partial('timetable/cell', array('lesson'=>$lesson));
                         echo '</td>';
                     }
                     else if ($lesson->getStart()<$time && $lesson->getEnd()>$time) {

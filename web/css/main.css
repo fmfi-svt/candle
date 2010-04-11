@@ -411,6 +411,10 @@ ul.vysledky_hladania li+li {
     right: 2px;
 }
 
+#rozvrh td.hodina .predmet_wrap {
+    padding-top: 4px;
+}
+
 #rozvrh td.hodina .predmet {
     padding-top: 1em;
 }
