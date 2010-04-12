@@ -15,11 +15,12 @@ class SubjectTable extends Doctrine_Table
         $matchQueryString = '%'.str_replace(array(' ', '.'), '%', $queryString).'%';
         
         $q = Doctrine_Query::create()
+            ->select('s.id, s.name, s.short_code, l.id, l.day, l.start, t.given_name, t.family_name, ty.code, ty.name, r.name')
             ->from('Subject s')
             ->innerJoin('s.Lessons l')
-            ->leftJoin('l.Teacher t')
-            ->leftJoin('l.LessonType ty')
-            ->leftJoin('l.Room r');
+            ->innerJoin('l.LessonType ty')
+            ->innerJoin('l.Room r')
+            ->leftJoin('l.Teacher t');
         
         if (strlen($queryString)>2) {
             $q->andWhere('s.name LIKE ?', $matchQueryString)
@@ -30,7 +31,7 @@ class SubjectTable extends Doctrine_Table
         $q->orWhere('EXISTS (SELECT sl.id FROM Lesson sl LEFT JOIN sl.Room sr WHERE sr.name LIKE ? AND sl.subject_id=s.id)', $matchQueryString)
             ->orderBy('s.name')
             ->limit($limit);
-        return $q->execute();
+        return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
     }
     
 }

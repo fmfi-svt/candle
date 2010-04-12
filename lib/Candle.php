@@ -46,4 +46,8 @@ class Candle {
     static public function nbsp($text) {
         return str_replace(' ', '&nbsp;', $text);
     }
+
+    static public function formatShortName($teacher) {
+        return ($teacher['given_name']?substr($teacher['given_name'], 0, 1).'. ':'').$teacher['family_name'];
+    }
 }

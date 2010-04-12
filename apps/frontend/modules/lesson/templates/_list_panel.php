@@ -40,13 +40,13 @@ foreach ($lessons as $lesson) {
       <tbody>
         <?php foreach ($lessons as $lesson): ?>
         <tr>
-          <td><abbr class="lesson-type lesson-type-<?php echo $lesson['LessonType']['code'] ?>" title="<?php echo $lesson->getLessonType()?>"><span class="lesson-type-in"><?php echo $lesson['LessonType']['code'] ?></span><span class="lesson-type-image"></span></abbr></td>
+          <td><abbr class="lesson-type lesson-type-<?php echo $lesson['LessonType']['code'] ?>" title="<?php echo $lesson['LessonType']['name']?>"><span class="lesson-type-in"><?php echo $lesson['LessonType']['code'] ?></span><span class="lesson-type-image"></span></abbr></td>
           <td><?php echo Candle::formatShortDay($lesson['day']) ?></td>
           <td><?php echo Candle::formatTime($lesson['start']) ?></td>
           <td><?php echo $lesson['Room']['name'] ?></td>
           <td><?php foreach ($lesson['Teacher'] as $i => $teacher):
                         if ($i>0) echo ', ';
-                        echo Candle::nbsp($teacher['short_name']);
+                        echo Candle::nbsp(Candle::formatShortName($teacher));
                     endforeach; ?>
           </td>
           <td class="last">
