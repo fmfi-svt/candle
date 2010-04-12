@@ -27,8 +27,10 @@ for ($i = 0; $i < 5; $i++) {
 if ($layout->isFMPHLike()) {
     $rowmins = 50; // pocet minut na jeden riadok tabulky
     $rowspanmins = 45; // pocet minut dlzky, za ktore sa ma vygenerovat jeden rowspan
-    $mintime = 490; // TODO zmenit casy generovania tabuliek
+    $mintime = 490; 
     $maxtime = 1190;
+    $mintime = min($mintime, 40+Candle::floorTo($layout->getLessonMinTime()-40, 50));
+    $maxtime = max($maxtime, 40+Candle::ceilTo($layout->getLessonMaxTime()-40, 50));
     $time_header_spans = 1; // kolko riadkov zabera hlavicka s casom 
 }
 else {
