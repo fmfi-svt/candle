@@ -6,7 +6,7 @@ class EditableTimetable {
     private $lessons = array();
     private $selectedLessons = array();
     private $userTimetableId = null;
-    private $isModified = false;
+    private $modified = false;
     
     public function __construct() {
     }
@@ -24,11 +24,16 @@ class EditableTimetable {
     }
     
     public function addLesson($lesson) {
-        $this->lessons[$lesson->getId()] = $lesson;
+        $this->addLessonById($lesson->getId());
+    }
+    
+    public function getLessonIds() {
+        return $this->lessons;    
     }
     
     public function getLessons() {
-        return $this->lessons;    
+        //return array();
+        return Doctrine::getTable('Lesson')->fetchFullLessons(array_keys($this->lessons));
     }
     
     public function removeLesson($lesson) {
@@ -62,7 +67,7 @@ class EditableTimetable {
     }
     
     public function isModified() {
-        return $this->isModified;
+        return $this->modified;
     }
     
     public function addSubjectById($subjectId) {
@@ -73,8 +78,12 @@ class EditableTimetable {
     }
     
     public function addLessonById($lessonId) {
-        $lesson = Doctrine::getTable('Lesson')->find($lessonId);
-        $this->addLesson($lesson);
+        if (!isset($this->lessons[$lessonId])) {
+            $this->lessons[$lessonId] = $lessonId;
+            $this->modified = true;
+            return true;
+        }
+        return false;
     }
     
     public function removeSubjectById($subjectId) {
@@ -85,7 +94,12 @@ class EditableTimetable {
     }
     
     public function removeLessonById($lessonId) {
-        unset($this->lessons[$lessonId]);
+        if (isset($this->lessons[$lessonId])) {
+            unset($this->lessons[$lessonId]);
+            $this->modified = true;
+            return true;
+        }
+        return false;
     }
 
 }

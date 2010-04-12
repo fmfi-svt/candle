@@ -8,3 +8,4 @@ config/databases\.yml
 ^plugins/\.filemap
 ^plugins/\.lock
 ^plugins/.*/\.DS_Store$
+^nbproject/private/

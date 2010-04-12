@@ -24,8 +24,8 @@ class TimetableLayout {
     }
 
     private static function compareLessonsByStartTime($a, $b) {
-        if ($a->getStart() == $b->getStart()) return 0;
-        return ($a->getStart() < $b->getStart()) ? -1 : 1 ;
+        if ($a['start'] == $b['start']) return 0;
+        return ($a['start'] < $b['start']) ? -1 : 1 ;
     }
     
     public function doLayout() {
@@ -39,11 +39,13 @@ class TimetableLayout {
         $this->lessonMinTime = 24*60;
         $this->lessonMaxTime = 0;
         $this->isFMPHLike = true; // kazda hodina nespravnej dlzky a casu to moze pokazit
-        foreach($this->timetable->getLessons() as $lesson) {
-            $byDays[$lesson->getDay()][] = $lesson;
-            $this->lessonMinTime = min($this->lessonMinTime, $lesson->getStart());
-            $this->lessonMaxTime = max($this->lessonMaxTime, $lesson->getEnd());
-            if (($lesson->getStart() % 50) != 40 || ($lesson->getLength() % 45 != 0)) {
+
+        $lessons = $this->timetable->getLessons();
+        foreach($lessons as $lesson) {
+            $byDays[$lesson['day']][] = $lesson;
+            $this->lessonMinTime = min($this->lessonMinTime, $lesson['start']);
+            $this->lessonMaxTime = max($this->lessonMaxTime, $lesson['end']);
+            if (($lesson['start'] % 50) != 40 || (($lesson['end']-$lesson['start']) % 45 != 0)) {
                 // toto nie je FMFI hodina
                 $this->isFMPHLike = false;
             }
@@ -93,7 +95,7 @@ class TimetableLayout {
         // iba posledna vec, musi byt utriedene podla casu!
         if (count($column) == 0) return True;
         $last = $column[count($column)-1];
-        return ($last->getEnd() <= $lesson->getStart());
+        return ($last['end'] <= $lesson['start']);
     }
 
 }

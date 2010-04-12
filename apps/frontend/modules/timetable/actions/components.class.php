@@ -13,6 +13,7 @@ class timetableComponents extends sfComponents {
         if ($this->lessonForm->isValid()) {
             $this->getUser()->setAttribute('panel_lesson_query', $queryString);
             $this->subjects = Doctrine::getTable('Subject')->searchSubjectsByAll($queryString);
+//            $this->subjects = array();
         }
         else {
             $this->subjects = null;

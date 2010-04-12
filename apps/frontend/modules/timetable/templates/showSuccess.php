@@ -74,7 +74,7 @@ else {
                         continue;
                     }
                     $lesson = $days[$day][$ix][$pos];
-                    if ($lesson->getEnd()<=$time) {
+                    if ($lesson['end']<=$time) {
                         // je treba sa posunut dalej
                         $counters[$day][$ix]++;
                         $pos = $counters[$day][$ix];
@@ -86,13 +86,13 @@ else {
                         $lesson = $days[$day][$ix][$pos];
                     }
                     // treba vypisat bunku?
-                    if ($lesson->getStart()==$time) {
-                        $rowspan = intval($lesson->getLength()/$rowspanmins);
+                    if ($lesson['start']==$time) {
+                        $rowspan = intval(($lesson['end']-$lesson['start'])/$rowspanmins);
                         echo '<td class="hodina" '.Candle::formatRowspan($rowspan).'>';
                         include_partial('timetable/cell', array('lesson'=>$lesson));
                         echo '</td>';
                     }
-                    else if ($lesson->getStart()<$time && $lesson->getEnd()>$time) {
+                    else if ($lesson['start']<$time && $lesson['end']>$time) {
                         // treba nevypisat nic
                     }
                     else {
