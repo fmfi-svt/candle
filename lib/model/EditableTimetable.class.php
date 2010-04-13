@@ -7,6 +7,7 @@ class EditableTimetable {
     private $highlightedLessons = array();
     private $userTimetableId = null;
     private $modified = false;
+    private $readOnly = false;
     
     public function __construct() {
     }
@@ -16,10 +17,6 @@ class EditableTimetable {
     }
     
     public function save() {
-        // TODO
-    }
-    
-    public function duplicate() {
         // TODO
     }
     
@@ -90,6 +87,14 @@ class EditableTimetable {
     
     public function isModified() {
         return $this->modified;
+    }
+
+    public function isReadOnly() {
+        return $this->readOnly;
+    }
+
+    public function isPersisted() {
+        return $this->userTimetableId !== null;
     }
     
     public function addSubjectById($subjectId) {
