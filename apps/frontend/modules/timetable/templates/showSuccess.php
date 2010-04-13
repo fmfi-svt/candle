@@ -41,7 +41,7 @@ else {
 }
 
 ?>
-<form method="post" action=""><div>
+<?php echo form_tag('@timetable_change_lessons?id='.$timetable_id); ?><div>
 <table id="rozvrh" <?php if (!$layout->isFMPHLike()) echo 'class="precise"' ?>>
     <tr>
         <th class="pristupnost">Začiatok</th>
@@ -88,8 +88,13 @@ else {
                     // treba vypisat bunku?
                     if ($lesson['start']==$time) {
                         $rowspan = intval(($lesson['end']-$lesson['start'])/$rowspanmins);
-                        echo '<td class="hodina" '.Candle::formatRowspan($rowspan).'>';
-                        include_partial('timetable/cell', array('lesson'=>$lesson));
+                        $highlighted = $timetable->isLessonHighlighted($lesson['id']);
+                        $additionalClass = '';
+                        if ($highlighted) {
+                            $additionalClass .= ' highlighted';
+                        }
+                        echo '<td class="hodina'.$additionalClass.'" '.Candle::formatRowspan($rowspan).'>';
+                        include_partial('timetable/cell', array('lesson'=>$lesson, 'highlighted'=>$highlighted));
                         echo '</td>';
                     }
                     else if ($lesson['start']<$time && $lesson['end']>$time) {
@@ -108,4 +113,5 @@ else {
 </div>
 <div>
     <button type="submit" class="jshide">Upraviť rozvrh</button>
-</div></form>
+</div>
+<?php echo '</form>' ?>

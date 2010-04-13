@@ -51,11 +51,15 @@ class timetableActions extends sfActions {
         $subject = $request->getParameter('subject', array());
         $lessonBefore = $request->getParameter('lessonBefore', array());
         $lesson = $request->getParameter('lesson', array());
+        $lessonHighlightedBefore = $request->getParameter('lessonHighlightedBefore', array());
+        $lessonHighlighted = $request->getParameter('lessonHighlighted', array());
         
         $subjectBeforeSet = array();
         $subjectSet = array();
         $lessonBeforeSet = array();
         $lessonSet = array();
+        $lessonHighlightedBeforeSet = array();
+        $lessonHighlightedSet = array();
         
         foreach ($subjectBefore as $subid) {
             $subjectBeforeSet[$subid] = true;
@@ -63,6 +67,10 @@ class timetableActions extends sfActions {
         
         foreach ($lessonBefore as $lesid) {
             $lessonBeforeSet[$lesid] = true;
+        }
+
+        foreach ($lessonHighlightedBefore as $lesid) {
+            $lessonHighlightedBeforeSet[$lesid] = true;
         }
         
         foreach ($subject as $subid) {
@@ -72,11 +80,29 @@ class timetableActions extends sfActions {
         foreach ($lesson as $lesid) {
             $lessonSet[$lesid] = true;
         }
+
+        foreach ($lessonHighlighted as $lesid) {
+            $lessonHighlightedSet[$lesid] = true;
+        }
         
         foreach ($lesson as $lesid) {
-            $before = isset($subjectLessonSet[$lesid]);
+            $before = isset($lessonBeforeSet[$lesid]);
             if (!$before) {
                 $this->timetable->addLessonById($lesid);
+            }
+        }
+
+        foreach ($lessonHighlighted as $lesid) {
+            $before = isset($lessonHighlightedBeforeSet[$lesid]);
+            if (!$before) {
+                $this->timetable->highlightLessonById($lesid);
+            }
+        }
+
+        foreach ($lessonHighlightedBefore as $lesid) {
+            $now = isset($lessonHighlightedSet[$lesid]);
+            if (!$now) {
+                $this->timetable->unhighlightLessonById($lesid);
             }
         }
         

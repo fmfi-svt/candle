@@ -10,7 +10,7 @@ html, body {
 }
 
 html.panel_hidden, body.panel_hidden {
-    background-position: -290px top;
+    background-position: -290px 0px;
 }
 
 #vrch {
@@ -392,6 +392,10 @@ ul.vysledky_hladania li+li {
     color: black;
     text-align: center;
     position: relative;
+}
+
+#rozvrh td.hodina.highlighted {
+    background: #ffffff;
 }
 
 #rozvrh td.hodina .wrap {

@@ -4,7 +4,7 @@ class EditableTimetable {
     
     private $name = '';
     private $lessons = array();
-    private $selectedLessons = array();
+    private $highlightedLessons = array();
     private $userTimetableId = null;
     private $modified = false;
     
@@ -49,10 +49,32 @@ class EditableTimetable {
     }
     
     public function hasLesson($lessonId) {
+        $lessonId = intval($lessonId);
         return isset($this->lessons[$lessonId]);
+    }
+
+    public function isLessonHighlighted($lessonId) {
+        $lessonId = intval($lessonId);
+        return isset($this->highlightedLessons[$lessonId]);
+    }
+
+    public function highlightLessonById($lessonId) {
+        $lessonId = intval($lessonId);
+        if (!$this->hasLesson($lessonId)) return false;
+        if (isset($this->highlightedLessons[$lessonId])) return false;
+        $this->highlightedLessons[$lessonId] = $lessonId;
+        return true;
+    }
+
+    public function unhighlightLessonById($lessonId) {
+        if (!$this->hasLesson($lessonId)) return false;
+        if (!isset($this->highlightedLessons[$lessonId])) return false;
+        unset($this->highlightedLessons[$lessonId]);
+        return true;
     }
     
     public function isSubjectSelected($subjectId) {
+        $subjectId = intval($subjectId);
         $lessons = Doctrine::getTable('Lesson')->listBySubjectId($subjectId);
         foreach ($lessons as $lesson) {
             if (!$this->hasLesson($lesson->getId())) {
@@ -71,6 +93,7 @@ class EditableTimetable {
     }
     
     public function addSubjectById($subjectId) {
+        $subjectId = intval($subjectId);
         $lessons = Doctrine::getTable('Lesson')->listBySubjectId($subjectId);
         foreach ($lessons as $lesson) {
             $this->addLesson($lesson);
@@ -78,6 +101,7 @@ class EditableTimetable {
     }
     
     public function addLessonById($lessonId) {
+        $lessonId = intval($lessonId);
         if (!isset($this->lessons[$lessonId])) {
             $this->lessons[$lessonId] = $lessonId;
             $this->modified = true;
@@ -87,6 +111,7 @@ class EditableTimetable {
     }
     
     public function removeSubjectById($subjectId) {
+        $subjectId = intval($subjectId);
         $lessons = Doctrine::getTable('Lesson')->listBySubjectId($subjectId);
         foreach ($lessons as $lesson) {
             $this->removeLesson($lesson);
@@ -94,8 +119,10 @@ class EditableTimetable {
     }
     
     public function removeLessonById($lessonId) {
+        $lessonId = intval($lessonId);
         if (isset($this->lessons[$lessonId])) {
             unset($this->lessons[$lessonId]);
+            unset($this->highlightedLessons[$lessonId]);
             $this->modified = true;
             return true;
         }
