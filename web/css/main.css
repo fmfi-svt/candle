@@ -356,11 +356,6 @@ ul.vysledky_hladania li+li {
     padding-left: 15px;
 }
 
-#obsah_in {
-    color: white;
-    background: #4E546A;
-}
-
 #obsah_in a {
     color: yellow;
 }
