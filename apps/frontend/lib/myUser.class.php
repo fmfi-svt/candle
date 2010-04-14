@@ -10,17 +10,22 @@ class myUser extends sfGuardSecurityUser
     public function getTimetableManager() {
         $manager = $this->getAttribute('timetable_manager', null);
         if ($manager == null) {
-            $manager = new EditableTimetableManager();
-            $defaultTimetable = new EditableTimetable();
-            $defaultTimetable->setName('Rozvrh');
-            $manager->addTimetable($defaultTimetable);
-            $this->setTimetableManager($manager);
+            $manager = $this->initDefaultTimetableManager();            
         }
         return $manager;
     }
 
     public function setTimetableManager(EditableTimetableManager $manager) {
         $this->setAttribute('timetable_manager', $manager);
+    }
+
+    private function initDefaultTimetableManager() {
+        $manager = new EditableTimetableManager();
+        $defaultTimetable = new EditableTimetable();
+        $defaultTimetable->setName('Rozvrh');
+        $manager->addTimetable($defaultTimetable);
+        $this->setTimetableManager($manager);
+        return $manager;
     }
 
     /**
@@ -57,6 +62,13 @@ class myUser extends sfGuardSecurityUser
 
         $this->setTimetableManager($newTimetableManager);
 
+    }
+
+    public function signOut() {
+        parent::signOut();
+
+        // zrusim vsetky otvorene rozvrhy
+        $this->initDefaultTimetableManager();
     }
 
 }
