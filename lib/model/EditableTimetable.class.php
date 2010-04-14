@@ -12,8 +12,20 @@ class EditableTimetable {
     public function __construct() {
     }
     
-    public function load($userTimetableId) {
-        
+    public function load($userTimetable) {
+        $this->name = $userTimetable['name'];
+        $this->lessons = array();
+        $this->highlightedLessons = array();
+        $this->userTimetableId = $userTimetable['id'];
+
+        foreach ($userTimetable['UserTimetableLessons'] as $utl) {
+            $this->addLessonById($utl['lesson_id']);
+            if ($utl['highlighted']) {
+                $this->highlightLessonById($utl['lesson_id']);
+            }
+        }
+
+        $this->modified = false;
     }
     
     public function save($userId) {
@@ -95,6 +107,7 @@ class EditableTimetable {
         if (!$this->hasLesson($lessonId)) return false;
         if (isset($this->highlightedLessons[$lessonId])) return false;
         $this->highlightedLessons[$lessonId] = $lessonId;
+        $this->modified = true;
         return true;
     }
 
@@ -102,6 +115,7 @@ class EditableTimetable {
         if (!$this->hasLesson($lessonId)) return false;
         if (!isset($this->highlightedLessons[$lessonId])) return false;
         unset($this->highlightedLessons[$lessonId]);
+        $this->modified = true;
         return true;
     }
     

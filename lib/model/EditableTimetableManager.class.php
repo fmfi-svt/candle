@@ -5,9 +5,6 @@ class EditableTimetableManager {
     private $timetables = array();
     
     public function __construct() {
-        $defaultTimetable = new EditableTimetable();
-        $defaultTimetable->setName('Vlastný rozvrh');
-        $this->timetables[] = $defaultTimetable;
     }
     
     public function addTimetable(EditableTimetable $timetable) {
