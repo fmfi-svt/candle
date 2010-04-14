@@ -7,10 +7,19 @@ class EditableTimetableManager {
     public function __construct() {
     }
     
-    public function addTimetable(EditableTimetable $timetable) {
+    public function addTimetable(EditableTimetable $timetable, $id=null) {
         $timetable->setName($this->getUniqueName($timetable->getName()));
-        $this->timetables[] = $timetable;
+        if ($id == null || isset($this->timetables[$id])) {
+            $this->timetables[] = $timetable;
+        }
+        else {
+            $this->timetables[$id] = $timetable;
+        }
         return key($this->timetables);
+    }
+
+    public function getMaxId() {
+        return max(array_keys($this->timetables));
     }
     
     public function duplicateTimetable(EditableTimetable $timetable) {
@@ -85,5 +94,5 @@ class EditableTimetableManager {
         $defaultTimetable->setName('Rozvrh');
         return $this->addTimetable($defaultTimetable);
     }
-
+    
 }

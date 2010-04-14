@@ -44,22 +44,24 @@ class myUser extends sfGuardSecurityUser
 
         $newTimetableManager = new EditableTimetableManager();
 
+        $nextId = $oldTimetableManager->getMaxId()+1;
+
         $userTimetables = Doctrine::getTable('UserTimetable')->findWithLessonsForUserId($user->getId());
         foreach ($userTimetables as $userTimetable) {
             $timetable = new EditableTimetable();
             $timetable->load($userTimetable);
-            $newTimetableManager->addTimetable($timetable);
+            $newTimetableManager->addTimetable($timetable, $nextId);
+            $nextId++;
         }
 
         // naimportujem vsetky doteraz otvorene a upravene rozvrhy do noveho managera
-        foreach ($oldTimetableManager->getTimetables() as $timetable) {
+        foreach ($oldTimetableManager->getTimetables() as $id=>$timetable) {
             if ($timetable->isModified()) {
-                $newTimetableManager->addTimetable($timetable);
+                $newTimetableManager->addTimetable($timetable, $id);
             }
         }
 
         $this->setTimetableManager($newTimetableManager);
-
     }
 
     public function signOut() {
