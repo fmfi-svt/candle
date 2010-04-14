@@ -12,4 +12,13 @@ class UserTimetableTable extends Doctrine_Table
         return $q->execute();
     }
 
+    public function deleteById($userTimetableId) {
+        $q = Doctrine_Query::create()
+                ->delete()
+                ->from('UserTimetable t')
+                ->where('t.id = ?', $userTimetableId);
+
+        return $q->execute();
+    }
+
 }

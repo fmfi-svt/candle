@@ -142,4 +142,17 @@ class timetableActions extends sfActions {
         $this->redirect('@timetable_show?id='.$this->timetable_id);
     }
 
+    public function executeDelete(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+        $this->manager->removeTimetable($this->timetable_id);
+        $this->getUser()->setFlash('notice', 'Rozvrh úspešne zmazaný');
+        $this->redirect('@timetable_show?id='.$this->manager->getFirstTimetableId());
+    }
+
+    public function executeHomepage(sfWebRequest $request) {
+        $timetableId = $this->getUser()->getTimetableManager()->getFirstTimetableId();
+        $request->setParameter('id', $timetableId);
+        $this->forward('timetable', 'show');
+    }
+
 }

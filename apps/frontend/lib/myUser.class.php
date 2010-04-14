@@ -21,9 +21,7 @@ class myUser extends sfGuardSecurityUser
 
     private function initDefaultTimetableManager() {
         $manager = new EditableTimetableManager();
-        $defaultTimetable = new EditableTimetable();
-        $defaultTimetable->setName('Rozvrh');
-        $manager->addTimetable($defaultTimetable);
+        $manager->addDefaultTimetable();
         $this->setTimetableManager($manager);
         return $manager;
     }

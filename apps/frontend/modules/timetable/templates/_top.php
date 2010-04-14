@@ -20,6 +20,6 @@
     --><li><a href="#">Importovať</a></li><!--
     --><li><a href="#">Exportovať</a></li><!--
     --><li><a href="#">Publikovať</a></li><!--
-    --><li><a href="#">Zmazať</a></li>
+    --><li><?php echo link_to('Zmazať', '@timetable_delete?id='.$timetable_id); ?></li>
 </ul>
 <?php endif; ?>

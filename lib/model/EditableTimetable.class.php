@@ -66,6 +66,10 @@ class EditableTimetable {
             throw $e;
         }
     }
+
+    public function delete() {
+        Doctrine::getTable('UserTimetable')->deleteById($this->userTimetableId);
+    }
     
     public function addLesson($lesson) {
         $this->addLessonById($lesson->getId());

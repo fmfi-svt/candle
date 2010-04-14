@@ -4,7 +4,7 @@
 # default rules
 homepage:
   url:   /
-  param: { module: timetable, action: show, id: 0 }
+  param: { module: timetable, action: homepage }
 
 sf_guard_signin:
     url: /login
@@ -58,8 +58,10 @@ timetable_duplicate:
 timetable_save:
     url: /timetable/:id/save
     param: { module: timetable, action: save }
-    requirements:
-        sf_method: get
+
+timetable_delete:
+    url: /timetable/:id/delete
+    param: { module: timetable, action: delete }
 
 # generic rules
 # please, remove them by adding more specific rules

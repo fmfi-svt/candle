@@ -43,12 +43,21 @@ class EditableTimetableManager {
         }
         throw new Exception("Shouldn't be here ;)");
     }
-    
+
+    /**
+     * Remove timetable and return the removed timetable
+     */
     public function removeTimetable($index) {
         $timetable = false;
         if (isset($this->timetables[$index])) {
             $timetable = $this->timetables[$index];
+            if ($timetable->isPersisted()) {
+                $timetable->delete();
+            }
             unset($this->timetables[$index]);
+        }
+        if ($this->isEmpty()) {
+            $this->addDefaultTimetable();
         }
         return $timetable;
     }
@@ -60,6 +69,21 @@ class EditableTimetableManager {
     
     public function getTimetables() {
         return $this->timetables;
+    }
+
+    public function isEmpty() {
+        return count($this->timetables) == 0;
+    }
+
+    public function getFirstTimetableId() {
+        reset($this->timetables);
+        return key($this->timetables);
+    }
+
+    public function addDefaultTimetable() {
+        $defaultTimetable = new EditableTimetable();
+        $defaultTimetable->setName('Rozvrh');
+        return $this->addTimetable($defaultTimetable);
     }
 
 }
