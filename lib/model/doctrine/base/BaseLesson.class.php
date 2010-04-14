@@ -20,37 +20,40 @@
  * @property Doctrine_Collection $Linked
  * @property Doctrine_Collection $StudentGroupLessons
  * @property Doctrine_Collection $TeacherLessons
+ * @property Doctrine_Collection $UserTimetableLessons
  * 
- * @method integer             getDay()                 Returns the current record's "day" value
- * @method integer             getStart()               Returns the current record's "start" value
- * @method integer             getEnd()                 Returns the current record's "end" value
- * @method integer             getLessonTypeId()        Returns the current record's "lesson_type_id" value
- * @method integer             getRoomId()              Returns the current record's "room_id" value
- * @method integer             getSubjectId()           Returns the current record's "subject_id" value
- * @method integer             getExternalId()          Returns the current record's "external_id" value
- * @method LessonType          getLessonType()          Returns the current record's "LessonType" value
- * @method Room                getRoom()                Returns the current record's "Room" value
- * @method Subject             getSubject()             Returns the current record's "Subject" value
- * @method Doctrine_Collection getStudentGroup()        Returns the current record's "StudentGroup" collection
- * @method Doctrine_Collection getTeacher()             Returns the current record's "Teacher" collection
- * @method Doctrine_Collection getLinked()              Returns the current record's "Linked" collection
- * @method Doctrine_Collection getStudentGroupLessons() Returns the current record's "StudentGroupLessons" collection
- * @method Doctrine_Collection getTeacherLessons()      Returns the current record's "TeacherLessons" collection
- * @method Lesson              setDay()                 Sets the current record's "day" value
- * @method Lesson              setStart()               Sets the current record's "start" value
- * @method Lesson              setEnd()                 Sets the current record's "end" value
- * @method Lesson              setLessonTypeId()        Sets the current record's "lesson_type_id" value
- * @method Lesson              setRoomId()              Sets the current record's "room_id" value
- * @method Lesson              setSubjectId()           Sets the current record's "subject_id" value
- * @method Lesson              setExternalId()          Sets the current record's "external_id" value
- * @method Lesson              setLessonType()          Sets the current record's "LessonType" value
- * @method Lesson              setRoom()                Sets the current record's "Room" value
- * @method Lesson              setSubject()             Sets the current record's "Subject" value
- * @method Lesson              setStudentGroup()        Sets the current record's "StudentGroup" collection
- * @method Lesson              setTeacher()             Sets the current record's "Teacher" collection
- * @method Lesson              setLinked()              Sets the current record's "Linked" collection
- * @method Lesson              setStudentGroupLessons() Sets the current record's "StudentGroupLessons" collection
- * @method Lesson              setTeacherLessons()      Sets the current record's "TeacherLessons" collection
+ * @method integer             getDay()                  Returns the current record's "day" value
+ * @method integer             getStart()                Returns the current record's "start" value
+ * @method integer             getEnd()                  Returns the current record's "end" value
+ * @method integer             getLessonTypeId()         Returns the current record's "lesson_type_id" value
+ * @method integer             getRoomId()               Returns the current record's "room_id" value
+ * @method integer             getSubjectId()            Returns the current record's "subject_id" value
+ * @method integer             getExternalId()           Returns the current record's "external_id" value
+ * @method LessonType          getLessonType()           Returns the current record's "LessonType" value
+ * @method Room                getRoom()                 Returns the current record's "Room" value
+ * @method Subject             getSubject()              Returns the current record's "Subject" value
+ * @method Doctrine_Collection getStudentGroup()         Returns the current record's "StudentGroup" collection
+ * @method Doctrine_Collection getTeacher()              Returns the current record's "Teacher" collection
+ * @method Doctrine_Collection getLinked()               Returns the current record's "Linked" collection
+ * @method Doctrine_Collection getStudentGroupLessons()  Returns the current record's "StudentGroupLessons" collection
+ * @method Doctrine_Collection getTeacherLessons()       Returns the current record's "TeacherLessons" collection
+ * @method Doctrine_Collection getUserTimetableLessons() Returns the current record's "UserTimetableLessons" collection
+ * @method Lesson              setDay()                  Sets the current record's "day" value
+ * @method Lesson              setStart()                Sets the current record's "start" value
+ * @method Lesson              setEnd()                  Sets the current record's "end" value
+ * @method Lesson              setLessonTypeId()         Sets the current record's "lesson_type_id" value
+ * @method Lesson              setRoomId()               Sets the current record's "room_id" value
+ * @method Lesson              setSubjectId()            Sets the current record's "subject_id" value
+ * @method Lesson              setExternalId()           Sets the current record's "external_id" value
+ * @method Lesson              setLessonType()           Sets the current record's "LessonType" value
+ * @method Lesson              setRoom()                 Sets the current record's "Room" value
+ * @method Lesson              setSubject()              Sets the current record's "Subject" value
+ * @method Lesson              setStudentGroup()         Sets the current record's "StudentGroup" collection
+ * @method Lesson              setTeacher()              Sets the current record's "Teacher" collection
+ * @method Lesson              setLinked()               Sets the current record's "Linked" collection
+ * @method Lesson              setStudentGroupLessons()  Sets the current record's "StudentGroupLessons" collection
+ * @method Lesson              setTeacherLessons()       Sets the current record's "TeacherLessons" collection
+ * @method Lesson              setUserTimetableLessons() Sets the current record's "UserTimetableLessons" collection
  * 
  * @package    candle
  * @subpackage model
@@ -128,6 +131,10 @@ abstract class BaseLesson extends sfDoctrineRecord
              'foreign' => 'lesson_id'));
 
         $this->hasMany('TeacherLessons', array(
+             'local' => 'id',
+             'foreign' => 'lesson_id'));
+
+        $this->hasMany('UserTimetableLessons', array(
              'local' => 'id',
              'foreign' => 'lesson_id'));
     }

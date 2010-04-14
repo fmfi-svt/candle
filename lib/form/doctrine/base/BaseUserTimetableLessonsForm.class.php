@@ -16,16 +16,16 @@ abstract class BaseUserTimetableLessonsForm extends BaseFormDoctrine
   {
     $this->setWidgets(array(
       'id'                => new sfWidgetFormInputHidden(),
-      'user_timetable_id' => new sfWidgetFormInputText(),
-      'lesson_id'         => new sfWidgetFormInputText(),
-      'selected'          => new sfWidgetFormInputCheckbox(),
+      'user_timetable_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('UserTimetable'), 'add_empty' => false)),
+      'lesson_id'         => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Lesson'), 'add_empty' => false)),
+      'highlighted'       => new sfWidgetFormInputCheckbox(),
     ));
 
     $this->setValidators(array(
       'id'                => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
-      'user_timetable_id' => new sfValidatorInteger(),
-      'lesson_id'         => new sfValidatorInteger(),
-      'selected'          => new sfValidatorBoolean(),
+      'user_timetable_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('UserTimetable'))),
+      'lesson_id'         => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Lesson'))),
+      'highlighted'       => new sfValidatorBoolean(),
     ));
 
     $this->widgetSchema->setNameFormat('user_timetable_lessons[%s]');

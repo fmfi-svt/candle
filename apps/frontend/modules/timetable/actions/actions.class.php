@@ -130,4 +130,16 @@ class timetableActions extends sfActions {
         $this->redirect('@timetable_show?id='.$this->timetable_id);
     }
 
+    public function executeSave(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+        $user = $this->getUser()->getGuardUser();
+        if (!$user) {
+            $this->redirect('@sf_guard_signin');
+            return;
+        }
+        $this->timetable->save($user->getId());
+        $this->getUser()->setFlash('notice', 'Rozvrh úspešne uložený');
+        $this->redirect('@timetable_show?id='.$this->timetable_id);
+    }
+
 }

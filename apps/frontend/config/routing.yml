@@ -41,7 +41,7 @@ timetable_create:
     url: /timetable
     param: { module: timetable, action: create }
     requirements:
-        sf_method: get
+        sf_method: post
 
 timetable_change_lessons:
     url: /timetable/:id/change_lessons
@@ -54,6 +54,12 @@ timetable_duplicate:
     param: { module: timetable, action: duplicate }
     requirements:
         sf_method: post
+
+timetable_save:
+    url: /timetable/:id/save
+    param: { module: timetable, action: save }
+    requirements:
+        sf_method: get
 
 # generic rules
 # please, remove them by adding more specific rules

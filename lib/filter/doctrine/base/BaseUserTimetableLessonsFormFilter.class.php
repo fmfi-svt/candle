@@ -13,15 +13,15 @@ abstract class BaseUserTimetableLessonsFormFilter extends BaseFormFilterDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'user_timetable_id' => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'lesson_id'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'selected'          => new sfWidgetFormChoice(array('choices' => array('' => 'yes or no', 1 => 'yes', 0 => 'no'))),
+      'user_timetable_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('UserTimetable'), 'add_empty' => true)),
+      'lesson_id'         => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Lesson'), 'add_empty' => true)),
+      'highlighted'       => new sfWidgetFormChoice(array('choices' => array('' => 'yes or no', 1 => 'yes', 0 => 'no'))),
     ));
 
     $this->setValidators(array(
-      'user_timetable_id' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'lesson_id'         => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'selected'          => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
+      'user_timetable_id' => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('UserTimetable'), 'column' => 'id')),
+      'lesson_id'         => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Lesson'), 'column' => 'id')),
+      'highlighted'       => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
     ));
 
     $this->widgetSchema->setNameFormat('user_timetable_lessons_filters[%s]');
@@ -42,9 +42,9 @@ abstract class BaseUserTimetableLessonsFormFilter extends BaseFormFilterDoctrine
   {
     return array(
       'id'                => 'Number',
-      'user_timetable_id' => 'Number',
-      'lesson_id'         => 'Number',
-      'selected'          => 'Boolean',
+      'user_timetable_id' => 'ForeignKey',
+      'lesson_id'         => 'ForeignKey',
+      'highlighted'       => 'Boolean',
     );
   }
 }

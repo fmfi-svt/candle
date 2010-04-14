@@ -483,3 +483,21 @@ ul.vysledky_hladania li+li {
 .lesson-type-v .lesson-type-image {
     background: transparent url("../images/ikona-typ-v.png") center center no-repeat;
 }
+
+
+.flash_notice {
+    margin: 0 30px;
+    padding: 0.4em;
+    background: #7f7;
+    color: black;
+    margin-bottom: 0.8em;
+}
+
+.flash_error {
+    margin: 0 30px;
+    padding: 0.4em;
+    background: #fb7;
+    color: red;
+    font-weight: bold;
+    margin-bottom: 0.8em;
+}

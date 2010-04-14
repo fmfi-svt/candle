@@ -15,7 +15,7 @@ abstract class BaseUserTimetableFormFilter extends BaseFormFilterDoctrine
     $this->setWidgets(array(
       'name'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'published' => new sfWidgetFormChoice(array('choices' => array('' => 'yes or no', 1 => 'yes', 0 => 'no'))),
-      'slug'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'slug'      => new sfWidgetFormFilterInput(),
       'user_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('sfGuardUser'), 'add_empty' => true)),
     ));
 

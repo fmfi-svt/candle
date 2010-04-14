@@ -13,11 +13,46 @@ class EditableTimetable {
     }
     
     public function load($userTimetableId) {
-        // TODO
+        
     }
     
-    public function save() {
-        // TODO
+    public function save($userId) {
+        $connection = Doctrine_Manager::connection();
+
+        $connection->beginTransaction();
+
+        try {
+
+            if (!$this->isPersisted()) {
+                $userTimetable = new UserTimetable();
+            }
+            else {
+                $userTimetable = Doctrine::getTable('UserTimetable')->find($this->userTimetableId);
+            }
+            $userTimetable['name'] = $this->getName();
+            $userTimetable['user_id'] = $userId;
+            
+            $userTimetable->save();
+            
+            Doctrine::getTable('UserTimetableLessons')->deleteForUserTimetableId($userTimetable['id']);
+
+            foreach ($this->lessons as $lesson) {
+                $utl = new UserTimetableLessons();
+                $utl['user_timetable_id'] = $userTimetable['id'];
+                $utl['lesson_id'] = $lesson;
+                $utl['highlighted'] = $this->isLessonHighlighted($lesson);
+                $utl->save();
+            }
+            
+            $connection->commit();
+
+            $this->userTimetableId = $userTimetable['id'];
+            $this->modified = false;
+        }
+        catch (Exception $e) {
+            $connection->rollback();
+            throw $e;
+        }
     }
     
     public function addLesson($lesson) {

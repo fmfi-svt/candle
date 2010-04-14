@@ -10,17 +10,20 @@
  * @property string $slug
  * @property integer $user_id
  * @property sfGuardUser $sfGuardUser
+ * @property Doctrine_Collection $UserTimetableLessons
  * 
- * @method string        getName()        Returns the current record's "name" value
- * @method boolean       getPublished()   Returns the current record's "published" value
- * @method string        getSlug()        Returns the current record's "slug" value
- * @method integer       getUserId()      Returns the current record's "user_id" value
- * @method sfGuardUser   getSfGuardUser() Returns the current record's "sfGuardUser" value
- * @method UserTimetable setName()        Sets the current record's "name" value
- * @method UserTimetable setPublished()   Sets the current record's "published" value
- * @method UserTimetable setSlug()        Sets the current record's "slug" value
- * @method UserTimetable setUserId()      Sets the current record's "user_id" value
- * @method UserTimetable setSfGuardUser() Sets the current record's "sfGuardUser" value
+ * @method string              getName()                 Returns the current record's "name" value
+ * @method boolean             getPublished()            Returns the current record's "published" value
+ * @method string              getSlug()                 Returns the current record's "slug" value
+ * @method integer             getUserId()               Returns the current record's "user_id" value
+ * @method sfGuardUser         getSfGuardUser()          Returns the current record's "sfGuardUser" value
+ * @method Doctrine_Collection getUserTimetableLessons() Returns the current record's "UserTimetableLessons" collection
+ * @method UserTimetable       setName()                 Sets the current record's "name" value
+ * @method UserTimetable       setPublished()            Sets the current record's "published" value
+ * @method UserTimetable       setSlug()                 Sets the current record's "slug" value
+ * @method UserTimetable       setUserId()               Sets the current record's "user_id" value
+ * @method UserTimetable       setSfGuardUser()          Sets the current record's "sfGuardUser" value
+ * @method UserTimetable       setUserTimetableLessons() Sets the current record's "UserTimetableLessons" collection
  * 
  * @package    candle
  * @subpackage model
@@ -43,13 +46,21 @@ abstract class BaseUserTimetable extends sfDoctrineRecord
              ));
         $this->hasColumn('slug', 'string', 30, array(
              'type' => 'string',
-             'notnull' => true,
              'length' => '30',
              ));
         $this->hasColumn('user_id', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
              'length' => '4',
+             ));
+
+
+        $this->index('slug_unique_index', array(
+             'fields' => 
+             array(
+              0 => 'slug',
+             ),
+             'type' => 'unique',
              ));
     }
 
@@ -60,5 +71,9 @@ abstract class BaseUserTimetable extends sfDoctrineRecord
              'local' => 'user_id',
              'foreign' => 'id',
              'onDelete' => 'CASCADE'));
+
+        $this->hasMany('UserTimetableLessons', array(
+             'local' => 'id',
+             'foreign' => 'user_timetable_id'));
     }
 }

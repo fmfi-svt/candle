@@ -15,7 +15,7 @@
 <?php if ($timetable): ?>
 <h2 class="pristupnost">Akcie aktívneho rozvrhu</h2>
 <ul id="rozvrh_akcie">
-    <li><a href="#">Uložiť</a></li><!--
+    <li><?php echo link_to('Uložiť', '@timetable_save?id='.$timetable_id); ?></li><!--
     --><li><?php echo link_to('Duplikovať', '@timetable_duplicate?id='.$timetable_id); ?></li><!--
     --><li><a href="#">Importovať</a></li><!--
     --><li><a href="#">Exportovať</a></li><!--

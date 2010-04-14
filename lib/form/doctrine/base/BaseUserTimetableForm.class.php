@@ -26,9 +26,13 @@ abstract class BaseUserTimetableForm extends BaseFormDoctrine
       'id'        => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
       'name'      => new sfValidatorString(array('max_length' => 50)),
       'published' => new sfValidatorBoolean(),
-      'slug'      => new sfValidatorString(array('max_length' => 30)),
+      'slug'      => new sfValidatorString(array('max_length' => 30, 'required' => false)),
       'user_id'   => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('sfGuardUser'))),
     ));
+
+    $this->validatorSchema->setPostValidator(
+      new sfValidatorDoctrineUnique(array('model' => 'UserTimetable', 'column' => array('slug')))
+    );
 
     $this->widgetSchema->setNameFormat('user_timetable[%s]');
 

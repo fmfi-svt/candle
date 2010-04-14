@@ -7,14 +7,20 @@
  * 
  * @property integer $user_timetable_id
  * @property integer $lesson_id
- * @property boolean $selected
+ * @property boolean $highlighted
+ * @property UserTimetable $UserTimetable
+ * @property Lesson $Lesson
  * 
  * @method integer              getUserTimetableId()   Returns the current record's "user_timetable_id" value
  * @method integer              getLessonId()          Returns the current record's "lesson_id" value
- * @method boolean              getSelected()          Returns the current record's "selected" value
+ * @method boolean              getHighlighted()       Returns the current record's "highlighted" value
+ * @method UserTimetable        getUserTimetable()     Returns the current record's "UserTimetable" value
+ * @method Lesson               getLesson()            Returns the current record's "Lesson" value
  * @method UserTimetableLessons setUserTimetableId()   Sets the current record's "user_timetable_id" value
  * @method UserTimetableLessons setLessonId()          Sets the current record's "lesson_id" value
- * @method UserTimetableLessons setSelected()          Sets the current record's "selected" value
+ * @method UserTimetableLessons setHighlighted()       Sets the current record's "highlighted" value
+ * @method UserTimetableLessons setUserTimetable()     Sets the current record's "UserTimetable" value
+ * @method UserTimetableLessons setLesson()            Sets the current record's "Lesson" value
  * 
  * @package    candle
  * @subpackage model
@@ -34,7 +40,7 @@ abstract class BaseUserTimetableLessons extends sfDoctrineRecord
              'type' => 'integer',
              'notnull' => true,
              ));
-        $this->hasColumn('selected', 'boolean', null, array(
+        $this->hasColumn('highlighted', 'boolean', null, array(
              'type' => 'boolean',
              'notnull' => true,
              ));
@@ -43,6 +49,14 @@ abstract class BaseUserTimetableLessons extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        
+        $this->hasOne('UserTimetable', array(
+             'local' => 'user_timetable_id',
+             'foreign' => 'id',
+             'onDelete' => 'CASCADE'));
+
+        $this->hasOne('Lesson', array(
+             'local' => 'lesson_id',
+             'foreign' => 'id',
+             'onDelete' => 'CASCADE'));
     }
 }
