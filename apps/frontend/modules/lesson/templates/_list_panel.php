@@ -20,7 +20,12 @@ foreach ($lessons as $lesson) {
 <li class="predmet">
     <div class="predmet_header">
         <div class="predmet_nazov"><?php echo $subject['name'] ?></div>
-        <div class="predmet_kod"><?php echo $subject['short_code'] ?></div>
+        <div class="predmet_info"
+            <span class="predmet_kod"><?php echo $subject['short_code'] ?></span>
+            <?php if ($subject['rozsah']): ?>
+                <span class="rozsah"><?php echo $subject['rozsah'] ?></span>
+            <?php endif; ?>
+        </div>
         <?php if ($allSelected): ?>
         <input type="hidden" name="subjectBefore[]" value="<?php echo $subject['id']?>" />
         <?php endif; ?>

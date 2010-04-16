@@ -293,9 +293,16 @@ ul.vysledky_hladania li+li {
     font-weight: bold;
 }
 
-.predmet_kod {
+.predmet_info {
     display: block;
     font-size: 90%;
+    position: relative;
+}
+
+.predmet_info .rozsah {
+    position: absolute;
+    top: 0;
+    left: 50%;
 }
 
 .predmet_check {

@@ -15,7 +15,7 @@ class SubjectTable extends Doctrine_Table
         $matchQueryString = '%'.str_replace(array(' ', '.'), '%', $queryString).'%';
         
         $q = Doctrine_Query::create()
-            ->select('s.id, s.name, s.short_code, l.id, l.day, l.start, t.given_name, t.family_name, ty.code, ty.name, r.name')
+            ->select('s.id, s.name, s.short_code, s.rozsah, l.id, l.day, l.start, t.given_name, t.family_name, ty.code, ty.name, r.name')
             ->from('Subject s')
             ->innerJoin('s.Lessons l')
             ->innerJoin('l.LessonType ty')
