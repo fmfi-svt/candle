@@ -307,6 +307,7 @@ ul.vysledky_hladania li+li {
 
 .predmet_check {
     position: absolute;
+    z-index: 10;
     bottom: 2px;
     right: 2px;
 }

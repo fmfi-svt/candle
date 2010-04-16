@@ -1,0 +1,13 @@
+.predmet_nazov {
+    display: inline;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+.pristupnost {
+    display: none;
+}
+
+#rozvrh_akcie {
+    text-align: left;
+}

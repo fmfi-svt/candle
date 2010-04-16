@@ -19,7 +19,13 @@ foreach ($lessons as $lesson) {
 
 <li class="predmet">
     <div class="predmet_header">
-        <div class="predmet_nazov"><?php echo $subject['name'] ?></div>
+        <?php $cb_id = "panel_subject_cb_".$subject['id']; ?>
+        <input id="<?php echo $cb_id; ?>" class="predmet_check"
+               type="checkbox" name="subject[]"
+               value="<?php echo $subject['id']?>"
+               <?php if ($allSelected) echo 'checked="checked"' ?>
+               title="Zobraziť predmet"/>
+        <label for="<?php echo $cb_id; ?>" class="predmet_nazov"><?php echo $subject['name'] ?></label>
         <div class="predmet_info"
             <span class="predmet_kod"><?php echo $subject['short_code'] ?></span>
             <?php if ($subject['rozsah']): ?>
@@ -29,10 +35,6 @@ foreach ($lessons as $lesson) {
         <?php if ($allSelected): ?>
         <input type="hidden" name="subjectBefore[]" value="<?php echo $subject['id']?>" />
         <?php endif; ?>
-        <?php $cb_id = "panel_subject_cb_".$subject['id']; ?>
-        <input id="<?php echo $cb_id; ?>" class="predmet_check" type="checkbox" name="subject[]" value="<?php echo $subject['id']?>" <?php
-                if ($allSelected) echo 'checked="checked"' ?>/>
-        <label class="pristupnost" for="<?php echo $cb_id; ?>">Zobraziť v rozvrhu celý predmet: <?php echo $subject['name']; ?></label>
     </div>
 
     <table>
@@ -59,9 +61,12 @@ foreach ($lessons as $lesson) {
                 <input type="hidden" name="lessonBefore[]" value="<?php echo $lesson['id']?>" />
             <?php endif; ?>
             <?php $cb_id = 'panel_lesson_cb_'.$lesson['id'] ?>
-            <input type="checkbox" id="<?php echo $cb_id; ?>" name="lesson[]" value="<?php echo $lesson['id']?>" <?php
-                if ($timetable->hasLesson($lesson['id'])) echo ' checked="checked"';
-            ?> /><label class="pristupnost" for="<?php echo $cb_id; ?>">Zobraziť v rozvrhu: <?php echo Candle::formatShortDay($lesson['day']) . ' ' . Candle::formatTime($lesson['start']) . ' ' . $subject['name'] ?></label></td>
+            <input type="checkbox" id="<?php echo $cb_id; ?>"
+                   name="lesson[]"
+                   value="<?php echo $lesson['id']?>"
+                   <?php if ($timetable->hasLesson($lesson['id'])) echo ' checked="checked"';?>
+                   title="Zobraziť v rozvrhu"
+                /><label class="pristupnost" for="<?php echo $cb_id; ?>"><?php echo Candle::formatShortDay($lesson['day']) . ' ' . Candle::formatTime($lesson['start']) . ' ' . $subject['name'] ?></label></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
