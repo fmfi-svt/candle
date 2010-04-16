@@ -61,9 +61,13 @@ else {
     </tr>
     <?php
         for ($time = $mintime, $row_number = 0; $time < $maxtime; $time += $rowmins, $row_number++) {
-            echo '<tr>';
-            if (($row_number % $time_header_spans) == 0) {
+            $lineStartingTimeHeader = ($row_number % $time_header_spans) == 0;
+            if ($lineStartingTimeHeader) {
+                echo '<tr class="startTimeHeader">';
                 echo '<td '.Candle::formatRowspan($time_header_spans).' class="cas">'.Candle::formatTime($time).'</td>';
+            }
+            else {
+                echo '<tr>';
             }
             for ($day = 0; $day < 5; $day++) {
                 foreach ($days[$day] as $ix=>$col) {

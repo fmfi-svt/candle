@@ -21,8 +21,15 @@ root {
 }
 
 #rozvrh, #rozvrh td {
-    border: 1px solid black;
     border-collapse: collapse;
+}
+
+#rozvrh {
+    border: 1px solid black;
+}
+
+#rozvrh tr.startTimeHeader {
+    border-top: 1px solid black;
 }
 
 #rozvrh .pristupnost{
@@ -38,16 +45,26 @@ root {
 }
 
 #rozvrh td {
-    padding: 0.2em;
+    vertical-align: top;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    height: 30pt;
+}
+
+#rozvrh.precise td {
+    height: 3pt;
 }
 
 #rozvrh td.cas {
     text-align: right;
+    padding: 0.2em;
 }
 
 #rozvrh td.hodina {
     position: relative;
     text-align: center;
+    border: 1px solid black;
+    padding: 0.2em;
 }
 
 #rozvrh td.hodina .wrap {
