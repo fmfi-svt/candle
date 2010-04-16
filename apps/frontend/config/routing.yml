@@ -32,7 +32,7 @@ timetable_show:
     param: { module: timetable, action: show, sf_format: html }
     requirements:
         id: \d+
-        sf_format: (?:html|txt|csv|ics)
+        sf_format: (?:html|txt|csv|ics|xml)
 
 timetable_new:
     url: /timetable/new
