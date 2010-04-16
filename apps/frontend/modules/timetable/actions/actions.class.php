@@ -5,6 +5,15 @@ class timetableActions extends sfActions {
     public function executeShow(sfWebRequest $request) {
         $this->fetchTimetable($request);
         $this->layout = new TimetableLayout($this->timetable->getLessons());
+
+        switch ($request->getRequestFormat())
+        {
+          case 'csv':
+            $this->setLayout(false);
+            $this->getResponse()->setContentType('text/csv;header=present'); // vid RFC 4180
+            break;
+        }
+
     }
     
     public function executeNew(sfWebRequest $request) {
