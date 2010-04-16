@@ -2,47 +2,36 @@
 
 class TimetableLayout {
 
-    private $timetable = null;
     private $lessonMinTime = 0;
     private $lessonMaxTime = 1440;
     private $isFMPHlike = false;
+    private $lessons = null;
 
-    /** Pole dni v rozvrhu
-    *
-    * Presnejsie pole poli poli hodin
-    * 
-    * Jednotlive urovne pola znamenaju:
-    *   * Den
-    *   * Stlpec v dni
-    *   * Zoznam hodin v stlpci
-    */
-    private $days = array();
-    
-    public function __construct(EditableTimetable $timetable) {
-        $this->timetable = $timetable;
-        $this->doLayout();
+    /**
+     *
+     * @param array $lessons Zhydratovany result set pre hodiny, utriedeny podla dna a zaciatku hodiny!
+     */
+    public function __construct(array $lessons) {
+        $this->lessons = $lessons;
+        $this->calcStats();
     }
 
-    private static function compareLessonsByStartTime($a, $b) {
-        if ($a['start'] == $b['start']) return 0;
-        return ($a['start'] < $b['start']) ? -1 : 1 ;
-    }
-    
-    public function doLayout() {
+    public function groupByDays() {
         $byDays = array();
-        $layout = array();
         for ($day = 0; $day < 5; $day++) {
             $byDays[] = array();
-            $layout[] = array(array());
         }
-        // Najprv rozdelim hodiny podla dni a spocitam niektore statistiky
+        foreach($this->lessons as $lesson) {
+            $byDays[$lesson['day']][] = $lesson;
+        }
+        return $byDays;
+    }
+
+    private function calcStats() {
         $this->lessonMinTime = 24*60;
         $this->lessonMaxTime = 0;
         $this->isFMPHLike = true; // kazda hodina nespravnej dlzky a casu to moze pokazit
-
-        $lessons = $this->timetable->getLessons();
-        foreach($lessons as $lesson) {
-            $byDays[$lesson['day']][] = $lesson;
+        foreach($this->lessons as $lesson) {
             $this->lessonMinTime = min($this->lessonMinTime, $lesson['start']);
             $this->lessonMaxTime = max($this->lessonMaxTime, $lesson['end']);
             if (($lesson['start'] % 50) != 40 || (($lesson['end']-$lesson['start']) % 45 != 0)) {
@@ -50,10 +39,27 @@ class TimetableLayout {
                 $this->isFMPHLike = false;
             }
         }
-        // Potom utriedim hodiny v dnoch podla casu
+    }
+
+    /**
+    *
+    * Spocitaj tabulkovy layout pre dane hodiny
+    *
+    * @return array Pole poli poli hodin
+    *
+    * Jednotlive urovne pola znamenaju:
+    *   * Den
+    *   * Stlpec v dni
+    *   * Zoznam hodin v stlpci
+    */
+    public function tableLayout() {
+        $layout = array();
         for ($day = 0; $day < 5; $day++) {
-            usort($byDays[$day], array('TimetableLayout', 'compareLessonsByStartTime')); // TODO mozno presunut porovnavaciu funkciu do lesson?
+            $layout[] = array(array());
         }
+        // Najprv rozdelim hodiny podla dni a spocitam niektore statistiky
+        $byDays = $this->groupByDays();
+
         // Dalej rozhodim hodiny do stlpcov v dnoch
         for ($day = 0; $day < 5; $day++) {
             foreach($byDays[$day] as $lesson) {
@@ -71,14 +77,9 @@ class TimetableLayout {
             }
         }
         
-        // Dokoncenie layoutu
-        $this->days = $layout;
+        return $layout;
     }   
 
-    public function getDays() {
-        return $this->days;
-    }
-    
     public function isFMPHLike() {
         return $this->isFMPHLike;
     }
@@ -89,6 +90,10 @@ class TimetableLayout {
     
     public function getLessonMaxTime() {
         return $this->lessonMaxTime;
+    }
+
+    public function getLessons() {
+        return $this->lessons;
     }
     
     private function isFree($column, $lesson) {

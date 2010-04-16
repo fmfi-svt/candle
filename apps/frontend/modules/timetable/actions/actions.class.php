@@ -4,7 +4,7 @@ class timetableActions extends sfActions {
     
     public function executeShow(sfWebRequest $request) {
         $this->fetchTimetable($request);
-        $this->layout = new TimetableLayout($this->timetable);
+        $this->layout = new TimetableLayout($this->timetable->getLessons());
     }
     
     public function executeNew(sfWebRequest $request) {

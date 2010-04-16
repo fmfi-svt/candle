@@ -28,8 +28,8 @@ lesson_search_all:
     param: { module: lesson, action: query }
 
 timetable_show:
-    url: /timetable/:id
-    param: { module: timetable, action: show }
+    url: /timetable/:id.:sf_format
+    param: { module: timetable, action: show, sf_format: html }
     requirements:
         id: \d+
 

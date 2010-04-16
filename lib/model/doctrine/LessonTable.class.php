@@ -25,13 +25,14 @@ class LessonTable extends Doctrine_Table
         if (count($lessonIdentifiers) == 0) return array(); // inac to robi strasne haluze
 
         $q = Doctrine_Query::create()
-                ->select('l.id, l.day, l.start, l.end, s.name, r.name, t.name, t.code')
+                ->select('l.id, l.day, l.start, l.end, s.name, r.name, t.name, t.code, tt.given_name, tt.family_name')
                 ->from('Lesson l')
                 ->innerJoin('l.Subject s')
                 ->innerJoin('l.Room r')
                 ->innerJoin('l.LessonType t')
-                ->andWhereIn('l.id', $lessonIdentifiers);
-//                ->andWhere('l.id IN ()');
+                ->leftJoin('l.Teacher tt')
+                ->andWhereIn('l.id', $lessonIdentifiers)
+                ->orderBy('l.day, l.start');
 
         return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
     }

@@ -10,9 +10,9 @@ slot('top');
 include_component('timetable','top', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
 end_slot();
 
-// pocitadla pre stlpce
-$days = $layout->getDays();
+$days = $layout->tableLayout();
 
+// pocitadla pre stlpce
 $counters = array();
 for ($i = 0; $i < 5; $i++) {
     $col_counters = array();
