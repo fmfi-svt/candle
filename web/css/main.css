@@ -402,6 +402,11 @@ ul.vysledky_hladania li+li {
     background: #ffffff;
 }
 
+#rozvrh th.zaciatok {
+    background: transparent;
+    width: auto;
+}
+
 #rozvrh td.hodina .wrap {
     position: relative;
 /*    height: 100%;*/

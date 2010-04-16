@@ -1,0 +1,77 @@
+/* 
+
+Tlacovy styl
+
+*/
+
+root { 
+    display: block;
+}
+
+#vrch, #panel, #panel_schovat, #vrch2, #vrch_riadok1 {
+    display: none;
+}
+
+.jshide, .jshidden {
+    display: none;
+}
+
+#rozvrh input, #rozvrh label {
+    display: none;
+}
+
+#rozvrh, #rozvrh td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#rozvrh .pristupnost{
+    display: none;
+}
+
+#rozvrh th {
+    width: 20%;
+}
+
+#rozvrh th.zaciatok {
+    width: auto;
+}
+
+#rozvrh td {
+    padding: 0.2em;
+}
+
+#rozvrh td.hodina {
+    position: relative;
+    text-align: center;
+}
+
+#rozvrh td.hodina .wrap {
+    position: relative;
+/*    height: 100%;*/
+}
+
+#rozvrh td.hodina .miestnost {
+    position: absolute;
+    top: 0.1em;
+    left: 0.1em;
+}
+
+#rozvrh td.hodina .typ {
+    position: absolute;
+    top: 0.1em;
+    right: 0.1em;
+}
+
+#rozvrh td.hodina .predmet_wrap {
+    padding-top: 0.2em;
+}
+
+#rozvrh td.hodina .predmet {
+    padding-top: 1em;
+}
+
+abbr {
+    text-decoration: none;
+    border-bottom: none;
+}

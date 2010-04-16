@@ -44,7 +44,7 @@ else {
 <?php echo form_tag('@timetable_change_lessons?id='.$timetable_id); ?><div>
 <table id="rozvrh" <?php if (!$layout->isFMPHLike()) echo 'class="precise"' ?>>
     <tr>
-        <th class="pristupnost">Začiatok</th>
+        <th class="zaciatok"><span class="pristupnost">Začiatok</span></th>
         <?php
             for ($day = 0; $day < 5; $day++) {                
                 $cols = count($days[$day]);
