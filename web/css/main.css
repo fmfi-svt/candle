@@ -382,6 +382,10 @@ ul.vysledky_hladania li+li {
     padding: 2px;
 }
 
+#rozvrh td.cas {
+    text-align: right;
+}
+
 #rozvrh.precise td {
     height: 0.3em;
 }

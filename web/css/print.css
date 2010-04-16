@@ -41,6 +41,10 @@ root {
     padding: 0.2em;
 }
 
+#rozvrh td.cas {
+    text-align: right;
+}
+
 #rozvrh td.hodina {
     position: relative;
     text-align: center;
