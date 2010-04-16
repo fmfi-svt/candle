@@ -56,7 +56,7 @@ foreach ($lessons as $lesson) {
             <?php $cb_id = 'panel_lesson_cb_'.$lesson['id'] ?>
             <input type="checkbox" id="<?php echo $cb_id; ?>" name="lesson[]" value="<?php echo $lesson['id']?>" <?php
                 if ($timetable->hasLesson($lesson['id'])) echo ' checked="checked"';
-            ?> /><label class="pristupnost" for="<?php echo $cb_id; ?>">Zobraziť v rozvrhu: <?php echo Candle::formatShortDay($lesson['day']) . ' ' . Candle::formatTime($lesson['start']) . ' ' . $lesson['Subject']['name'] ?></label></td>
+            ?> /><label class="pristupnost" for="<?php echo $cb_id; ?>">Zobraziť v rozvrhu: <?php echo Candle::formatShortDay($lesson['day']) . ' ' . Candle::formatTime($lesson['start']) . ' ' . $subject['name'] ?></label></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
