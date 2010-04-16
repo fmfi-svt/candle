@@ -8,10 +8,14 @@ class timetableActions extends sfActions {
 
         switch ($request->getRequestFormat())
         {
-          case 'csv':
-            $this->setLayout(false);
-            $this->getResponse()->setContentType('text/csv;header=present'); // vid RFC 4180
-            break;
+            case 'csv':
+                $this->setLayout(false);
+                $this->getResponse()->setContentType('text/csv;header=present'); // vid RFC 4180
+                break;
+            case 'ics':
+                $this->setLayout(false);
+                $this->getResponse()->setContentType('text/calendar'); // vid RFC 2445
+                break;
         }
 
     }
