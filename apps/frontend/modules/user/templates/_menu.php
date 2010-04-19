@@ -18,6 +18,8 @@ if ($username) {
 }
 else {
     echo link_to('Prihlásiť', '@sf_guard_signin');
+    ?></li><li><?php
+    echo link_to('Zrušiť session', '@sf_guard_signout');
 }
 
 ?></li><!--

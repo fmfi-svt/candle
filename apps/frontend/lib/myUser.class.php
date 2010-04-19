@@ -67,8 +67,11 @@ class myUser extends sfGuardSecurityUser
     public function signOut() {
         parent::signOut();
 
-        // zrusim vsetky otvorene rozvrhy
-        $this->initDefaultTimetableManager();
+        $this->clearSession();
+    }
+
+    public function clearSession() {
+        $this->getAttributeHolder()->clear();
     }
 
 }
