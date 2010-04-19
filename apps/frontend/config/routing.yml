@@ -64,6 +64,10 @@ timetable_delete:
     url: /timetable/:id/delete
     param: { module: timetable, action: delete }
 
+timetable_export:
+    url: /timetable/:id/export
+    param: { module: timetable, action: export }
+
 # generic rules
 # please, remove them by adding more specific rules
 default_index:

@@ -168,4 +168,8 @@ class timetableActions extends sfActions {
         $this->forward('timetable', 'show');
     }
 
+    public function executeExport(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+    }
+
 }
