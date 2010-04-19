@@ -433,14 +433,14 @@ ul.vysledky_hladania li+li {
 
 #rozvrh td.hodina .miestnost {
     position: absolute;
-    top: 2px;
-    left: 2px;
+    top: 0;
+    left: 0;
 }
 
 #rozvrh td.hodina .typ {
     position: absolute;
-    top: 2px;
-    right: 2px;
+    top: 0;
+    right: 0;
 }
 
 #rozvrh td.hodina .predmet_wrap {
