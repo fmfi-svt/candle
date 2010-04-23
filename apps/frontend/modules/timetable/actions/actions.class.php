@@ -40,6 +40,7 @@ class timetableActions extends sfActions {
             $newId = $this->getUser()->getTimetableManager()->addTimetable($newTimetable);
             $this->redirect('@timetable_show?id='.$newId);
         }
+        $this->setTemplate('new');
     }
     
     public function executeDuplicate(sfWebRequest $request) {
@@ -155,6 +156,45 @@ class timetableActions extends sfActions {
         $this->redirect('@timetable_show?id='.$this->timetable_id);
     }
 
+    public function executePublishExecute(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+        $user = $this->getUser()->getGuardUser();
+        $this->publishCheckLogin();
+
+        $this->form = new EditableTimetablePublishForm();
+        $this->form->bind(array(
+            'slug' => $request->getParameter('slug'),
+            '_csrf_token' => $request->getParameter('_csrf_token')
+        ));
+
+        if ($this->form->isValid()) {
+            if ($this->timetable->isModified()) {
+                $this->timetable->save($user->getId());
+            }
+            $userTimetable = Doctrine::getTable('UserTimetable')->find($this->timetable->getUserTimetableId());
+
+            $userTimetable['slug'] = $request->getParameter('slug');
+            $userTimetable['published'] = true;
+
+            try {
+                $userTimetable->save();
+            }
+            catch (Doctrine_Connection_Exception $e) {
+                if ($e->getPortableCode() == -5) {
+                    $this->getUser()->setFlash('error', 'Takýto rozvrh už existuje');
+                    $this->setTemplate('publish');
+                    return;
+                }
+                throw $e;
+                return;
+            }
+
+            $this->getUser()->setFlash('notice', 'Rozvrh úspešne publikovaný');
+            $this->redirect('@timetable_show?id='.$this->timetable_id);
+        }
+        $this->setTemplate('publish');
+    }
+
     public function executeDelete(sfWebRequest $request) {
         $this->fetchTimetable($request);
         $this->manager->removeTimetable($this->timetable_id);
@@ -170,6 +210,21 @@ class timetableActions extends sfActions {
 
     public function executeExport(sfWebRequest $request) {
         $this->fetchTimetable($request);
+    }
+
+    public function executePublish(sfWebRequest $request) {
+        $this->publishCheckLogin();
+        $this->fetchTimetable($request);
+        $this->form = new EditableTimetablePublishForm();
+    }
+
+    private function publishCheckLogin() {
+        $user = $this->getUser()->getGuardUser();
+        if (!$user) {
+            $this->getUser()->setFlash('error', 'Pre publikovanie rozvrhu musíte byť prihlásený/á');
+            $this->redirect('@sf_guard_signin');
+            return;
+        }
     }
 
 }

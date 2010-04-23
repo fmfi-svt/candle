@@ -68,6 +68,18 @@ timetable_export:
     url: /timetable/:id/export
     param: { module: timetable, action: export }
 
+timetable_publish_do:
+    class: sfRequestRoute
+    url: /timetable/:id/publish
+    param: { module: timetable, action: publishExecute }
+    requirements: { sf_method: post }
+
+
+timetable_publish:
+    class: sfRequestRoute
+    url: /timetable/:id/publish
+    param: { module: timetable, action: publish }
+    requirements: { sf_method: get }
 # generic rules
 # please, remove them by adding more specific rules
 default_index:

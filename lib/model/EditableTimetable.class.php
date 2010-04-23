@@ -149,6 +149,10 @@ class EditableTimetable {
     public function isPersisted() {
         return $this->userTimetableId !== null;
     }
+
+    public function getUserTimetableId() {
+        return $this->userTimetableId;
+    }
     
     public function addSubjectById($subjectId) {
         $subjectId = intval($subjectId);
