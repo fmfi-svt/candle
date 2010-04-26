@@ -46,9 +46,15 @@ root {
 
 #rozvrh td {
     vertical-align: top;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
     height: 30pt;
+}
+
+#rozvrh td.startOfDayColumn {
+    border-left: 1px solid black;
+}
+
+#rozvrh td.endOfDayColumn {
+    border-right: 1px solid black;
 }
 
 #rozvrh.precise td {

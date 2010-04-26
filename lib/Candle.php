@@ -29,6 +29,15 @@ class Candle {
         }
     }
     
+    static public function formatClass($classes) {
+        if (!$classes || count($classes) == 0) return '';
+        return ' class="'.implode(' ', $classes).'" ';
+    }
+
+    static public function formatTD($classes=null, $rowspan=1) {
+        return '<td'.Candle::formatClass($classes).Candle::formatRowspan($rowspan).'>';
+    }
+    
     static public function floorTo($number, $precision) {
         return $number - ($number % $precision);
     }

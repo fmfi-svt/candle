@@ -58,11 +58,21 @@ else {
                 echo '<tr>';
             }
             for ($day = 0; $day < 5; $day++) {
+                $column_count = count($days[$day]);
                 foreach ($days[$day] as $ix=>$col) {
+                    $cell_classes = array();
+
+                    if ($ix == 0) {
+                        $cell_classes[] = 'startOfDayColumn';
+                    }
+                    if ($ix == $column_count-1) {
+                        $cell_classes[] = 'endOfDayColumn';
+                    }
+                    
                     $pos = $counters[$day][$ix];
                     if ($pos >= count($days[$day][$ix])) {
                         // tento stlpec je hotovy
-                        echo '<td></td>';
+                        echo Candle::formatTD($cell_classes).'</td>';
                         continue;
                     }
                     $lesson = $days[$day][$ix][$pos];
@@ -72,7 +82,7 @@ else {
                         $pos = $counters[$day][$ix];
                         if ($pos >= count($days[$day][$ix])) {
                             // tento stlpec je hotovy
-                            echo '<td></td>';
+                            echo Candle::formatTD($cell_classes).'</td>';
                             continue;
                         }
                         $lesson = $days[$day][$ix][$pos];
@@ -81,11 +91,11 @@ else {
                     if ($lesson['start']==$time) {
                         $rowspan = intval(($lesson['end']-$lesson['start'])/$rowspanmins);
                         $highlighted = $timetable->isLessonHighlighted($lesson['id']);
-                        $additionalClass = '';
+                        $cell_classes[] = 'hodina';
                         if ($highlighted) {
-                            $additionalClass .= ' highlighted';
+                            $cell_classes[] = 'highlighted';
                         }
-                        echo '<td class="hodina'.$additionalClass.'" '.Candle::formatRowspan($rowspan).'>';
+                        echo Candle::formatTD($cell_classes, $rowspan);
                         include_partial('timetable/cell', array('lesson'=>$lesson, 'highlighted'=>$highlighted, 'editable'=>$editable));
                         echo '</td>';
                     }
@@ -94,7 +104,7 @@ else {
                     }
                     else {
                         // treba vypisat prazdnu bunku
-                        echo '<td></td>';
+                        echo Candle::formatTD($cell_classes).'</td>';
                     }
                 }
             }

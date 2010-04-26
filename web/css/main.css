@@ -392,7 +392,13 @@ ul.vysledky_hladania li+li {
     color: white;
     height: 3em;
     vertical-align: top;
+}
+
+#rozvrh td.startOfDayColumn {
     border-left: 2px solid #4E546A;
+}
+
+#rozvrh td.endOfDayColumn {
     border-right: 2px solid #4E546A;
 }
 
