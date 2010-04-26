@@ -266,6 +266,7 @@ ul.vysledky_hladania {
     margin-top: 0.5em;
     max-height: 400px;
     overflow: auto;
+    position: relative;
 }
 
 ul.vysledky_hladania li {
