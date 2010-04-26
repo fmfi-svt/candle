@@ -107,3 +107,8 @@ timetable_publish:
     url: /timetable/:id/publish
     param: { module: timetable, action: publish }
     requirements: { sf_method: get }
+
+timetable_unpublish:
+    class: sfRequestRoute
+    url: /timetable/:id/unpublish
+    param: { module: timetable, action: unpublish }
