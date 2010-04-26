@@ -47,6 +47,11 @@ root {
 #rozvrh td {
     vertical-align: top;
     height: 30pt;
+    /* Hm, spodny border sa renderoval vo FF aj do nasledujucej bunky,
+       ak sa v tabulke vyskytol rowspan. Nasledovne nastavenie vyzera, ze
+       problem potlaci.
+    */
+    border-bottom: 1px solid transparent;
 }
 
 #rozvrh td.startOfDayColumn {

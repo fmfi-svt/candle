@@ -392,6 +392,11 @@ ul.vysledky_hladania li+li {
     color: white;
     height: 3em;
     vertical-align: top;
+    /* Hm, spodny border sa renderoval vo FF aj do nasledujucej bunky,
+       ak sa v tabulke vyskytol rowspan. Nasledovne nastavenie vyzera, ze
+       problem potlaci.
+    */
+    border-bottom: 1px solid transparent;
 }
 
 #rozvrh td.startOfDayColumn {
