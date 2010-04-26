@@ -24,12 +24,16 @@ class timetableActions extends sfActions {
         $this->setTimetableExportResponse($request);
     }
 
-    public function executeShowPublished(sfWebRequest $request) {
+    private function fetchPublishedTimetable() {
         $userTimetable = $this->getRoute()->getObject();
         $this->forward404Unless($userTimetable);
         $this->timetable = new EditableTimetable();
         $this->timetable->load($userTimetable);
         $this->timetable_slug = $userTimetable['slug'];
+    }
+
+    public function executeShowPublished(sfWebRequest $request) {
+        $this->fetchPublishedTimetable();
         $this->layout = new TimetableLayout($this->timetable->getLessons());
         if ($request->getRequestFormat() != 'html') {
             $this->setTemplate('show');
@@ -63,6 +67,13 @@ class timetableActions extends sfActions {
     public function executeDuplicate(sfWebRequest $request) {
         $this->fetchTimetable($request);
         $newId = $this->manager->duplicateTimetable($this->timetable);
+        $this->redirect('@timetable_show?id='.$newId);
+    }
+
+    public function executeDuplicatePublished(sfWebRequest $request) {
+        $this->fetchPublishedTimetable();
+        $manager = $this->getUser()->getTimetableManager();
+        $newId = $manager->duplicateTimetable($this->timetable);
         $this->redirect('@timetable_show?id='.$newId);
     }
     
@@ -227,6 +238,10 @@ class timetableActions extends sfActions {
 
     public function executeExport(sfWebRequest $request) {
         $this->fetchTimetable($request);
+    }
+
+    public function executeExportPublished(sfWebRequest $request) {
+        $this->fetchPublishedTimetable();
     }
 
     public function executePublish(sfWebRequest $request) {
