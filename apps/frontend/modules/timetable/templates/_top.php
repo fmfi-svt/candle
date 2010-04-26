@@ -3,7 +3,7 @@
     <?php $foundSelected = false;
         foreach($all_timetables as $i => $current_timetable /* $timetable is current, don't redefine it! */):
             ?><li><a href="<?php echo url_for('@timetable_show?id='.$i); ?>" <?php
-                    if ($current_timetable==$timetable) {
+                    if (isset($timetable_id) && $i==$timetable_id) {
                         echo ' class="selected"';
                         $foundSelected = true;
                     }
