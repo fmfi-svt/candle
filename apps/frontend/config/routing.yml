@@ -65,6 +65,15 @@ timetable_duplicate:
     requirements:
         sf_method: post
 
+timetable_duplicate_published:
+    url: /timetable/published/:slug.:sf_format/duplicate
+    class: sfDoctrineRoute
+    options: { model: UserTimetable, type: object }
+    param: { module: timetable, action: duplicatePublished, sf_format: html }
+    requirements:
+        #slug: \[a-z-\]+
+        sf_format: (?:html|txt|csv|ics|xml)
+
 timetable_save:
     url: /timetable/:id/save
     param: { module: timetable, action: save }
@@ -76,6 +85,15 @@ timetable_delete:
 timetable_export:
     url: /timetable/:id/export
     param: { module: timetable, action: export }
+
+timetable_export_published:
+    url: /timetable/published/:slug.:sf_format/export
+    class: sfDoctrineRoute
+    options: { model: UserTimetable, type: object }
+    param: { module: timetable, action: exportPublished, sf_format: html }
+    requirements:
+        #slug: \[a-z-\]+
+        sf_format: (?:html|txt|csv|ics|xml)
 
 timetable_publish_do:
     class: sfRequestRoute

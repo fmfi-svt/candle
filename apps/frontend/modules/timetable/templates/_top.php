@@ -1,14 +1,25 @@
 <h2 class="pristupnost">Výber aktívneho rozvrhu</h2>
 <ul id="rozvrh_taby">
-    <?php foreach($all_timetables as $i => $current_timetable /* $timetable is current, don't redefine it! */):
+    <?php $foundSelected = false;
+        foreach($all_timetables as $i => $current_timetable /* $timetable is current, don't redefine it! */):
             ?><li><a href="<?php echo url_for('@timetable_show?id='.$i); ?>" <?php
-                    if ($current_timetable==$timetable) echo ' class="selected"' ?>><?php
+                    if ($current_timetable==$timetable) {
+                        echo ' class="selected"';
+                        $foundSelected = true;
+                    }
+                    ?>><?php
                     echo $current_timetable->getName();
                     if ($current_timetable->isModified()):
                         ?> <span class="rozvrh_stav">[upravený]</span><?php
                     endif;
             ?></a></li><?php
           endforeach;
+          if (!$foundSelected && isset($timetable) && $timetable &&
+                  isset($timetable_url) && $timetable_url) {
+              ?><li><a href="<?php echo $timetable_url; ?>" class="selected"><?php
+                        echo $timetable->getName();
+              ?></a></li><?php
+          }
     ?><li><a href="<?php echo url_for('@timetable_new') ?>" class="rozvrh_taby_novy<?php 
         if ($newSelected) echo ' selected' ?>">Nový</a></li>
 </ul>

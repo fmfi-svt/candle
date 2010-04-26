@@ -29,7 +29,7 @@ class timetableActions extends sfActions {
         $this->forward404Unless($userTimetable);
         $this->timetable = new EditableTimetable();
         $this->timetable->load($userTimetable);
-        $this->published_timetable_slug = $userTimetable['slug'];
+        $this->timetable_slug = $userTimetable['slug'];
         $this->layout = new TimetableLayout($this->timetable->getLessons());
         if ($request->getRequestFormat() != 'html') {
             $this->setTemplate('show');
