@@ -1,12 +1,11 @@
 <?php
 
 class timetableActions extends sfActions {
-    
-    public function executeShow(sfWebRequest $request) {
-        $this->fetchTimetable($request);
-        $this->layout = new TimetableLayout($this->timetable->getLessons());
 
-        switch ($request->getRequestFormat())
+    private function setTimetableExportResponse(sfWebRequest $request) {
+        $format = $request->getRequestFormat();
+
+        switch ($format)
         {
             case 'csv':
                 $this->setLayout(false);
@@ -17,7 +16,25 @@ class timetableActions extends sfActions {
                 $this->getResponse()->setContentType('text/calendar'); // vid RFC 2445
                 break;
         }
+    }
 
+    public function executeShow(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+        $this->layout = new TimetableLayout($this->timetable->getLessons());
+        $this->setTimetableExportResponse($request);
+    }
+
+    public function executeShowPublished(sfWebRequest $request) {
+        $userTimetable = $this->getRoute()->getObject();
+        $this->forward404Unless($userTimetable);
+        $this->timetable = new EditableTimetable();
+        $this->timetable->load($userTimetable);
+        $this->published_timetable_slug = $userTimetable['slug'];
+        $this->layout = new TimetableLayout($this->timetable->getLessons());
+        if ($request->getRequestFormat() != 'html') {
+            $this->setTemplate('show');
+            $this->setTimetableExportResponse($request);
+        }
     }
     
     public function executeNew(sfWebRequest $request) {
