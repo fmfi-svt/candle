@@ -5,4 +5,5 @@ all:
     sf_guard_plugin:
         routes_register: false
         success_signin_url: @homepage # the plugin use the referer as default
+        success_signout_url: @homepage
 
