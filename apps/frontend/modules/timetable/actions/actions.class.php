@@ -259,4 +259,22 @@ class timetableActions extends sfActions {
         }
     }
 
+    public function executeImport(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+    }
+
+    public function executeImportDo(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+        $text = $request->getParameter('text');
+        $text = str_replace(array("\r\n", "\n", "\r"), ",", $text);
+        $text = str_replace(" ", "", $text);
+        $codes = explode(",",$text);
+        $lessons = Doctrine::getTable('Lesson')->getIDsBySubjectCodes($codes);
+        foreach ($lessons as $lesson) {
+            $this->timetable->addLessonById($lesson['id']);
+        }
+        $this->getUser()->setFlash('notice', 'Dáta naimportované');
+        $this->redirect('@timetable_show?id='.$this->timetable_id);
+    }
+
 }

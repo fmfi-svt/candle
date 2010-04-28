@@ -82,6 +82,18 @@ timetable_delete:
     url: /timetable/:id/delete
     param: { module: timetable, action: delete }
 
+timetable_import:
+    class: sfRequestRoute
+    url: /timetable/:id/import
+    param: { module: timetable, action: import }
+    requirements: { sf_method: get }
+
+timetable_importDo:
+    class: sfRequestRoute
+    url: /timetable/:id/import
+    param: { module: timetable, action: importDo }
+    requirements: { sf_method: post }
+
 timetable_export:
     url: /timetable/:id/export
     param: { module: timetable, action: export }
