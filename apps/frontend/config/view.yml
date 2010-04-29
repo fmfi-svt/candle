@@ -14,7 +14,7 @@ default:
 
   stylesheets:    [main.css, print.css { media: print }, tty.css { media: tty }]
 
-  javascripts:    [mootools-1.2.4-core.js, layout.js]
+  javascripts:    [mootools-1.2.4-core.js, layout.js, timetable_editor.js]
 
   has_layout:     true
   layout:         layout

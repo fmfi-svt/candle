@@ -1,4 +1,4 @@
-<?php echo form_tag('@timetable_change_lessons?id='.$timetable_id); ?>
+<?php echo form_tag('@timetable_change_lessons?id='.$timetable_id, array('id'=>'panel_change_lessons')); ?>
 <div>
 
 <ul class="vysledky_hladania">
