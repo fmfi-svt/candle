@@ -7,8 +7,13 @@ var TimetableEditor = new Class({
         this.setOptions(options);
         this.timetableForm = $(timetableForm);
         this.bindCheckboxes();
+        this.changeLessons = new Request({
+           url: this.timetableForm.getProperty('action'),
+           link: 'chain'
+        });
     },
     timetableForm: null,
+    changeLessons: null,
     bindCheckboxes: function() {
         // checboxy na upravu pritomnosti v rozvrhu
         // zatial treba poslat request a loadnut cely rozvrh zo servera
@@ -40,9 +45,11 @@ var TimetableEditor = new Class({
         var cell = this.getTimetableCell(checkbox);
         if (checkbox.checked) {
             cell.addClass('highlighted');
+            this.serverHighlightLesson(checkbox.getProperty('value'));
         }
         else {
             cell.removeClass('highlighted');
+            this.serverUnhighlightLesson(checkbox.getProperty('value'));
         }
         this.change();
     },
@@ -54,6 +61,12 @@ var TimetableEditor = new Class({
     },
     change: function() {
         this.fireEvent('change');
+    },
+    serverHighlightLesson: function(lesson_id) {
+        this.changeLessons.post({'lessonHighlighted[]': lesson_id});
+    },
+    serverUnhighlightLesson: function(lesson_id) {
+        this.changeLessons.post({'lessonHighlightedBefore[]': lesson_id});
     }
 });
 
