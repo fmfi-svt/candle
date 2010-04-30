@@ -63,10 +63,14 @@ window.addEvent('domready', function() {
       $('panel_change_lessons').submit();
   });
 
-  var editor = new TimetableEditor('timetable_editor_form');
+  var timetable_editor_form = $('timetable_editor_form');
 
-  editor.addEvent('change', function() {
-     tabManager.setState('upravený');
-  });
+  if ($chk(timetable_editor_form)) {
+      var editor = new TimetableEditor(timetable_editor_form);
+
+      editor.addEvent('change', function() {
+         tabManager.setState('upravený');
+      });
+  }
 
 });

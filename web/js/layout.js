@@ -161,15 +161,22 @@ var TabManager = new Class({
 var tabManager = null;
 
 window.addEvent('domready', function() {
-    $("panel_schovat").removeClass("hidden");
+    var panel_schovat = $("panel_schovat");
+    if ($chk(panel_schovat)) {
+        panel_schovat.removeClass("hidden");
+    }
     $$(".jshide").addClass("jshidden");
     $(document.body).addClass("jsactive");
-    new Panel($(document.body), 
-            {clickElement: $("panel_toggle"),
-             hiddenClass: "panel_hidden",
-             additionalElements: [$(document.html), $("obsah_wrap")],
-             ensureReflow: [$("obsah_wrap")]
-            });
+
+    var panel_toggle = $("panel_toggle");
+    if ($chk(panel_toggle)) {
+        new Panel($(document.body),
+                {clickElement: $("panel_toggle"),
+                 hiddenClass: "panel_hidden",
+                 additionalElements: [$(document.html), $("obsah_wrap")],
+                 ensureReflow: [$("obsah_wrap")]
+                });
+    }
     new PanelGroup({groups: $$("#panel .panel_cast"),
                     togglers: $$("#panel .panel_cast h2 a"),
                     focusTargets: $$("#panel .panel_cast .panel_search input[type=text]")}
