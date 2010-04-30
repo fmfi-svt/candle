@@ -125,9 +125,40 @@ var PanelGroup = new Class({
     }
 });
 
+var TabManager = new Class({
+    Implements: Options,
+    options: {
+
+    },
+    initialize: function(tabListElement, options) {
+        this.setOptions(options);
+        this.tabListElement = $(tabListElement);
+    },
+    tabListElement: null,
+    setState: function(label) {
+        var link = this.getActiveTabLink();
+        var state = link.getElement('span.rozvrh_stav');
+        var adding = !$chk(state);
+        if (adding) {
+            state = new Element('span', {'class': 'rozvrh_stav'});
+        }
+        state.set('text', '['+label+']');
+        if (adding) {
+            link.appendText(' ');
+            link.grab(state);
+        }
+    },
+    getActiveTabLink: function() {
+        return this.tabListElement.getElement('li a.selected');
+    }
+});
+
+
 /*
     Inicializacia prvkov
 */
+
+var tabManager = null;
 
 window.addEvent('domready', function() {
     $("panel_schovat").removeClass("hidden");
@@ -143,4 +174,5 @@ window.addEvent('domready', function() {
                     togglers: $$("#panel .panel_cast h2 a"),
                     focusTargets: $$("#panel .panel_cast .panel_search input[type=text]")}
                   );
+    tabManager = new TabManager('rozvrh_taby');
 });

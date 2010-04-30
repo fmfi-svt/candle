@@ -1,5 +1,5 @@
 var TimetableEditor = new Class({
-    Implements: Options,
+    Implements: [Options, Events],
     options: {
 
     },
@@ -33,6 +33,7 @@ var TimetableEditor = new Class({
     },
     lessonCheckboxChanged: function(event) {
         this.refreshTimetable();
+        this.change();
     },
     lessonHighlightedCheckboxChanged: function(event) {
         var checkbox = $(event.target);
@@ -43,14 +44,17 @@ var TimetableEditor = new Class({
         else {
             cell.removeClass('highlighted');
         }
+        this.change();
     },
     getTimetableCell: function(el) {
         // najdi bunku pre tento element (on sam, alebo najblizsi rodic typu td)
         var element = $(el);
         if (element.get('tag') == 'td') return element;
         return element.getParent('td');
+    },
+    change: function() {
+        this.fireEvent('change');
     }
-
 });
 
 window.addEvent('domready', function() {
@@ -59,6 +63,10 @@ window.addEvent('domready', function() {
       $('panel_change_lessons').submit();
   });
 
-  new TimetableEditor('timetable_editor_form');
+  var editor = new TimetableEditor('timetable_editor_form');
+
+  editor.addEvent('change', function() {
+     tabManager.setState('upravený');
+  });
 
 });
