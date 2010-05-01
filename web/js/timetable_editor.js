@@ -65,8 +65,9 @@ var TimetableEditor = new Class({
         //this.timetableEditorElement.set('html', responseHTML);
     },
     lessonCheckboxChanged: function(event) {
-        this.refreshTimetable();
-        this.change();
+        var checkbox = $(event.target);
+        // tento checkbox sa da pouzit iba jednym smerom...
+        this.removeLesson(checkbox.getProperty('value'));
     },
     lessonHighlightedCheckboxChanged: function(event) {
         var checkbox = $(event.target);
@@ -100,6 +101,18 @@ var TimetableEditor = new Class({
         this.change();
         this.changeLessonsRefresh.post({'lesson[]': lesson_id});
     },
+    removeLesson: function(lesson_id) {
+        this.change();
+        this.changeLessonsRefresh.post({'lessonBefore[]': lesson_id});
+    },
+    addSubject: function(subject_id) {
+        this.change();
+        this.changeLessonsRefresh.post({'subject[]': subject_id});
+    },
+    removeSubject: function(lesson_id) {
+        this.change();
+        this.changeLessonsRefresh.post({'subjectBefore[]': lesson_id});
+    },
     changeLessonsRefreshSucceded: function(responseText, responseXML) {
         this.refreshTimetable();
     }
@@ -130,6 +143,15 @@ var TimetableEditorPanel = new Class({
     },
     lessonCheckboxChanged: function(event) {
         var checkbox = $(event.target);
+        var subjectItem = this.getSubjectItem(checkbox);
+        var all = 0;
+        var checked = 0;
+        subjectItem.getElements('input[type=checkbox][name="lesson[]"]')
+            .each(function(checkbox) {
+                all += 1;
+                if (checkbox.checked) checked += 1;
+            }, this);
+        subjectItem.getElement('input[type=checkbox][name="subject[]"]').checked = (all == checked);
         var lesson_id = checkbox.getProperty('value');
         this.lessonChange(lesson_id, checkbox.checked);
     },
@@ -137,7 +159,7 @@ var TimetableEditorPanel = new Class({
         var checkbox = $(event.target);
         var subject_id = checkbox.getProperty('value');
         var checked = checkbox.checked;
-        var subjectItem = checkbox.getParent('li');
+        var subjectItem = this.getSubjectItem(checkbox);
         subjectItem.getElements('input[type=checkbox]').each(function(checkbox) {
             checkbox.checked = checked;
         });
@@ -148,6 +170,9 @@ var TimetableEditorPanel = new Class({
     },
     subjectChange: function(subject_id, selected) {
         this.fireEvent('subjectChange', [subject_id, selected])
+    },
+    getSubjectItem: function(element) {
+        return element.getParent('li');
     }
 });
 
@@ -169,6 +194,17 @@ window.addEvent('domready', function() {
           editorPanel.addEvent('lessonChange', function(lessonId, selected) {
               if (selected) {
                   editor.addLesson(lessonId);
+              }
+              else {
+                  editor.removeLesson(lessonId);
+              }
+          });
+          editorPanel.addEvent('subjectChange', function(subjectId, selected) {
+              if (selected) {
+                  editor.addSubject(subjectId);
+              }
+              else {
+                  editor.removeSubject(subjectId);
               }
           });
       }
