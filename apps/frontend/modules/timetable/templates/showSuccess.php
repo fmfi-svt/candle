@@ -12,6 +12,7 @@ include_component('timetable', 'editMenu', array('timetable'=>$timetable, 'timet
 end_slot();
 
 ?>
+<div id="timetable_editor">
 <?php echo form_tag('@timetable_change_lessons?id='.$timetable_id, array('id'=>'timetable_editor_form')); ?><div>
 <?php include_partial('timetable/table', array('timetable'=>$timetable, 'layout'=>$layout, 'editable'=>true)); ?>
 </div>
@@ -19,3 +20,4 @@ end_slot();
     <button type="submit" class="jshide">Upraviť rozvrh</button>
 </div>
 <?php echo '</form>' ?>
+</div>

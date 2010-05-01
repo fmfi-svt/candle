@@ -168,7 +168,9 @@ class timetableActions extends sfActions {
                 $this->timetable->removeSubjectById($subid);
             }
         }
-
+        if ($request->isXmlHttpRequest()) {
+            return $this->renderText('ok');
+        }
         $this->redirect('@timetable_show?id='.$this->timetable_id);
     }
 
