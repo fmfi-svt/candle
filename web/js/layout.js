@@ -165,7 +165,6 @@ window.addEvent('domready', function() {
     if ($chk(panel_schovat)) {
         panel_schovat.removeClass("hidden");
     }
-    $$(".jshide").addClass("jshidden");
     $(document.body).addClass("jsactive");
 
     var panel_toggle = $("panel_toggle");

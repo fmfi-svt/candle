@@ -469,7 +469,7 @@ ul.vysledky_hladania li+li {
     bottom: 2px;
 }
 
-.jshidden {
+.jsactive .jshide {
     display: none;
 }
 

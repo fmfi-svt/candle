@@ -12,7 +12,7 @@ root {
     display: none;
 }
 
-.jshide, .jshidden {
+.jshide {
     display: none;
 }
 
@@ -51,7 +51,7 @@ root {
        ak sa v tabulke vyskytol rowspan. Nasledovne nastavenie vyzera, ze
        problem potlaci.
     */
-    border-bottom: 1px solid transparent;
+    /*border-bottom: 1px solid transparent;*/
 }
 
 #rozvrh td.startOfDayColumn {
@@ -74,6 +74,7 @@ root {
 #rozvrh td.hodina {
     text-align: center;
     border: 1px solid black;
+    border-top: 1px solid black;
     padding: 0.2em;
 }
 
