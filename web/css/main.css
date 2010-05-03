@@ -537,3 +537,9 @@ ul.vysledky_hladania li+li {
     font-weight: bold;
     margin-bottom: 0.8em;
 }
+
+.nazov_policka {
+    display: inline-block;
+    width: 15em;
+    text-align: right;
+}
