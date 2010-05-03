@@ -14,9 +14,18 @@ sf_guard_signout:
     url: /logout
     param: { module: sfGuardAuth, action: signout }
 
-sf_guard_password:
-    url: /request_password
-    param: { module: sfGuardAuth, action: password }
+register:
+    url: /register
+    class: sfRequestRoute
+    param: { module: user, action: register }
+    requirements: {sf_method: get}
+
+register_post:
+    url: /register
+    class: sfRequestRoute
+    param: { module: user, action: registerDo }
+    requirements: {sf_method: post}
+
 
 # zobrazenie vsetkych hodin
 lesson_list_all:
