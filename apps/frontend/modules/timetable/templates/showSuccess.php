@@ -2,14 +2,16 @@
 
 slot('title', $timetable->getName());
 
-slot('panel');
-include_component('timetable','panel',array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
-end_slot();
+if (!$sf_request->isXmlHttpRequest()) {
+    slot('panel');
+    include_component('timetable','panel',array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
+    end_slot();
 
-slot('top');
-include_component('timetable','top', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
-include_component('timetable', 'editMenu', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
-end_slot();
+    slot('top');
+    include_component('timetable','top', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
+    include_component('timetable', 'editMenu', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
+    end_slot();
+}
 
 ?>
 <div id="timetable_editor">
