@@ -61,6 +61,10 @@ class myUser extends sfGuardSecurityUser
             }
         }
 
+        if ($newTimetableManager->isEmpty()) {
+            $newTimetableManager->addDefaultTimetable();
+        }
+
         $this->setTimetableManager($newTimetableManager);
     }
 
