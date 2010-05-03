@@ -26,6 +26,17 @@ register_post:
     param: { module: user, action: registerDo }
     requirements: {sf_method: post}
 
+profile:
+    url: /profile
+    class: sfRequestRoute
+    param: { module: user, action: profile }
+    requirements: {sf_method: get}
+
+change_password:
+    url: /change-password
+    class: sfRequestRoute
+    param: { module: user, action: changePassword }
+    requirements: {sf_method: post}
 
 # zobrazenie vsetkych hodin
 lesson_list_all:

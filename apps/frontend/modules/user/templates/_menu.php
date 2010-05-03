@@ -9,11 +9,11 @@ else {
 }
 
 ?></span><!--
---><ul><!--
-    --><li><a href="#">Nastavenia</a></li><!--
-    --><li><?php
+--><ul><li><?php
 
 if ($username) {
+    echo link_to('Profil', '@profile');
+    ?></li><li><?php
     echo link_to('Odhlásiť', '@sf_guard_signout');
 }
 else {
@@ -22,5 +22,4 @@ else {
     echo link_to('Zrušiť session', '@sf_guard_signout');
 }
 
-?></li><!--
---></ul>
+?></li></ul>
