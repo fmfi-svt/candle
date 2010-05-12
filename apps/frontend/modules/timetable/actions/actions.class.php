@@ -27,6 +27,7 @@ class timetableActions extends sfActions {
     private function fetchPublishedTimetable() {
         $userTimetable = $this->getRoute()->getObject();
         $this->forward404Unless($userTimetable);
+        $this->forward404Unless($userTimetable['published']); // TODO presunut do modelu route
         $this->timetable = new EditableTimetable();
         $this->timetable->load($userTimetable);
         $this->timetable_slug = $userTimetable['slug'];
@@ -225,6 +226,17 @@ class timetableActions extends sfActions {
         $this->setTemplate('publish');
     }
 
+    public function executeUnpublishExecute(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+        $user = $this->getUser()->getGuardUser();
+        $this->publishCheckLogin();
+        $userTimetable = Doctrine::getTable('UserTimetable')->find($this->timetable->getUserTimetableId());
+        $userTimetable['published'] = false;
+        $userTimetable->save();
+        $this->getUser()->setFlash('notice', 'Rozvrh už nie je verejne prístupný');
+        $this->redirect('@timetable_show?id='.$this->timetable_id);
+    }
+
     public function executeDelete(sfWebRequest $request) {
         $this->fetchTimetable($request);
         $this->manager->removeTimetable($this->timetable_id);
@@ -250,6 +262,10 @@ class timetableActions extends sfActions {
         $this->publishCheckLogin();
         $this->fetchTimetable($request);
         $this->form = new EditableTimetablePublishForm();
+        /*if ($this->timetable->isPersisted()) {
+            $userTimetable = Doctrine::getTable('UserTimetable')->find($this->timetable->getUserTimetableId());
+            $this->form['slug']->setValue($userTimetable['slug']);
+        }*/
     }
 
     private function publishCheckLogin() {

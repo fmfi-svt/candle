@@ -33,7 +33,12 @@ class timetableComponents extends sfComponents {
     public function executeEditMenu(sfWebRequest $request) {
         if ($this->timetable->isPersisted()) {
             $userTimetable = Doctrine::getTable('UserTimetable')->find($this->timetable->getUserTimetableId());
-            $this->published_slug = $userTimetable['slug'];
+            if ($userTimetable['published']) { // TODO presunut check do modelu
+                $this->published_slug = $userTimetable['slug'];
+            }
+            else {
+                $this->published_slug = null;
+            }
         }
         else {
             $this->published_slug = null;
