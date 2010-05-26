@@ -66,8 +66,10 @@ var TimetableEditor = new Class({
     },
     lessonCheckboxChanged: function(event) {
         var checkbox = $(event.target);
+        var lesson_id = checkbox.getProperty('value');
         // tento checkbox sa da pouzit iba jednym smerom...
-        this.removeLesson(checkbox.getProperty('value'));
+        this.removeLesson(lesson_id);
+        this.lessonRemoved(lesson_id);
     },
     lessonHighlightedCheckboxChanged: function(event) {
         var checkbox = $(event.target);
@@ -115,6 +117,9 @@ var TimetableEditor = new Class({
     },
     changeLessonsRefreshSucceded: function(responseText, responseXML) {
         this.refreshTimetable();
+    },
+    lessonRemoved: function(lesson_id) {
+        this.fireEvent('lessonRemoved', [lesson_id]);
     }
 });
 
@@ -141,8 +146,7 @@ var TimetableEditorPanel = new Class({
             }));
         }, this);
     },
-    lessonCheckboxChanged: function(event) {
-        var checkbox = $(event.target);
+    lessonUpdateState: function(checkbox) {
         var subjectItem = this.getSubjectItem(checkbox);
         var all = 0;
         var checked = 0;
@@ -152,6 +156,13 @@ var TimetableEditorPanel = new Class({
                 if (checkbox.checked) checked += 1;
             }, this);
         subjectItem.getElement('input[type=checkbox][name="subject[]"]').checked = (all == checked);
+    },
+    getLessonCheckbox: function(lessonId) {
+        return $('panel_lesson_cb_'+lessonId);
+    },
+    lessonCheckboxChanged: function(event) {
+        var checkbox = $(event.target);
+        this.lessonUpdateState(checkbox);
         var lesson_id = checkbox.getProperty('value');
         this.lessonChange(lesson_id, checkbox.checked);
     },
@@ -205,6 +216,13 @@ window.addEvent('domready', function() {
               }
               else {
                   editor.removeSubject(subjectId);
+              }
+          });
+          editor.addEvent('lessonRemoved', function(lessonId) {
+              var checkbox = editorPanel.getLessonCheckbox(lessonId);
+              if (checkbox) {
+                  checkbox.checked = false;
+                  editorPanel.lessonUpdateState(checkbox);
               }
           });
       }
