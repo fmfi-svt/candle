@@ -191,4 +191,10 @@ class EditableTimetable {
         return false;
     }
 
+    public function __clone() {
+        $this->userTimetableId = null;
+        $this->readOnly = false;
+        $this->modified = true;
+    }
+
 }
