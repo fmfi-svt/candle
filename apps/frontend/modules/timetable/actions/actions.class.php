@@ -24,24 +24,6 @@ class timetableActions extends sfActions {
         $this->setTimetableExportResponse($request);
     }
 
-    private function fetchPublishedTimetable() {
-        $userTimetable = $this->getRoute()->getObject();
-        $this->forward404Unless($userTimetable);
-        $this->forward404Unless($userTimetable['published']); // TODO presunut do modelu route
-        $this->timetable = new EditableTimetable();
-        $this->timetable->load($userTimetable);
-        $this->timetable_slug = $userTimetable['slug'];
-    }
-
-    public function executeShowPublished(sfWebRequest $request) {
-        $this->fetchPublishedTimetable();
-        $this->layout = new TimetableLayout($this->timetable->getLessons());
-        if ($request->getRequestFormat() != 'html') {
-            $this->setTemplate('show');
-            $this->setTimetableExportResponse($request);
-        }
-    }
-    
     public function executeNew(sfWebRequest $request) {
         $this->form = new EditableTimetableForm();
     }
@@ -71,13 +53,6 @@ class timetableActions extends sfActions {
         $this->redirect('@timetable_show?id='.$newId);
     }
 
-    public function executeDuplicatePublished(sfWebRequest $request) {
-        $this->fetchPublishedTimetable();
-        $manager = $this->getUser()->getTimetableManager();
-        $newId = $manager->duplicateTimetable($this->timetable);
-        $this->redirect('@timetable_show?id='.$newId);
-    }
-    
     public function processForm(EditableTimetableForm $form, sfWebRequest $request) {
         $form->bind(array(
             'name' => $request->getParameter('name'),
@@ -252,10 +227,6 @@ class timetableActions extends sfActions {
 
     public function executeExport(sfWebRequest $request) {
         $this->fetchTimetable($request);
-    }
-
-    public function executeExportPublished(sfWebRequest $request) {
-        $this->fetchPublishedTimetable();
     }
 
     public function executePublish(sfWebRequest $request) {
