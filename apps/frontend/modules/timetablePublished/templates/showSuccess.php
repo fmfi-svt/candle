@@ -6,7 +6,7 @@ slot('top');
 include_component('timetable','top', 
         array('timetable'=>$timetable,
               'timetable_url'=>url_for('@timetable_show_published?slug='.$timetable_slug)));
-include_partial('timetablePublished/publishedMenu', array('timetable_slug'=>$timetable_slug));
+include_partial('timetablePublished/menu', array('timetable_slug'=>$timetable_slug));
 end_slot();
 
 ?>

@@ -11,7 +11,7 @@ class timetablePublishedActions extends sfActions {
         $this->timetable_slug = $userTimetable['slug'];
     }
 
-    public function executeShowPublished(sfWebRequest $request) {
+    public function executeShow(sfWebRequest $request) {
         $this->fetchPublishedTimetable();
         $this->layout = new TimetableLayout($this->timetable->getLessons());
         if ($request->getRequestFormat() != 'html') {
@@ -20,14 +20,14 @@ class timetablePublishedActions extends sfActions {
         }
     }
 
-    public function executeDuplicatePublished(sfWebRequest $request) {
+    public function executeDuplicate(sfWebRequest $request) {
         $this->fetchPublishedTimetable();
         $manager = $this->getUser()->getTimetableManager();
         $newId = $manager->duplicateTimetable($this->timetable);
         $this->redirect('@timetable_show?id='.$newId);
     }
 
-    public function executeExportPublished(sfWebRequest $request) {
+    public function executeExport(sfWebRequest $request) {
         $this->fetchPublishedTimetable();
     }
 

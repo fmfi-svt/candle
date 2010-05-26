@@ -58,7 +58,7 @@ timetable_show_published:
     url: /timetable/published/:slug.:sf_format
     class: sfDoctrineRoute
     options: { model: UserTimetable, type: object }
-    param: { module: timetablePublished, action: showPublished, sf_format: html }
+    param: { module: timetablePublished, action: show, sf_format: html }
     requirements:
         #slug: \[a-z-\]+
         sf_format: (?:html|txt|csv|ics|xml)
@@ -89,7 +89,7 @@ timetable_duplicate_published:
     url: /timetable/published/:slug.:sf_format/duplicate
     class: sfDoctrineRoute
     options: { model: UserTimetable, type: object }
-    param: { module: timetablePublished, action: duplicatePublished, sf_format: html }
+    param: { module: timetablePublished, action: duplicate, sf_format: html }
     requirements:
         #slug: \[a-z-\]+
         sf_format: (?:html|txt|csv|ics|xml)
@@ -122,7 +122,7 @@ timetable_export_published:
     url: /timetable/published/:slug.:sf_format/export
     class: sfDoctrineRoute
     options: { model: UserTimetable, type: object }
-    param: { module: timetablePublished, action: exportPublished, sf_format: html }
+    param: { module: timetablePublished, action: export, sf_format: html }
     requirements:
         #slug: \[a-z-\]+
         sf_format: (?:html|txt|csv|ics|xml)
