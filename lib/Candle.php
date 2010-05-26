@@ -59,4 +59,20 @@ class Candle {
     static public function formatShortName($teacher) {
         return ($teacher['given_name']?substr($teacher['given_name'], 0, 1).'. ':'').$teacher['family_name'];
     }
+
+    static public function setTimetableExportResponse(sfWebRequest $request) {
+        $format = $request->getRequestFormat();
+
+        switch ($format)
+        {
+            case 'csv':
+                $this->setLayout(false);
+                $this->getResponse()->setContentType('text/csv;header=present'); // vid RFC 4180
+                break;
+            case 'ics':
+                $this->setLayout(false);
+                $this->getResponse()->setContentType('text/calendar'); // vid RFC 2445
+                break;
+        }
+    }
 }

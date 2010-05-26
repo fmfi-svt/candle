@@ -2,26 +2,10 @@
 
 class timetableActions extends sfActions {
 
-    private function setTimetableExportResponse(sfWebRequest $request) {
-        $format = $request->getRequestFormat();
-
-        switch ($format)
-        {
-            case 'csv':
-                $this->setLayout(false);
-                $this->getResponse()->setContentType('text/csv;header=present'); // vid RFC 4180
-                break;
-            case 'ics':
-                $this->setLayout(false);
-                $this->getResponse()->setContentType('text/calendar'); // vid RFC 2445
-                break;
-        }
-    }
-
     public function executeShow(sfWebRequest $request) {
         $this->fetchTimetable($request);
         $this->layout = new TimetableLayout($this->timetable->getLessons());
-        $this->setTimetableExportResponse($request);
+        Candle::setTimetableExportResponse($request);
     }
 
     public function executeNew(sfWebRequest $request) {
