@@ -40,3 +40,10 @@ all:
     param:
       cache_key_use_vary_headers: true
       cache_key_use_host_name:    true
+
+# Pre ukladanie sessions do databazy
+#  storage:
+#    class: sfPDOSessionStorage
+#    param:
+#      database: doctrine
+#      db_table: sf_session_storage
