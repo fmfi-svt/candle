@@ -60,6 +60,10 @@ class Candle {
         return ($teacher['given_name']?substr($teacher['given_name'], 0, 1).'. ':'').$teacher['family_name'];
     }
 
+    static public function formatLongName($teacher) {
+        return ($teacher['given_name']?$teacher['given_name'].' ':'').$teacher['family_name'];
+    }
+
     static public function setTimetableExportResponse(sfWebRequest $request) {
         $format = $request->getRequestFormat();
 

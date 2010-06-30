@@ -149,3 +149,27 @@ timetable_unpublish:
     class: sfRequestRoute
     url: /timetable/:id/unpublish
     param: { module: timetable, action: unpublish }
+
+timetable_teacher_show:
+    url: /timetable/teacher/:id.:sf_format
+    class: sfDoctrineRoute
+    options: { model: Teacher, type: object }
+    param: { module: timetableTeacher, action: show, sf_format: html }
+    requirements:
+        sf_format: (?:html|txt|csv|ics|xml)
+
+timetable_teacher_export:
+    url: /timetable/teacher/:id.:sf_format/export
+    class: sfDoctrineRoute
+    options: { model: Teacher, type: object }
+    param: { module: timetableTeacher, action: export, sf_format: html }
+    requirements:
+        sf_format: (?:html|txt|csv|ics|xml)
+
+timetable_teacher_duplicate:
+    url: /timetable/teacher/:id.:sf_format/duplicate
+    class: sfDoctrineRoute
+    options: { model: Teacher, type: object }
+    param: { module: timetableTeacher, action: duplicate, sf_format: html }
+    requirements:
+        sf_format: (?:html|txt|csv|ics|xml)
