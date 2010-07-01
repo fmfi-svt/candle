@@ -11,7 +11,7 @@
         </div></form>
         <?php if ($subjects): ?>
             <div class="pristupnost">Výsledky hľadania:</div>
-            <?php include_partial('lesson/list_panel', array(
+            <?php include_partial('panel/list_lessons', array(
                         'form' => $lessonForm,
                         'subjects' => $subjects,
                         'timetable' => $timetable,
@@ -23,9 +23,21 @@
 <div class="panel_cast" id="panel_cast_ucitelia">
     <h2><a href="#panel_cast_ucitelia">Učitelia</a></h2>
     <div class="panel_cast_obsah">
+        <?php include_stylesheets_for_form($teacherForm) ?>
+        <?php include_javascripts_for_form($teacherForm) ?>
+
         <form method="post" action=""><div class="panel_search">
-            <label for="hladaj_ucitelov" class="pristupnost">Hľadaj učiteľov</label><input id="hladaj_ucitelov" type="text" /><button type="submit">Hľadaj</button>
+            <?php echo $teacherForm['showTeachers']->renderLabel();
+                echo $teacherForm['showTeachers'] ?><button type="submit">Hľadaj</button>
+            <?php echo $teacherForm['showTeachers']->renderError() ?>
         </div></form>
+
+        <?php if ($teachers): ?>
+            <div class="pristupnost">Výsledky hľadania:</div>
+            <?php include_partial('panel/list_teachers', array(
+                        'teachers' => $teachers,
+                    )); ?>
+        <?php endif; ?>
     </div>
 </div>
 <div class="panel_cast" id="panel_cast_miestnosti">
