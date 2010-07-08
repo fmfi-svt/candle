@@ -1,0 +1,19 @@
+GIMP Palette
+Name: Candle
+#Paleta farieb pre UI programu candle
+211 213 221 
+26 26 26 Tmavy vrch
+51 51 51 
+128 128 128 
+52 56 70 
+255 255 255 
+255 255 0
+78 84 106 
+#Farby typu hodiny
+128 0 0 Cvicenie
+170 136 0 Kurz
+51 128 0 Labak
+102 102 102 Nezname
+55 113 200 Prednaska
+128 0 102 Seminar
+0 128 102 Vyberovy/volitelny
