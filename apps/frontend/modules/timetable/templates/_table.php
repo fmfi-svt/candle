@@ -95,6 +95,7 @@ else {
                         if ($highlighted) {
                             $cell_classes[] = 'highlighted';
                         }
+                        $cell_classes[] = 'lesson-type-'.$lesson['LessonType']['code'];
                         echo Candle::formatTD($cell_classes, $rowspan);
                         include_partial('timetable/cell', array('lesson'=>$lesson, 'highlighted'=>$highlighted, 'editable'=>$editable));
                         echo '</td>';
