@@ -76,7 +76,7 @@ class EditableTimetable {
     }
     
     public function getLessonIds() {
-        return $this->lessons;    
+        return keys($this->lessons);
     }
     
     public function getLessons() {
