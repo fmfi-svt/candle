@@ -8,7 +8,7 @@
 
     <?php if ($editable): ?>
         <?php $cb_id = 'timetable_lesson_selection_cb_'.$lesson['id'] ?>
-        <input type="checkbox" id="<?php echo $cb_id; ?>" name="lesson_selection[]" value="<?php echo $lesson['id']?>" checked="checked"
+        <input type="checkbox" id="<?php echo $cb_id; ?>" name="lesson_selection[]" value="<?php echo $lesson['id']?>"
         title="Označiť túto hodinu" /><label class="pristupnost" for="<?php echo $cb_id; ?>">Zobraziť v rozvrhu: <?php echo Candle::formatShortDay($lesson['day']) . ' ' . Candle::formatTime($lesson['start']) . ' ' . $lesson['Subject']['name'] ?></label>
     <?php endif; ?>
     
