@@ -20,19 +20,10 @@ var TimetableEditor = new Class({
     changeLessons: null,
     timetableEditorElement: null,
     bindCheckboxes: function() {
-        // checboxy na upravu pritomnosti v rozvrhu
-        // zatial treba poslat request a loadnut cely rozvrh zo servera
-        this.timetableForm.getElements('input[type=checkbox][name="lesson[]"]')
-                .each(function(checkbox) {
-            checkbox.addEvent('change', this.lessonCheckboxChanged.create({
-                event: true,
-                bind: this
-            }));
-        }, this);
         // checkboxy na upravu zvyraznenia
-        this.timetableForm.getElements('input[type=checkbox][name="lessonHighlighted[]"]')
+        this.timetableForm.getElements('input[type=checkbox][name="lesson_selection[]"]')
                 .each(function(checkbox) {
-            checkbox.addEvent('change', this.lessonHighlightedCheckboxChanged.create({
+            checkbox.addEvent('change', this.lessonSelectionCheckboxChanged.create({
                 event: true,
                 bind: this
             }));
@@ -64,23 +55,14 @@ var TimetableEditor = new Class({
         this.bindCheckboxes();
         //this.timetableEditorElement.set('html', responseHTML);
     },
-    lessonCheckboxChanged: function(event) {
-        var checkbox = $(event.target);
-        var lesson_id = checkbox.getProperty('value');
-        // tento checkbox sa da pouzit iba jednym smerom...
-        this.removeLesson(lesson_id);
-        this.lessonRemoved(lesson_id);
-    },
-    lessonHighlightedCheckboxChanged: function(event) {
+    lessonSelectionCheckboxChanged: function(event) {
         var checkbox = $(event.target);
         var cell = this.getTimetableCell(checkbox);
         if (checkbox.checked) {
-            cell.addClass('highlighted');
-            this.serverHighlightLesson(checkbox.getProperty('value'));
+            cell.addClass('selected');
         }
         else {
-            cell.removeClass('highlighted');
-            this.serverUnhighlightLesson(checkbox.getProperty('value'));
+            cell.removeClass('selected');
         }
         this.change();
     },
