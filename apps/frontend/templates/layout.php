@@ -57,9 +57,9 @@
     <div id="vrch_riadok1_vlavo">
         <h2 class="pristupnost">Užitočné stránky</h2>
         <ul><!--
-            --><li><span class="selected">Rozvrh</span></li><!--
-            --><li><a href="http://www.st.fmph.uniba.sk/~kralik3/">fajr</a></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk">projekty</a></li><!--
+            --><li><?php echo link_to('Rozvrh', '@homepage', array('class'=>'selected')) ?></li><!--
+            --><li><a href="https://fajr.dcs.fmph.uniba.sk/">fajr</a></li><!--
+            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/">projekty</a></li><!--
         --></ul>
     </div>    
 </div>
