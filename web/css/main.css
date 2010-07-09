@@ -585,3 +585,7 @@ ul.vysledky_hladania li+li {
     width: 15em;
     text-align: right;
 }
+
+abbr {
+    cursor: help;
+}
