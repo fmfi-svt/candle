@@ -1,15 +1,15 @@
 var TimetableEditor = new Class({
     Implements: Events,
-    initialize: function(timetableEditorElement) {
+    initialize: function(timetableEditorElement, changeLessonsURL) {
         this.timetableEditorElement = $(timetableEditorElement);
         this.timetableForm = this.timetableEditorElement.getElement('form');
         this.bindCheckboxes();
         this.changeLessons = new Request({
-           url: this.timetableForm.getProperty('action'),
+           url: changeLessonsURL,
            link: 'chain'
         });
         this.changeLessonsRefresh = new Request({
-           url: this.timetableForm.getProperty('action'),
+           url: changeLessonsURL,
            link: 'chain'
         });
         this.changeLessonsRefresh.addEvent('success', this.changeLessonsRefreshSucceded.create({
@@ -191,8 +191,8 @@ window.addEvent('domready', function() {
 
   var timetable_editor_element = $('timetable_editor');
 
-  if ($chk(timetable_editor_element)) {
-      var editor = new TimetableEditor(timetable_editor_element);
+  if ($chk(timetable_editor_element) && $chk(timetableEditor_changeLessonsURL)) {
+      var editor = new TimetableEditor(timetable_editor_element, timetableEditor_changeLessonsURL);
 
       editor.addEvent('change', function() {
          tabManager.setState('upravený');
