@@ -369,6 +369,25 @@ ul.vysledky_hladania li+li {
     color: yellow;
 }
 
+#timetable_editor_command_bar {
+    padding-left: 50px;
+    margin-bottom: 0.3em;
+}
+
+#selection_source_selection {
+    background-image: url("../images/bg-yellow-strip-20px.png");
+    background-position: top left;
+    background-repeat: repeat-y;
+    padding-left: 25px;
+}
+
+#selection_source_highlight {
+    background-image: url("../images/bg-white-strip-20px.png");
+    background-position: top left;
+    background-repeat: repeat-y;
+    padding-left: 25px;
+}
+
 #rozvrh {
     border-collapse: collapse;
     width: 100%;

@@ -16,6 +16,10 @@ root {
     display: none;
 }
 
+#timetable_editor_command_bar {
+    display: none;
+}
+
 #rozvrh input, #rozvrh label {
     display: none;
 }
