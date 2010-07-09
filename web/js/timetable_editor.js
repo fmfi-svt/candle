@@ -19,6 +19,7 @@ var TimetableEditor = new Class({
     },
     timetableForm: null,
     changeLessons: null,
+    changeLessonsRefresh: null,
     timetableEditorElement: null,
     bindCheckboxes: function() {
         // checkboxy na upravu zvyraznenia
@@ -34,6 +35,30 @@ var TimetableEditor = new Class({
         var selectionSource = $('timetable_editor_selection_source');
         if ($chk(selectionSource)) {
             selectionSource.addEvent('change', this.selectionSourceChanged.create({
+                event: true,
+                bind: this
+            }))
+        }
+
+        var highlightLessons = $('timetable_editor_selection_action_highlight')
+        if ($chk(highlightLessons)) {
+            highlightLessons.addEvent('click', this.highlightLessonsClicked.create({
+                event: true,
+                bind: this
+            }))
+        }
+
+        var unhighlightLessons = $('timetable_editor_selection_action_unhighlight')
+        if ($chk(unhighlightLessons)) {
+            unhighlightLessons.addEvent('click', this.unhighlightLessonsClicked.create({
+                event: true,
+                bind: this
+            }))
+        }
+
+        var removeLessons = $('timetable_editor_selection_action_remove')
+        if ($chk(removeLessons)) {
+            removeLessons.addEvent('click', this.removeLessonsClicked.create({
                 event: true,
                 bind: this
             }))
@@ -84,6 +109,35 @@ var TimetableEditor = new Class({
         else {
             $('timetable_editor_selection_action_highlight').disabled = undefined;
         }
+    },
+    getAffectedLessonIds: function() {
+        var lessonIds = Array();
+        var selectionSource = $('timetable_editor_selection_source');
+        if (selectionSource.value == 'selection') {
+            $('timetable_editor').getElements('input[type=checkbox][name="lesson_selection[]"][checked]')
+                    .each(function(checkbox) {
+                lessonIds.push(checkbox.value);
+            });
+        }
+        else if (selectionSource.value == 'highlight') {
+            $('timetable_editor').getElements('.highlighted input[type=checkbox][name="lesson_selection[]"]')
+                    .each(function(checkbox) {
+                lessonIds.push(checkbox.value);
+            });
+        }
+        return lessonIds;
+    },
+    highlightLessonsClicked: function(event) {
+        alert(this.getAffectedLessonIds());
+        
+    },
+    unhighlightLessonsClicked: function(event) {
+        alert(this.getAffectedLessonIds());
+
+    },
+    removeLessonsClicked: function(event) {
+        alert(this.getAffectedLessonIds());
+
     },
     getTimetableCell: function(el) {
         // najdi bunku pre tento element (on sam, alebo najblizsi rodic typu td)
