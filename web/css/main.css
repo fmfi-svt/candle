@@ -452,6 +452,14 @@ ul.vysledky_hladania li+li {
     background: #ffffff;
 }
 
+#rozvrh td.hodina.selected {
+    background: #ffff00;
+}
+
+#rozvrh td.hodina.highlighted.selected {
+    background: #00ffff;
+}
+
 #rozvrh th.zaciatok {
     background: transparent;
     width: auto;
