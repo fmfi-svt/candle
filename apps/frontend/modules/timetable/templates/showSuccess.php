@@ -27,9 +27,9 @@ Všetky
 
 hodiny v rozvrhu
 
-<button name="selection_action" type="submit" value="remove">Odstrániť</button>
 <button name="selection_action" type="submit" value="highlight">Zvýrazňovať</button>
 <button name="selection_action" type="submit" value="unhighlight">Nezvýrazňovať</button>
+<button name="selection_action" type="submit" value="remove">Odstrániť</button>
 
 </div> <!-- timetable_editor_command_bar -->
 
