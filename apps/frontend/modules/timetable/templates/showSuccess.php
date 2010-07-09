@@ -21,15 +21,15 @@ if (!$sf_request->isXmlHttpRequest()) {
 
 Všetky
 <select name="selection_source" size="1">
-    <option value="selection" id="selection_source_selection">vybrané</option>
+    <option value="selection" id="selection_source_selection">označené</option>
     <option value="highlight" id="selection_source_highlight">zvýraznené</option>
 </select>
 
 hodiny v rozvrhu
 
-<button name="selection_action" type="submit">Odstrániť</button>
-<button name="selection_action" type="highlight">Zvýrazňovať</button>
-<button name="selection_action" type="unhighlight">Nezvýrazňovať</button>
+<button name="selection_action" type="submit" value="remove">Odstrániť</button>
+<button name="selection_action" type="submit" value="highlight">Zvýrazňovať</button>
+<button name="selection_action" type="submit" value="unhighlight">Nezvýrazňovať</button>
 
 </div> <!-- timetable_editor_command_bar -->
 
