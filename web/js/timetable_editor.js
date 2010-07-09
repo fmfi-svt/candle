@@ -4,6 +4,7 @@ var TimetableEditor = new Class({
         this.timetableEditorElement = $(timetableEditorElement);
         this.timetableForm = this.timetableEditorElement.getElement('form');
         this.bindCheckboxes();
+        this.bindCommandBar();
         this.changeLessons = new Request({
            url: changeLessonsURL,
            link: 'chain'
@@ -28,6 +29,15 @@ var TimetableEditor = new Class({
                 bind: this
             }));
         }, this);
+    },
+    bindCommandBar: function() {
+        var selectionSource = $('timetable_editor_selection_source');
+        if ($chk(selectionSource)) {
+            selectionSource.addEvent('change', this.selectionSourceChanged.create({
+                event: true,
+                bind: this
+            }))
+        }
     },
     refreshTimetable: function() {
         var html = new Request.HTML({
@@ -65,6 +75,15 @@ var TimetableEditor = new Class({
             cell.removeClass('selected');
         }
         this.change();
+    },
+    selectionSourceChanged: function(event) {
+        var select = $(event.target);
+        if (select.value == 'highlight') {
+            $('timetable_editor_selection_action_highlight').disabled = "disabled";
+        }
+        else {
+            $('timetable_editor_selection_action_highlight').disabled = undefined;
+        }
     },
     getTimetableCell: function(el) {
         // najdi bunku pre tento element (on sam, alebo najblizsi rodic typu td)
