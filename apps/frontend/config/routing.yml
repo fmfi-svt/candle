@@ -80,6 +80,12 @@ timetable_change_lessons:
     requirements:
         sf_method: post
 
+timetable_lesson_action:
+    url: /timetable/:id/lesson_action
+    param: { module: timetable, action: lessonAction }
+    requirements:
+        sf_method: post
+
 timetable_duplicate:
     url: /timetable/:id/duplicate
     param: { module: timetable, action: duplicate }

@@ -43,10 +43,63 @@ class timetableActions extends sfActions {
             '_csrf_token' => $request->getParameter('_csrf_token')
         ));
     }
+
+    private function getAffectedLessons(sfWebRequest $request, EditableTimetable $timetable) {
+        $affectedLessons = null;
+        $selectionSource = $request->getParameter('selection_source');
+        if ($selectionSource == 'selection') {
+            $affectedLessons = array();
+            $lessonSelection = $request->getParameter('lesson_selection',array());
+            foreach ($lessonSelection as $lessonId) {
+                if ($timetable->hasLesson(intval($lessonId))) {
+                    $affectedLessons[] = intval($lessonId);
+                }
+            }
+        }
+        else if ($selectionSource == 'highlight') {
+            $affectedLessons = $timetable->getHighlightedLessonIds();
+        }
+        else {
+            throw new Exception("Unknown value of selection_source");
+        }
+        return $affectedLessons;
+    }
+
+    public function executeLessonAction(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+
+        $lessons = $this->getAffectedLessons($request, $this->timetable);
+
+        $lessonAction = $request->getParameter("selection_action");
+
+        if ($lessonAction == 'remove') {
+            foreach ($lessons as $lessonId) {
+                $this->timetable->removeLessonById($lessonId);
+            }
+        }
+        else if ($lessonAction == 'highlight') {
+            foreach ($lessons as $lessonId) {
+                $this->timetable->highlightLessonById($lessonId);
+            }
+        }
+        else if ($lessonAction == 'unhighlight') {
+            foreach ($lessons as $lessonId) {
+                $this->timetable->unhighlightLessonById($lessonId);
+            }
+        }
+        else {
+            throw new Exception("Unknown value of selection_action");
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->renderText('ok');
+        }
+        $this->redirect('@timetable_show?id='.$this->timetable_id);
+    }
     
     public function executeChangeLessons(sfWebRequest $request) {
         $this->fetchTimetable($request);
-                
+
         // odstranim hodiny, ktore boli zaciarknute
         // a teraz nie su a naopak
         $subjectBefore = $request->getParameter('subjectBefore', array());
