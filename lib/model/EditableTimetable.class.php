@@ -76,7 +76,7 @@ class EditableTimetable {
     }
     
     public function getLessonIds() {
-        return keys($this->lessons);
+        return array_keys($this->lessons);
     }
     
     public function getLessons() {
@@ -121,6 +121,10 @@ class EditableTimetable {
         unset($this->highlightedLessons[$lessonId]);
         $this->modified = true;
         return true;
+    }
+
+    public function getHighlightedLessonIds() {
+        return array_keys($this->highlightedLessons);
     }
     
     public function isSubjectSelected($subjectId) {
