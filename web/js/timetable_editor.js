@@ -128,16 +128,37 @@ var TimetableEditor = new Class({
         return lessonIds;
     },
     highlightLessonsClicked: function(event) {
-        alert(this.getAffectedLessonIds());
-        
+        var lessons = this.getAffectedLessonIds();
+        lessons.each(function(lessonId) {
+            var cell = this.getLessonCell(lessonId);
+            if ($chk(cell)) {
+                cell.addClass('highlighted');
+            }
+        });
+        this.change();
+        this.serverHighlightLessons(lessons);
+        event.preventDefault();
+        return false;
     },
     unhighlightLessonsClicked: function(event) {
-        alert(this.getAffectedLessonIds());
-
+        var lessons = this.getAffectedLessonIds();
+        lessons.each(function(lessonId) {
+            var cell = this.getLessonCell(lessonId);
+            if ($chk(cell)) {
+                cell.removeClass('highlighted');
+            }
+        });
+        this.change();
+        this.serverUnhighlightLessons(lessons);
+        event.preventDefault();
+        return false;
     },
     removeLessonsClicked: function(event) {
-        alert(this.getAffectedLessonIds());
-
+        //var lessons = this.getAffectedLessonIds();
+        //alert(lessons);
+        //this.removeLessons(lessons);
+        event.preventDefault();
+        return false;
     },
     getTimetableCell: function(el) {
         // najdi bunku pre tento element (on sam, alebo najblizsi rodic typu td)
@@ -145,22 +166,74 @@ var TimetableEditor = new Class({
         if (element.get('tag') == 'td') return element;
         return element.getParent('td');
     },
+    getLessonSelectionCheckbox: function(lessonId) {
+        return $('timetable_lesson_selection_cb_'+lessonId);
+    },
+    getLessonCell: function(lessonId) {
+        var checkbox = this.getLessonSelectionCheckbox(lessonId);
+        if (!$chk(checkbox)) return null;
+        return this.getTimetableCell(checkbox);
+    },
     change: function() {
         this.fireEvent('change');
     },
     serverHighlightLesson: function(lesson_id) {
         this.changeLessons.post({'lessonHighlighted[]': lesson_id});
     },
+    serverHighlightLessons: function(lesson_ids) {
+        var data = "";
+        var first = true;
+        lesson_ids.each(function(lesson_id) {
+            if (!first) data += "&";
+            first = false;
+
+            data += "lessonHighlighted[]="+escape(lesson_id);
+        });
+        this.changeLessons.post({'data': data});
+    },
     serverUnhighlightLesson: function(lesson_id) {
         this.changeLessons.post({'lessonHighlightedBefore[]': lesson_id});
+    },
+    serverUnhighlightLessons: function(lesson_ids) {
+        var data = "";
+        var first = true;
+        lesson_ids.each(function(lesson_id) {
+            if (!first) data += "&";
+            first = false;
+
+            data += "lessonHighlightedBefore[]="+escape(lesson_id);
+        });
+        this.changeLessons.post({'data': data});
     },
     addLesson: function(lesson_id) {
         this.change();
         this.changeLessonsRefresh.post({'lesson[]': lesson_id});
     },
+    addLessons: function(lesson_ids) {
+        var data = "";
+        var first = true;
+        lesson_ids.each(function(lesson_id) {
+            if (!first) data += "&";
+            first = false;
+
+            data += "lesson[]="+escape(lesson_id);
+        });
+        this.changeLessonsRefresh.post({'data': data});
+    },
     removeLesson: function(lesson_id) {
         this.change();
         this.changeLessonsRefresh.post({'lessonBefore[]': lesson_id});
+    },
+    removeLessons: function(lesson_ids) {
+        var data = "";
+        var first = true;
+        lesson_ids.each(function(lesson_id) {
+            if (!first) data += "&";
+            first = false;
+
+            data += "lessonBefore[]="+escape(lesson_id);
+        });
+        this.changeLessonsRefresh.post({'data': data});
     },
     addSubject: function(subject_id) {
         this.change();
