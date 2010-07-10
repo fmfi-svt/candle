@@ -79,4 +79,8 @@ class Candle {
                 break;
         }
     }
+
+    static public function getLessonTypeHTMLClass($lessonType) {
+        return 'lesson-type-'.strtoupper($lessonType['code']);
+    }
 }
