@@ -4,7 +4,7 @@ var TimetableEditor = new Class({
         this.timetableEditorElement = $(timetableEditorElement);
         this.timetableForm = this.timetableEditorElement.getElement('form');
         this.bindCheckboxes();
-        this.bindCommandBar();
+        //this.bindCommandBar();
         this.changeLessons = new Request({
            url: changeLessonsURL,
            link: 'chain'
@@ -32,6 +32,11 @@ var TimetableEditor = new Class({
         }, this);
     },
     bindCommandBar: function() {
+        this.timetableForm.addEvent('submit', this.timetableFormSubmit.create({
+            event: true,
+            bind: this
+        }));
+
         var selectionSource = $('timetable_editor_selection_source');
         if ($chk(selectionSource)) {
             selectionSource.addEvent('change', this.selectionSourceChanged.create({
@@ -127,6 +132,10 @@ var TimetableEditor = new Class({
         }
         return lessonIds;
     },
+    timetableFormSubmit: function(event) {
+        event.preventDefault();
+        return false;
+    },
     highlightLessonsClicked: function(event) {
         var lessons = this.getAffectedLessonIds();
         lessons.each(function(lessonId) {
@@ -134,7 +143,7 @@ var TimetableEditor = new Class({
             if ($chk(cell)) {
                 cell.addClass('highlighted');
             }
-        });
+        }, this);
         this.change();
         this.serverHighlightLessons(lessons);
         event.preventDefault();
@@ -147,16 +156,15 @@ var TimetableEditor = new Class({
             if ($chk(cell)) {
                 cell.removeClass('highlighted');
             }
-        });
+        }, this);
         this.change();
         this.serverUnhighlightLessons(lessons);
         event.preventDefault();
         return false;
     },
     removeLessonsClicked: function(event) {
-        //var lessons = this.getAffectedLessonIds();
-        //alert(lessons);
-        //this.removeLessons(lessons);
+        var lessons = this.getAffectedLessonIds();
+        this.removeLessons(lessons);
         event.preventDefault();
         return false;
     },
@@ -189,7 +197,7 @@ var TimetableEditor = new Class({
 
             data += "lessonHighlighted[]="+escape(lesson_id);
         });
-        this.changeLessons.post({'data': data});
+        this.changeLessons.post(data);
     },
     serverUnhighlightLesson: function(lesson_id) {
         this.changeLessons.post({'lessonHighlightedBefore[]': lesson_id});
@@ -203,7 +211,7 @@ var TimetableEditor = new Class({
 
             data += "lessonHighlightedBefore[]="+escape(lesson_id);
         });
-        this.changeLessons.post({'data': data});
+        this.changeLessons.post(data);
     },
     addLesson: function(lesson_id) {
         this.change();
@@ -218,22 +226,21 @@ var TimetableEditor = new Class({
 
             data += "lesson[]="+escape(lesson_id);
         });
-        this.changeLessonsRefresh.post({'data': data});
+        this.changeLessonsRefresh.post(data);
     },
     removeLesson: function(lesson_id) {
         this.change();
         this.changeLessonsRefresh.post({'lessonBefore[]': lesson_id});
     },
     removeLessons: function(lesson_ids) {
-        var data = "";
-        var first = true;
+        var data = {};
+        var i = 0;
         lesson_ids.each(function(lesson_id) {
-            if (!first) data += "&";
-            first = false;
-
-            data += "lessonBefore[]="+escape(lesson_id);
+            if (i>0) data += "&";
+            data ["lessonBefore["+escape(i)+"]"]=escape(lesson_id);
+            i += 1;
         });
-        this.changeLessonsRefresh.post({'data': data});
+        this.changeLessonsRefresh.post(data);
     },
     addSubject: function(subject_id) {
         this.change();
