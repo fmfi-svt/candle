@@ -168,6 +168,7 @@ var TimetableEditor = new Class({
     removeLessonsClicked: function(event) {
         var lessons = this.getAffectedLessonIds();
         this.removeLessons(lessons);
+        lessons.each(this.lessonRemoved,this);
         event.preventDefault();
         return false;
     },
