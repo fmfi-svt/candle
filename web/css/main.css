@@ -105,6 +105,11 @@ html.panel_hidden, body.panel_hidden {
     color: white;
 }
 
+#rozvrh_taby {
+    white-space: pre;
+    overflow: auto;
+}
+
 #rozvrh_taby a {
     display: inline-block;
     padding: 0.3em 0.5em;
