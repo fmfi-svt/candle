@@ -485,13 +485,13 @@ ul.vysledky_hladania li+li {
     position: absolute;
     top: 0;
     right: 0;
-    padding: 0 0.5em;
     text-align: center;
 }
 
 #rozvrh td.hodina .typ abbr {
     text-decoration: none;
     border-bottom-style: none;
+    padding: 0 0.5em;
 }
 
 #rozvrh td.hodina .predmet_wrap {
