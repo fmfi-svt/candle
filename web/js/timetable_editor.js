@@ -3,8 +3,7 @@ var TimetableEditor = new Class({
     initialize: function(timetableEditorElement, changeLessonsURL) {
         this.timetableEditorElement = $(timetableEditorElement);
         this.timetableForm = this.timetableEditorElement.getElement('form');
-        this.bindCheckboxes();
-        this.bindCommandBar();
+        this.bindEditor();
         this.changeLessons = new Request({
            url: changeLessonsURL,
            link: 'chain'
@@ -21,6 +20,10 @@ var TimetableEditor = new Class({
     changeLessons: null,
     changeLessonsRefresh: null,
     timetableEditorElement: null,
+    bindEditor: function() {
+        this.bindCheckboxes();
+        this.bindCommandBar();
+    },
     bindCheckboxes: function() {
         // checkboxy na upravu zvyraznenia
         this.timetableForm.getElements('input[type=checkbox][name="lesson_selection[]"]')
@@ -32,6 +35,11 @@ var TimetableEditor = new Class({
         }, this);
     },
     bindCommandBar: function() {
+        this.timetableForm.addEvent('submit', this.timetableFormSubmit.create({
+            event: true,
+            bind: this
+        }));
+
         var selectionSource = $('timetable_editor_selection_source');
         if ($chk(selectionSource)) {
             selectionSource.addEvent('change', this.selectionSourceChanged.create({
@@ -87,7 +95,7 @@ var TimetableEditor = new Class({
         this.timetableEditorElement = newTimetableEditor;
         parent.appendChild(this.timetableEditorElement);
         this.timetableForm = this.timetableEditorElement.getElement('form');
-        this.bindCheckboxes();
+        this.bindEditor();
         //this.timetableEditorElement.set('html', responseHTML);
     },
     lessonSelectionCheckboxChanged: function(event) {
@@ -127,6 +135,10 @@ var TimetableEditor = new Class({
         }
         return lessonIds;
     },
+    timetableFormSubmit: function(event) {
+        event.preventDefault();
+        return false;
+    },
     highlightLessonsClicked: function(event) {
         var lessons = this.getAffectedLessonIds();
         lessons.each(function(lessonId) {
@@ -134,7 +146,7 @@ var TimetableEditor = new Class({
             if ($chk(cell)) {
                 cell.addClass('highlighted');
             }
-        });
+        }, this);
         this.change();
         this.serverHighlightLessons(lessons);
         event.preventDefault();
@@ -147,16 +159,16 @@ var TimetableEditor = new Class({
             if ($chk(cell)) {
                 cell.removeClass('highlighted');
             }
-        });
+        }, this);
         this.change();
         this.serverUnhighlightLessons(lessons);
         event.preventDefault();
         return false;
     },
     removeLessonsClicked: function(event) {
-        //var lessons = this.getAffectedLessonIds();
-        //alert(lessons);
-        //this.removeLessons(lessons);
+        var lessons = this.getAffectedLessonIds();
+        this.removeLessons(lessons);
+        lessons.each(this.lessonRemoved,this);
         event.preventDefault();
         return false;
     },
@@ -177,63 +189,47 @@ var TimetableEditor = new Class({
     change: function() {
         this.fireEvent('change');
     },
+    serverPostLessonIds: function(lesson_ids, fieldName, refreshTimetable) {
+        var dataToSend = "";
+        var first = true;
+        lesson_ids.each(function(lesson_id) {
+            if (!first) dataToSend += "&";
+            first = false;
+
+            dataToSend += fieldName+"="+escape(lesson_id);
+        });
+        if (refreshTimetable) {
+            this.changeLessonsRefresh.send({data:dataToSend, method:'post'});
+        }
+        else {
+            this.changeLessons.send({data:dataToSend, method:'post'});
+        }
+    },
     serverHighlightLesson: function(lesson_id) {
         this.changeLessons.post({'lessonHighlighted[]': lesson_id});
     },
     serverHighlightLessons: function(lesson_ids) {
-        var data = "";
-        var first = true;
-        lesson_ids.each(function(lesson_id) {
-            if (!first) data += "&";
-            first = false;
-
-            data += "lessonHighlighted[]="+escape(lesson_id);
-        });
-        this.changeLessons.post({'data': data});
+        this.serverPostLessonIds(lesson_ids, 'lessonHighlighted[]', false);
     },
     serverUnhighlightLesson: function(lesson_id) {
         this.changeLessons.post({'lessonHighlightedBefore[]': lesson_id});
     },
     serverUnhighlightLessons: function(lesson_ids) {
-        var data = "";
-        var first = true;
-        lesson_ids.each(function(lesson_id) {
-            if (!first) data += "&";
-            first = false;
-
-            data += "lessonHighlightedBefore[]="+escape(lesson_id);
-        });
-        this.changeLessons.post({'data': data});
+        this.serverPostLessonIds(lesson_ids, 'lessonHighlightedBefore[]', false);
     },
     addLesson: function(lesson_id) {
         this.change();
         this.changeLessonsRefresh.post({'lesson[]': lesson_id});
     },
     addLessons: function(lesson_ids) {
-        var data = "";
-        var first = true;
-        lesson_ids.each(function(lesson_id) {
-            if (!first) data += "&";
-            first = false;
-
-            data += "lesson[]="+escape(lesson_id);
-        });
-        this.changeLessonsRefresh.post({'data': data});
+        this.serverPostLessonIds(lesson_ids, 'lesson[]', true);
     },
     removeLesson: function(lesson_id) {
         this.change();
         this.changeLessonsRefresh.post({'lessonBefore[]': lesson_id});
     },
     removeLessons: function(lesson_ids) {
-        var data = "";
-        var first = true;
-        lesson_ids.each(function(lesson_id) {
-            if (!first) data += "&";
-            first = false;
-
-            data += "lessonBefore[]="+escape(lesson_id);
-        });
-        this.changeLessonsRefresh.post({'data': data});
+        this.serverPostLessonIds(lesson_ids, 'lessonBefore[]', true);
     },
     addSubject: function(subject_id) {
         this.change();
