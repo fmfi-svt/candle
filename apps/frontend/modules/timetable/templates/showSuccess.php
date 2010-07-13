@@ -18,6 +18,8 @@ if (!$sf_request->isXmlHttpRequest()) {
 <script type="text/javascript" >var timetableEditor_changeLessonsURL="<?php echo url_for('@timetable_change_lessons?id='.$timetable_id); ?>";</script>
 <?php echo form_tag('@timetable_lesson_action?id='.$timetable_id, array('id'=>'timetable_editor_form')); ?><div>
 
+<h1 class="posunuty"><?php echo $timetable->getName(); ?></h1>
+
 <div id="timetable_editor_command_bar">
 
 Všetky

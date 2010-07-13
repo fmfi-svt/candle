@@ -12,6 +12,8 @@ include_partial('timetableTeacher/menu', array('teacher_id'=>$teacher_id));
 end_slot();
 
 ?>
+<h1 class="posunuty"><?php echo Candle::formatLongName($teacher); ?></h1>
+
 <div>
 <?php include_partial('timetable/table',
         array(  'timetable'=>$timetable,

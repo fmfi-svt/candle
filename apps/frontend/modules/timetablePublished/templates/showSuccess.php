@@ -8,6 +8,8 @@ include_partial('timetablePublished/menu', array('timetable_slug'=>$timetable_sl
 end_slot();
 
 ?>
+<h1><?php echo $timetable->getName(); ?></h1>
+
 <div>
 <?php include_partial('timetable/table',
         array(  'timetable'=>$timetable,

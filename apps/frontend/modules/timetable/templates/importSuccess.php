@@ -8,7 +8,7 @@ include_component('timetable','editMenu', array('timetable'=>$timetable, 'timeta
 end_slot();
 
 ?>
-<h2>Importovať hodiny do rozvrhu</h2>
+<h1>Importovať hodiny do rozvrhu: <?php echo $timetable->getName(); ?></h1>
 
 <p>Do rozvrhu je možné vložiť predmety podľa zoznamu ECTS kódov predmetu (napr. 1-INF-165),
 jednotlivé kódy oddeľujte buď čiarkou, alebo znakom pre nový riadok</p>

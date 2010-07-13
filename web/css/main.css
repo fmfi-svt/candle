@@ -621,3 +621,15 @@ ul.vysledky_hladania li+li {
 abbr {
     cursor: help;
 }
+
+h1 {
+    font-size: 150%;
+    margin: 0;
+    margin-top: 0.2em;
+    margin-bottom: 0.4em;
+    padding: 0;
+}
+
+h1.posunuty {
+    margin-left: 32px;
+}

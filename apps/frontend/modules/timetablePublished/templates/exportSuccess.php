@@ -8,5 +8,5 @@ include_partial('timetablePublished/menu', array('timetable_slug'=>$timetable_sl
 end_slot();
 
 ?>
-<h2>Exportovať rozvrh</h2>
+<h1>Exportovať rozvrh: <?php echo $timetable->getName(); ?></h1>
 <?php include_partial('timetable/exportOptions', array('url'=>array('sf_route'=>'timetable_show_published', 'slug'=>$timetable_slug)));

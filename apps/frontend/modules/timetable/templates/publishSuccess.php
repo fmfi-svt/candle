@@ -5,7 +5,7 @@ include_component('timetable','top',array('timetable'=>$timetable, 'timetable_id
 end_slot();
 
 ?>
-<h1>Publikovať rozvrh</h1>
+<h1>Publikovať rozvrh: <?php echo $timetable->getName(); ?></h1>
 <?php echo form_tag('@timetable_publish_do?id='.$timetable_id); ?>
 <?php echo $form; ?>
 <button type="submit">Publikovať rozvrh</button>
