@@ -13,11 +13,5 @@
                     endif;
             ?></a></li><?php
           endforeach;
-          if (!$foundSelected && isset($timetable) && $timetable &&
-                  isset($timetable_url) && $timetable_url) {
-              ?><li><a href="<?php echo $timetable_url; ?>" class="selected"><?php
-                        echo $timetable->getName();
-              ?></a></li><?php
-          }
     ?><li><a href="<?php echo url_for('@timetable_new') ?>" class="rozvrh_taby_novy<?php 
         if ($newSelected) echo ' selected' ?>">Vytvoriť nový rozvrh</a></li></ul>
