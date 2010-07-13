@@ -7,9 +7,7 @@ include_component('timetable','panel',array());
 end_slot();
 
 slot('top');
-include_component('timetable','top', 
-        array('timetable'=>$timetable,
-              'timetable_url'=>url_for('@timetable_teacher_show?id='.$teacher_id)));
+include_component('timetable','top');
 include_partial('timetableTeacher/menu', array('teacher_id'=>$teacher_id));
 end_slot();
 
