@@ -1,6 +1,5 @@
 <h2 class="pristupnost">Výber aktívneho rozvrhu</h2>
-<ul id="rozvrh_taby">
-    <?php $foundSelected = false;
+<ul id="rozvrh_taby"><?php $foundSelected = false;
         foreach($all_timetables as $i => $current_timetable /* $timetable is current, don't redefine it! */):
             ?><li><a href="<?php echo url_for('@timetable_show?id='.$i); ?>" <?php
                     if (isset($timetable_id) && $i==$timetable_id) {
@@ -21,5 +20,4 @@
               ?></a></li><?php
           }
     ?><li><a href="<?php echo url_for('@timetable_new') ?>" class="rozvrh_taby_novy<?php 
-        if ($newSelected) echo ' selected' ?>">Nový</a></li>
-</ul>
+        if ($newSelected) echo ' selected' ?>">Nový</a></li></ul>
