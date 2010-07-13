@@ -51,7 +51,7 @@ if ($timetable) {
     <table>
       <thead>
         <tr>
-          <th>Typ</th><th>Deň</th><th>Čas</th><th>Kde</th><th>Kto</th>
+          <th>Typ</th><th>Kedy</th><th>Kde</th><th>Kto</th>
           <?php if ($timetable): ?>
             <th>Zobraziť</th>
           <?php endif ?>
@@ -61,11 +61,10 @@ if ($timetable) {
       <tbody>
         <?php foreach ($lessons as $lesson): ?>
         <tr>
-            <td><abbr class="lesson-type <?php echo Candle::getLessonTypeHTMLClass($lesson['LessonType']); ?>" title="<?php echo $lesson['LessonType']['name']?>"><span class="lesson-type-in"><?php echo $lesson['LessonType']['code'] ?></span><span class="lesson-type-image"></span></abbr></td>
-          <td><?php echo Candle::formatShortDay($lesson['day']) ?></td>
-          <td><?php echo Candle::formatTime($lesson['start']) ?></td>
-          <td><?php echo $lesson['Room']['name'] ?></td>
-          <td><?php foreach ($lesson['Teacher'] as $i => $teacher):
+            <td class="lesson-type-cell"><abbr class="lesson-type <?php echo Candle::getLessonTypeHTMLClass($lesson['LessonType']); ?>" title="<?php echo $lesson['LessonType']['name']?>"><span class="lesson-type-in"><?php echo $lesson['LessonType']['code'] ?></span><span class="lesson-type-image"></span></abbr></td>
+          <td class="kedy"><?php echo Candle::formatShortDay($lesson['day']) ?>&nbsp;<?php echo Candle::formatTime($lesson['start']) ?></td>
+          <td class="kde"><?php echo $lesson['Room']['name'] ?></td>
+          <td class="kto"><?php foreach ($lesson['Teacher'] as $i => $teacher):
                         if ($i>0) echo ', ';
                         echo Candle::nbsp(Candle::formatShortName($teacher));
                     endforeach; ?>

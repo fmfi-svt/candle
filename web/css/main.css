@@ -512,6 +512,23 @@ ul.vysledky_hladania li+li {
     display: none;
 }
 
+#panel .predmet td.lesson-type-cell {
+    width: 25px;
+}
+
+#panel .predmet td.kde {
+    padding: 0 0.25em;
+    font-style: italic;
+}
+
+#panel .predmet td.kedy {
+    padding: 0 0.25em;
+}
+
+#panel td.kto {
+    width: 80%;
+}
+
 .lesson-type {
     display: inline-block;
     width: 23px;
