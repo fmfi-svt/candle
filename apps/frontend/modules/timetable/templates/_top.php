@@ -20,4 +20,4 @@
               ?></a></li><?php
           }
     ?><li><a href="<?php echo url_for('@timetable_new') ?>" class="rozvrh_taby_novy<?php 
-        if ($newSelected) echo ' selected' ?>">Nový</a></li></ul>
+        if ($newSelected) echo ' selected' ?>">Vytvoriť nový rozvrh</a></li></ul>
