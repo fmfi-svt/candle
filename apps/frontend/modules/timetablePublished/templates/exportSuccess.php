@@ -8,7 +8,7 @@ include_partial('timetablePublished/menu', array('timetable_slug'=>$timetable_sl
 end_slot();
 
 ?>
-<h2>Exportovať rozvh</h2>
+<h2>Exportovať rozvrh</h2>
 <p>Môžete si vybrať niektorý z nasledujúcich výstupných formátov:</p>
 <ul>
     <li><?php echo link_to('iCalendar (.ics)', '@timetable_show_published?sf_format=ics&slug='.$timetable_slug); ?>

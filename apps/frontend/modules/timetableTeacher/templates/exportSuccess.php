@@ -8,7 +8,7 @@ include_partial('timetableTeacher/menu', array('teacher_id'=>$teacher_id));
 end_slot();
 
 ?>
-<h2>Exportovať rozvh</h2>
+<h2>Exportovať rozvrh</h2>
 <p>Môžete si vybrať niektorý z nasledujúcich výstupných formátov:</p>
 <ul>
     <li><?php echo link_to('iCalendar (.ics)', '@timetable_teacher_show?sf_format=ics&id='.$teacher_id); ?>

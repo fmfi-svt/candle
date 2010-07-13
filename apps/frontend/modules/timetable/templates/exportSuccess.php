@@ -8,7 +8,7 @@ include_component('timetable','editMenu', array('timetable'=>$timetable, 'timeta
 end_slot();
 
 ?>
-<h2>Exportovať rozvh</h2>
+<h2>Exportovať rozvrh</h2>
 <p>Môžete si vybrať niektorý z nasledujúcich výstupných formátov:</p>
 <ul>
     <li><?php echo link_to('iCalendar (.ics)', '@timetable_show?sf_format=ics&id='.$timetable_id); ?>
