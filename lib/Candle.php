@@ -83,4 +83,8 @@ class Candle {
     static public function getLessonTypeHTMLClass($lessonType) {
         return 'lesson-type-'.strtoupper($lessonType['code']);
     }
+
+    static public function addFormat(array $url, $format) {
+        return array_merge($url, array('sf_format'=>$format));
+    }
 }
