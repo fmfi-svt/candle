@@ -64,25 +64,47 @@ var PanelGroup = new Class({
         defaultGroup: 0,
         groups: [],
         togglers: [],
-        focusTargets: []
+        focusTargets: [],
+        cookieOptions: {}
     },
     initialize: function(options) {
         this.setOptions(options);
         this.addGroups(this.options.groups, this.options.togglers,
                         this.options.focusTargets);
         if (this.groups.length) {
-            this.showOnly(this.options.defaultGroup);
+            var foundConfig = false;
+            this.groups.each(function(group, idx) {
+                var cookie = Cookie.read(this.getCookieNameForGroup(group.id));
+                if ($chk(cookie)) {
+                    foundConfig = true;
+                    if (cookie == "show") {
+                        this.showGroup(idx);
+                    }
+                    else {
+                        this.hideGroup(idx);
+                    }
+                }
+            }, this);
+            if (!foundConfig) this.showOnly(this.options.defaultGroup);
         }
     },
     groups: [],
     togglers: [],
     focusTargets: [],
+    getCookieNameForGroup: function(group_id) {
+        return "layout_panelgroup_"+group_id;
+    },
+    getGroupId: function(idx) {
+        return this.groups[idx].id;
+    },
     showGroup: function(idx) {
         this.groups[idx].removeClass(this.options.collapsedClass);
         this.focusTargets[idx].focus();
+        Cookie.write(this.getCookieNameForGroup(this.getGroupId(idx)), "show", this.options.cookieOptions);
     },
     hideGroup: function(idx) {
         this.groups[idx].addClass(this.options.collapsedClass);
+        Cookie.write(this.getCookieNameForGroup(this.getGroupId(idx)), "hide", this.options.cookieOptions);
     },
     toggleGroup: function(idx) {
         if (this.groups[idx].hasClass(this.options.collapsedClass)) {
@@ -178,7 +200,8 @@ window.addEvent('domready', function() {
     }
     new PanelGroup({groups: $$("#panel .panel_cast"),
                     togglers: $$("#panel .panel_cast h2 a"),
-                    focusTargets: $$("#panel .panel_cast .panel_search input[type=text]")}
+                    focusTargets: $$("#panel .panel_cast .panel_search input[type=text]"),
+                    cookieOptions: {path: candleFrontendRelativeUrl, domain: candleFrontendDomain }}
                   );
     tabManager = new TabManager('rozvrh_taby');
 });

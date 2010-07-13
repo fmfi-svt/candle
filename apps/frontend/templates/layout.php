@@ -7,6 +7,11 @@
     <?php include_metas() ?>
     <title><?php if (!include_slot('title')) echo 'Rozvrh'; ?></title>
     <link rel="shortcut icon" href="/favicon.ico" />
+    <script type="text/javascript">
+        var candleFrontendRelativeUrl = "<?php echo url_for('@homepage');?>";
+        var candleFrontendAbsoluteUrl = "<?php echo url_for('@homepage', true);?>";
+        var candleFrontendDomain = "<?php echo $sf_request->getHost();?>";
+    </script>
     <?php include_stylesheets() ?>
     <?php include_javascripts() ?>
 </head>
