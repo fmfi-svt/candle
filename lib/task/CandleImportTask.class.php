@@ -2,6 +2,38 @@
 
 class CandleImportTask extends sfBaseTask
 {
+
+  protected static $ucitelFields = array('priezvisko', 'meno', 'iniciala', 'katedra', 'oddelenie');
+  protected static $miestnostFields = array('nazov', 'kapacita', 'typ');
+  protected static $predmetFields = array('nazov', 'kod', 'kratkykod', 'kredity', 'rozsah');
+  protected static $hodinaFields = array('den', 'zaciatok', 'koniec', 'miestnost', 'trvanie', 'predmet', 'ucitelia', 'kruzky', 'typ', 'zviazanehodiny');
+
+  const STATE_ROOT = 0;
+  const STATE_TYPY = 1;
+  const STATE_TYPYMIESTNOSTI = 2;
+  const STATE_UCITELIA = 3;
+  const STATE_MIESTNOSTI = 4;
+  const STATE_PREDMETY = 5;
+  const STATE_HODINY = 6;
+
+  /**
+   *
+   * @var Doctrine_Connection
+   */
+  protected $connection;
+
+  /**
+   *
+   * @var Doctrine_Connection_Statement
+   */
+  protected $insertLessonType;
+
+  /**
+   *
+   * @var Doctrine_Connection_Statement
+   */
+  protected $insertRoomType;
+
   protected function configure()
   {
     $this->addArguments(array(
@@ -39,14 +71,449 @@ EOF;
         return true;
     }
   }
+
+  protected function rethrowParseError($parser, Exception $exception) {
+      $message = 'Line '.xml_get_current_line_number($parser);
+      $message .= ', Column '.xml_get_current_column_number($parser);
+      $message .= ': '.$exception->getMessage();
+      throw new Exception($message, null, $exception);
+  }
+
+  protected function parseError($parser, $description) {
+      $message = 'Line '.xml_get_current_line_number($parser);
+      $message .= ', Column '.xml_get_current_column_number($parser);
+      $message .= ': '.$description;
+      throw new Exception($message);
+  }
+
+  protected function parseErrorUnexpectedElement($parser, $name) {
+      $this->parseError($parser, 'Unexpected element: '.$name);
+  }
+
+  protected function setActiveField($parser, $name) {
+      if ($this->dataField !== null) {
+          $this->parseErrorUnexpectedElement($parser, $name);
+      }
+      if (isset($this->elementData[$name])) {
+          $this->parseError($parser, 'Value for '.$name.' field already set');
+      }
+      $this->dataField = $name;
+  }
+
+  protected function parser_startElement($parser, $name, $attrs) {
+      //echo '<'.$name.' '.$this->state."\n";
+      if ($this->state == self::STATE_ROOT) {
+          if ($name == 'rozvrh') {
+              // skip
+          }
+          else if ($name == 'typy') {
+              $this->state = self::STATE_TYPY;
+          }
+          else if ($name == 'typymiestnosti') {
+              $this->state = self::STATE_TYPYMIESTNOSTI;
+          }
+          else if ($name == 'ucitelia') {
+              $this->state = self::STATE_UCITELIA;
+          }
+          else if ($name == 'miestnosti') {
+              $this->state = self::STATE_MIESTNOSTI;
+          }
+          else if ($name == 'predmety') {
+              $this->state = self::STATE_PREDMETY;
+          }
+          else if ($name == 'hodiny') {
+              $this->state = self::STATE_HODINY;
+          }
+          else {
+              $this->parseErrorUnexpectedElement($parser, $name);
+          }
+      }
+      else if ($this->state == self::STATE_TYPY) {
+          if ($name == 'typ') {
+              if ($this->elementData != null) {
+                  $this->parseErrorUnexpectedElement ($parser, $name);
+              }
+              $this->elementData = array();
+              $this->elementData['id'] = $attrs['id'];
+              $this->elementData['popis'] = $attrs['popis'];
+              try {
+                $this->handleTyp();
+              }
+              catch (Exception $e) {
+                $this->rethrowParseError($parser, $e);
+              }
+          }
+          else {
+              $this->parseErrorUnexpectedElement($parser, $name);
+          }
+      }
+      else if ($this->state == self::STATE_TYPYMIESTNOSTI) {
+          if ($name == 'typmiestnosti') {
+              if ($this->elementData != null) {
+                  $this->parseErrorUnexpectedElement ($parser, $name);
+              }
+              $this->elementData = array();
+              $this->elementData['id'] = $attrs['id'];
+              $this->elementData['popis'] = $attrs['popis'];
+              try {
+                $this->handleTypMiestnosti();
+              }
+              catch (Exception $e) {
+                $this->rethrowParseError($parser, $e);
+              }
+          }
+          else {
+              $this->parseErrorUnexpectedElement($parser, $name);
+          }
+      }
+      else if ($this->state == self::STATE_UCITELIA) {
+          if ($name == 'ucitel') {
+              if ($this->elementData != null) {
+                  $this->parseErrorUnexpectedElement ($parser, $name);
+              }
+              $this->elementData = array();
+              $this->elementData['id'] = $attrs['id'];
+              $this->dataFields = self::$ucitelFields;
+          }
+          else if ($this->dataFields != null) {
+              $this->setActiveField($parser, $name);
+          }
+          else {
+              $this->parseErrorUnexpectedElement($parser, $name);
+          }
+      }
+      else if ($this->state == self::STATE_MIESTNOSTI) {
+          if ($name == 'miestnost') {
+              if ($this->elementData != null) {
+                  $this->parseErrorUnexpectedElement ($parser, $name);
+              }
+              $this->elementData = array();
+              $this->dataFields = self::$miestnostFields;
+          }
+          else if ($this->dataFields != null) {
+              $this->setActiveField($parser, $name);
+          }
+          else {
+              $this->parseErrorUnexpectedElement($parser, $name);
+          }
+      }
+      else if ($this->state == self::STATE_PREDMETY) {
+          if ($name == 'predmet') {
+              if ($this->elementData != null) {
+                  $this->parseErrorUnexpectedElement ($parser, $name);
+              }
+              $this->elementData = array();
+              $this->dataFields = self::$predmetFields;
+          }
+          else if ($this->dataFields != null) {
+              $this->setActiveField($parser, $name);
+          }
+          else {
+              $this->parseErrorUnexpectedElement($parser, $name);
+          }
+      }
+      else if ($this->state == self::STATE_HODINY) {
+          if ($name == 'hodina') {
+              if ($this->elementData != null) {
+                  $this->parseErrorUnexpectedElement ($parser, $name);
+              }
+              $this->elementData = array();
+              $this->dataFields = self::$predmetFields;
+          }
+          else if ($this->dataFields != null) {
+              $this->setActiveField($parser, $name);
+          }
+          else {
+              $this->parseErrorUnexpectedElement($parser, $name);
+          }
+      }
+      else {
+          $this->parseError($parser, 'Some internal state messed, '.$this->state);
+      }
+  }
+
+  protected function parser_endElement($parser, $name) {
+      //echo '</'.$name."\n";
+      $this->dataField = null;
+      if ($this->state == self::STATE_TYPY) {
+          if ($name == 'typy') {
+              $this->state = self::STATE_ROOT;
+          }
+          else if ($name == 'typ') {
+              $this->elementData = null;
+          }
+      }
+      else if ($this->state == self::STATE_TYPYMIESTNOSTI) {
+          if ($name == 'typymiestnosti') {
+              $this->state = self::STATE_ROOT;
+          }
+          else if ($name == 'typmiestnosti') {
+              $this->elementData = null;
+          }
+      }
+      else if ($this->state == self::STATE_UCITELIA) {
+          if ($name == 'ucitelia') {
+              $this->state = self::STATE_ROOT;
+          }
+          else if ($name == 'ucitel') {
+              $this->dataFields = null;
+              try {
+                $this->handleUcitel();
+              }
+              catch (Exception $e) {
+                  $this->rethrowParseError($parser, $e);
+              }
+              $this->elementData = null;
+          }
+      }
+      else if ($this->state == self::STATE_MIESTNOSTI) {
+          if ($name == 'miestnosti') {
+              $this->state = self::STATE_ROOT;
+          }
+          else if ($name == 'miestnost') {
+              $this->dataFields = null;
+              try {
+                $this->handleMiestnost();
+              }
+              catch (Exception $e) {
+                  $this->rethrowParseError($parser, $e);
+              }
+              $this->elementData = null;
+          }
+      }
+      else if ($this->state == self::STATE_PREDMETY) {
+          if ($name == 'predmety') {
+              $this->state = self::STATE_ROOT;
+          }
+          else if ($name == 'predmet') {
+              $this->dataFields = null;
+              try {
+                $this->handlePredmet();
+              }
+              catch (Exception $e) {
+                  $this->rethrowParseError($parser, $e);
+              }
+              $this->elementData = null;
+          }
+      }
+      else if ($this->state == self::STATE_HODINY) {
+          if ($name == 'hodiny') {
+              $this->state = self::STATE_ROOT;
+          }
+          else if ($name == 'hodina') {
+              $this->dataFields = null;
+              try {
+                $this->handleHodina();
+              }
+              catch (Exception $e) {
+                  $this->rethrowParseError($parser, $e);
+              }
+              $this->elementData = null;
+          }
+      }
+  }
+
+  protected function parser_characterData($parser, $data) {
+      if ($this->dataField == null) return;
+      if (!isset($this->elementData[$this->dataField])) {
+          $this->elementData[$this->dataField] = $data;
+      }
+      else {
+          $this->elementData[$this->dataField] .= $data;
+      }
+  }
+
+  protected function handleTyp() {
+    //print_r($this->elementData);
+    $this->insertLessonType->execute(array(
+        $this->elementData['id'], $this->elementData['popis']
+    ));
+  }
+
+  protected function handleTypMiestnosti() {
+    //print_r($this->elementData);
+    $this->insertRoomType->execute(array(
+        $this->elementData['id'], $this->elementData['popis']
+    ));
+  }
+
+  protected function handleUcitel() {
+    //print_r($this->elementData);
+    $this->insertTeacher->execute(array(
+        $this->elementData['meno'], $this->elementData['priezvisko'],
+        $this->elementData['iniciala'], $this->elementData['oddelenie'],
+        $this->elementData['katedra'], $this->elementData['id']
+    ));
+  }
+
+  protected function handleMiestnost() {
+    //print_r($this->elementData);
+    $this->insertRoom->execute(array(
+        $this->elementData['nazov'], $this->elementData['typ'],
+        (int) $this->elementData['kapacita']
+    ));
+  }
+
+  protected function handlePredmet() {
+    //print_r($this->elementData);
+    $this->insertSubject->execute(array(
+        $this->elementData['nazov'], $this->elementData['kod'],
+        $this->elementData['kratkykod'], (int) $this->elementData['kredity'],
+        $this->elementData['rozsah'], $this->elementData['id']
+    ));
+  }
+
+  protected function handleHodina() {
+    //print_r($this->elementData);
+    $lessonId = (int) $this->elementData['id'];
+
+    $this->insertLesson->execute(array(
+        Candle::dayFromCode($this->elementData['den']), (int) $this->elementData['start'],
+        (int) $this->elementData['end'], $this->elementData['typ'],
+        $this->elementData['miestnost'], $this->elementData['predmet'],
+        $lessonId
+    ));
+
+    if (isset($this->elementData['ucitelia'])) {
+        $ucitelia = explode(',', $this->elementData['ucitelia']);
+        foreach ($ucitelia as $ucitelId) {
+            $this->insertLessonTeacher->execute(array($lessonId, $ucitelId));
+        }
+    }
+
+    if (isset($this->elementData['kruzky'])) {
+        $kruzky = explode(',', $this->elementData['kruzky']);
+        foreach ($kruzky as $kruzok) {
+            $this->insertLessonStudentGroup->execute(array($lessonId, $kruzok));
+        }
+    }
+
+    if (isset($this->elementData['zviazanehodiny'])) {
+        $zviazaneHodiny = explode(',', $this->elementData['zviazanehodiny']);
+        foreach ($zviazaneHodiny as $zviazanaHodina) {
+            $this->insertLessonLink->execute(array($lessonId, $zviazanaHodina));
+        }
+    }
+  }
+
+  protected function deleteAllData() {
+    $this->logSection('candle', 'Deleting all data');
+
+    $deletedLessons = Doctrine::getTable('Lesson')->createQuery()
+                            ->delete()->execute();
+
+    $deletedLessonTypes = Doctrine::getTable('LessonType')->createQuery()
+                            ->delete()->execute();
+
+    $deletedRooms = Doctrine::getTable('Room')->createQuery()
+                            ->delete()->execute();
+
+    $deletedRoomTypes = Doctrine::getTable('RoomType')->createQuery()
+                            ->delete()->execute();
+
+    $deletedTeachers = Doctrine::getTable('Teacher')->createQuery()
+                            ->delete()->execute();
+
+    $deletedSubjects = Doctrine::getTable('Subject')->createQuery()
+                            ->delete()->execute();
+
+    $deletedStudentGroups = Doctrine::getTable('StudentGroup')->createQuery()
+                            ->delete()->execute();
+  }
+
+  protected function createTemporaryTables() {
+      $this->logSection('candle', 'Creating temporary tables');
+
+      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_type ";
+      $sql .= "(name varchar(30) not null, code varchar(1) not null)";
+      $res = $this->connection->execute($sql);
+
+      $sql = "CREATE TEMPORARY TABLE tmp_insert_room_type ";
+      $sql .= "(name varchar(30) not null, code varchar(1) not null)";
+      $res = $this->connection->execute($sql);
+
+      $sql = "CREATE TEMPORARY TABLE tmp_insert_teacher ";
+      $sql .= "(given_name varchar(50), family_name varchar(50) not null,";
+      $sql .= "iniciala varchar(50), oddelenie varchar(50), katedra varchar(50),";
+      $sql .= "external_id varchar(50) not null)";
+      $res = $this->connection->execute($sql);
+
+      $sql = "CREATE TEMPORARY TABLE tmp_insert_room ";
+      $sql .= "(name varchar(30) not null, room_type varchar(1) not null, capacity integer not null)";
+      $res = $this->connection->execute($sql);
+
+      $sql = "CREATE TEMPORARY TABLE tmp_insert_subject ";
+      $sql .= "(name varchar(100), code varchar(30), short_code varchar(10), ";
+      $sql .= "credit_value integer not null, rozsah varchar(30), external_id varchar(30))";
+      $res = $this->connection->execute($sql);
+
+      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson ";
+      $sql .= "(day integer not null, start integer not null, end integer not null, ";
+      $sql .= "lesson_type varchar(1) not null, room varchar(30) not null, ";
+      $sql .= "subject varchar(30) not null, external_id integer not null)";
+      $res = $this->connection->execute($sql);
+
+      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_teacher ";
+      $sql .= "(lesson_external_id integer not null, teacher_external_id varchar(50) not null)";
+      $res = $this->connection->execute($sql);
+
+      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_student_group ";
+      $sql .= "(lesson_external_id integer not null, student_group varchar(30) not null)";
+      $res = $this->connection->execute($sql);
+
+      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_link ";
+      $sql .= "(lesson1_external_id integer not null, lesson2_external_id integer not null)";
+      $res = $this->connection->execute($sql);
+  }
+
+  protected function prepareInsertStatements() {
+      $this->logSection('candle', 'Creating prepared statements');
+
+      $sql = 'INSERT INTO tmp_insert_lesson_type (name, code) VALUES (?, ?)';
+      $this->insertLessonType = $this->connection->prepare($sql);
+
+      $sql = 'INSERT INTO tmp_insert_room_type (name, code) VALUES (?, ?)';
+      $this->insertRoomType = $this->connection->prepare($sql);
+
+      $sql = 'INSERT INTO tmp_insert_teacher (given_name, family_name, iniciala, ';
+      $sql .= 'oddelenie, katedra, external_id) VALUES (?, ?, ?, ?, ?, ?)';
+      $this->insertTeacher = $this->connection->prepare($sql);
+
+      $sql = 'INSERT INTO tmp_insert_room (name, room_type, capacity';
+      $sql .= ') VALUES (?, ?, ?)';
+      $this->insertRoom = $this->connection->prepare($sql);
+
+      $sql = 'INSERT INTO tmp_insert_subject (name, code, short_code, ';
+      $sql .= 'credit_value, rozsah, external_id) VALUES (?, ?, ?, ?, ?, ?)';
+      $this->insertSubject = $this->connection->prepare($sql);
+
+      $sql = 'INSERT INTO tmp_insert_lesson (day, start, end, lesson_type, ';
+      $sql .= 'room, subject, external_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      $this->insertLesson = $this->connection->prepare($sql);
+
+      $sql = 'INSERT INTO tmp_insert_lesson_teacher (lesson_external_id, ';
+      $sql .= 'teacher_external_id) VALUES (?, ?)';
+      $this->insertLessonTeacher = $this->connection->prepare($sql);
+
+      $sql = 'INSERT INTO tmp_insert_lesson_student_group (lesson_external_id, ';
+      $sql .= 'student_group) VALUES (?, ?)';
+      $this->insertLessonStudentGroup = $this->connection->prepare($sql);
+
+      $sql = 'INSERT INTO tmp_insert_lesson_link (lesson1_external_id, ';
+      $sql .= 'lesson2_external_id) VALUES (?, ?)';
+      $this->insertLessonLink = $this->connection->prepare($sql);
+  }
     
   protected function execute($arguments = array(), $options = array())
   {
     
     $databaseManager = new sfDatabaseManager($this->configuration);
-    $connection = Doctrine_Manager::connection();
+    $this->connection = Doctrine_Manager::connection();
     $environment = $this->configuration instanceof sfApplicationConfiguration ? $this->configuration->getEnvironment() : 'all';
-    
+    $this->elementData = null;
+    $this->dataField = null;
+    $this->state = self::STATE_ROOT;
+
 
     if (!$this->askConfirmation(array_merge(
         array(sprintf('This command will remove source timetable data in the "%s" connection.', $environment), ''),
@@ -58,281 +525,43 @@ EOF;
 
       return 1;
     }
-    
-    // Nacitat cele to xml-ko do pamate zere celkom vela...
-    // FIXME prerobit skript tak, aby pouzival menej pamate
-    ini_set("memory_limit","320M");    
 
-    $lessonTypes = array();
-    $roomTypes = array();
-    $teachers = array();
-    $rooms = array();
-    $subjects = array();
-    $lessons = array();
-    $studentGroups = array();
-    $lessonLinks = array();
-    
-    libxml_use_internal_errors(true);
-    $this->logSection('candle', 'Starting to load source file: '.$arguments['file']);
-    $xmlRoot = simplexml_load_file($arguments['file']);
-    $errors = libxml_get_errors();
-    if ($xmlRoot === false || $errors) {
-        $errorMessages = 'Error reading xml file';
-        foreach($errors as $error) {
-            switch ($error->level) {
-                case LIBXML_ERR_WARNING:
-                    $errorMessages .= "\n\n  WARNING $error->code: ";
-                    break;
-                 case LIBXML_ERR_ERROR:
-                    $errorMessages .= "\n\n  ERROR $error->code: ";
-                    break;
-                case LIBXML_ERR_FATAL:
-                    $errorMessages .= "\n\n  FATAL ERROR $error->code: ";
-                    break;
-            }
-            $errorMessages .= trim($error->message)."\n";
-            $errorMessages .= '    (Line: '.$error->line.' Column: '.$error->column.")\n";
-        }
-        $this->logBlock($errorMessages, 'ERROR');
-        return 1;
-    }
-    
-    $this->warnings = 0;
-    
-    $this->logSection('candle', 'Extracting data from xml');
+    $parser = xml_parser_create();
+    xml_set_element_handler($parser, array($this, 'parser_startElement'), array($this, 'parser_endElement'));
+    xml_set_character_data_handler($parser, array($this, 'parser_characterData'));
+    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
 
-    foreach($xmlRoot->typy->typ as $xmlTyp) {
-        $type = new LessonType();
-        $type->setCode((string) $xmlTyp['id']);
-        $type->setName((string) $xmlTyp['popis']);
+    // Sice som uz znizil pamatove naroky, stale treba zvysit limit
+    ini_set("memory_limit","64M");
 
-        if (strlen($type->getCode()) != 1) {
-            $this->spit('Incorrect typ.id length (should be 1): '.$type->getCode());
-        }
-        
-        if (isset($lessonTypes[$type->getCode()])) {
-            $this->spit('Duplicate typ.id: '. $type->getCode());
-        }
+    $this->connection->beginTransaction();
 
-        $lessonTypes[$type->getCode()] = $type;
-    }
-    
-    foreach($xmlRoot->typymiestnosti->typmiestnosti as $xmlTypMiestnosti) {
-        $roomType = new RoomType();
-        $roomType->setCode((string) $xmlTypMiestnosti['id']);
-        $roomType->setName((string) $xmlTypMiestnosti['popis']);
- 
-        if (strlen($roomType->getCode()) != 1) {
-            $this->spit('Incorrect typmiestnosti.id length (should be 1): '.$roomType->getCode());
-        }
-        
-        if (isset($roomTypes[$roomType->getCode()])) {
-            $this->spit('Duplicate typmiestnosti.id: '. $roomType->getCode());
-        }
+    $this->connection->prepare('$statement');
 
-       $roomTypes[$roomType->getCode()] = $roomType;
-    }
-    
-    foreach($xmlRoot->ucitelia->ucitel as $xmlUcitel) {
-        $teacher = new Teacher();
-        $teacher->setExternalId((string) $xmlUcitel['id']);
-        $teacher->setFamilyName(trim((string) $xmlUcitel->priezvisko));
-        $teacher->setGivenName(trim((string) $xmlUcitel->meno));
-        $teacher->setIniciala(trim((string) $xmlUcitel->iniciala));
-        $teacher->setKatedra(trim((string) $xmlUcitel->katedra));
-        $teacher->setOddelenie(trim((string) $xmlUcitel->oddelenie));
-        
-        if (isset($teachers[$teacher->getExternalId()])) {
-            $this->spit('Duplicate ucitel.id: '. $teacher->getExternalId());
-        }
-
-        $teachers[$teacher->getExternalId()] = $teacher;
-    }
-    
-    foreach($xmlRoot->miestnosti->miestnost as $xmlMiestnost) {
-        $room = new Room();
-        $room->setName((string) $xmlMiestnost->nazov);
-        $room->setCapacity((int) $xmlMiestnost->kapacita);
-        $room->setRoomType($roomTypes[(string) $xmlMiestnost->typ]);
-        
-        if (isset($rooms[$room->getName()])) {
-            $this->spit('Duplicate miestnost.nazov: '. $room->getName());
-        }
-        
-        $rooms[$room->getName()] = $room;
-    }
-    
-    foreach($xmlRoot->predmety->predmet as $xmlPredmet) {
-        $subject = new Subject();
-        $subject->setExternalId((string) $xmlPredmet['id']);
-        $subject->setName((string) $xmlPredmet->nazov);
-        $subject->setCode((string) $xmlPredmet->kod);
-        $subject->setShortCode((string) $xmlPredmet->kratkykod);
-        $subject->setCreditValue((int) $xmlPredmet->kredity);
-        $subject->setRozsah((string) $xmlPredmet->rozsah);
-        $subjects[$subject->getExternalId()] = $subject;
-    }
-    
-    foreach($xmlRoot->hodiny->hodina as $xmlHodina) {
-        $lesson = new Lesson();
-        $lesson->setExternalId((int) $xmlHodina['id']);
-        $lesson->setDay(Candle::dayFromCode((string) $xmlHodina->den));
-        $lesson->setStart((int) $xmlHodina->zaciatok);
-        $lesson->setEnd((int) $xmlHodina->koniec);
-        
-        if (!$rooms[(string) $xmlHodina->miestnost]) {
-            $message = 'Undefined hodina.miestnost: '. (string) $xmlHodina->miestnost;
-            $message .= "\n  (hodina.id = ".$lesson->getExternalId().')';
-            $this->spit($message, !$options['skip-bad']);
-            continue;
-        }
-        $lesson->setRoom($rooms[(string) $xmlHodina->miestnost]);
-        
-        if (!$subjects[(string) $xmlHodina->predmet]) {
-            $message = 'Undefined hodina.predmet: '. (string) $xmlHodina->predmet;
-            $message .= "\n  (hodina.id = ".$lesson->getExternalId().')';
-            $this->spit($message, !$options['skip-bad']);
-            continue;
-        }
-        $lesson->setSubject($subjects[(string) $xmlHodina->predmet]);
-        
-        $ucitelia = explode(',', (string) $xmlHodina->ucitelia);
-        foreach ($ucitelia as $ucitel_id) {
-            if (!$teachers[$ucitel_id]) {
-                $message = 'Undefined ucitel: '. $ucitel_id;
-                $message .= "\n  (hodina.id = ".$lesson->getExternalId().')';
-                $this->spit($message, !$options['skip-bad']);
-                continue;
-            }
-            $lesson->Teacher[] = $teachers[$ucitel_id];
-        }
-        
-        $kruzky = explode(',', (string) $xmlHodina->kruzky);
-        foreach ($kruzky as $kruzok) {
-            if (!isset($studentGroups[$kruzok])) {
-                $studentGroups[$kruzok] = new StudentGroup();
-                $studentGroups[$kruzok]->setName($kruzok);
-            }
-            $lesson->StudentGroup[] = $studentGroups[$kruzok];
-        }
-        
-        if (!$lessonTypes[(string) $xmlHodina->typ]) {
-            $message = 'Undefined hodina.typ: '. (string) $xmlHodina->typ;
-            $message .= "\n  (hodina.id = ".$lesson->getExternalId().')';
-            $this->spit($message, !$options['skip-bad']);
-            continue;
-        }
-        $lesson->setLessonType($lessonTypes[(string) $xmlHodina->typ]);
-
-        if (isset($lessons[$lesson->getExternalId()])) {
-            $this->spit('Duplicate hodina.id: '. $lesson->getExternalId());
-        }
-
-        $zviazanehodiny = explode(',', (string) $xmlHodina->zviazanehodiny);
-        $lessonLinks[$lesson->getExternalId()] = array();
-        foreach ($zviazanehodiny as $zviazanahodina) {
-            $lessonLinks[$lesson->getExternalId()][] = (int) $zviazanahodina;
-        }
-    
-        $lessons[$lesson->getExternalId()] = $lesson;
-    }
-    
-    // Nastav zviazane hodiny (toto treba robit az ked mam vsetky hodiny)
-    foreach ($lessons as $lesson) {
-        foreach ($lessonsLinks[$lesson->getExternalId()] as $link) {
-            if (!$lessons[$link]) {
-                $message = sprintf('Lesson link from %d to undefined target: %d', $lesson->getExternalId(), $link);
-                $this->spit($message, !$options['skip-bad']);
-                continue;
-            }
-            $lesson->Linked[] = $lessons[$link];
-        }
-    }
-    
-    if ($this->warnings) {
-        $this->logSection('candle', sprintf('Data extracted with %d warnings', $this->warnings));
-    }
-    else {
-        $this->logSection('candle', 'Data extracted successfully');
-    }
- 
-    $connection->beginTransaction();
-    
     try {
 
-        $this->logSection('candle', 'Deleting all data');    
-        
-        $deletedLessons = Doctrine::getTable('Lesson')->createQuery()
-                                ->delete()->execute();
+        $this->createTemporaryTables();
+        $this->prepareInsertStatements();
 
-        $deletedLessonTypes = Doctrine::getTable('LessonType')->createQuery()
-                                ->delete()->execute();
+        $this->logSection('candle', 'Loading xml data into database');
+        xml_parse($parser, file_get_contents($arguments['file']));
+        
+        $this->deleteAllData();
 
-        $deletedRooms = Doctrine::getTable('Room')->createQuery()
-                                ->delete()->execute();
+        
 
-        $deletedRoomTypes = Doctrine::getTable('RoomType')->createQuery()
-                                ->delete()->execute();
-
-        $deletedTeachers = Doctrine::getTable('Teacher')->createQuery()
-                                ->delete()->execute();
-        
-        $deletedSubjects = Doctrine::getTable('Subject')->createQuery()
-                                ->delete()->execute();
-        
-        $deletedStudentGroups = Doctrine::getTable('StudentGroup')->createQuery()
-                                ->delete()->execute();
-        
-        $this->logSection('candle', 'Saving lesson types');        
-        foreach ($lessonTypes as $lessonType) {
-            $lessonType->save();
-        }
-
-        $this->logSection('candle', 'Saving room types');        
-        foreach ($roomTypes as $roomType) {
-            $roomType->save();
-        }
-        
-        $this->logSection('candle', 'Saving teachers');
-        foreach ($teachers as $teacher) {
-            $teacher->save();
-        }
-        
-        $this->logSection('candle', 'Saving rooms');
-        foreach ($rooms as $room) {
-            $room->save();
-        }
-        
-        $this->logSection('candle', 'Saving subjects');
-        foreach ($subjects as $subject) {
-            $subject->save();
-        }
-        
-        $this->logSection('candle', 'Saving student groups');
-        foreach ($studentGroups as $studentGroup) {
-            $studentGroup->save();
-        }
-        
-        $this->logSection('candle', 'Saving lessons');
-        foreach ($lessons as $lesson) {
-            $lesson->save();
-        }
-        
-        $connection->commit();
+        $this->connection->commit();
     }
     catch (Exception $e) {
         $this->logSection('candle', 'Exception occured, executing rollback');
-        $connection->rollback();
-        throw $e;
+        $this->connection->rollback();
+        $this->logBlock(array($e->getMessage(), $e->getTraceAsString()), 'ERROR');
     }
-   
 
-    $this->logSection('candle', sprintf('Replaced %d lesson types with %d new (%+d)', $deletedLessonTypes, count($lessonTypes), count($lessonTypes)-$deletedLessonTypes));
-    $this->logSection('candle', sprintf('Replaced %d room types with %d new (%+d)', $deletedRoomTypes, count($roomTypes), count($roomTypes)-$deletedRoomTypes));
-    $this->logSection('candle', sprintf('Replaced %d teachers with %d new (%+d)', $deletedTeachers, count($teachers), count($teachers)-$deletedTeachers));
-    $this->logSection('candle', sprintf('Replaced %d rooms with %d new (%+d)', $deletedRooms, count($rooms), count($rooms)-$deletedRooms));
-    $this->logSection('candle', sprintf('Replaced %d subjects with %d new (%+d)', $deletedSubjects, count($subjects), count($subjects)-$deletedSubjects));
-    $this->logSection('candle', sprintf('Replaced %d student groups with %d new (%+d)', $deletedStudentGroups, count($studentGroups), count($studentGroups)-$deletedStudentGroups));
-    $this->logSection('candle', sprintf('Replaced %d lessons with %d new (%+d)', $deletedLessons, count($lessons), count($lessons)-$deletedLessons));
+    xml_parser_free($parser);
+
+
+    throw new Exception('TODO');
+
   }
 }
