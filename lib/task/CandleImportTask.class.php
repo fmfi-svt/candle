@@ -45,8 +45,10 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environement', 'prod'),
         new sfCommandOption('replace', null, sfCommandOption::PARAMETER_NONE, 'Whether to replace data instead of merge'),
         new sfCommandOption('dry-run', null, sfCommandOption::PARAMETER_NONE, 'Don\'t modify data tables'),
-        new sfCommandOption('no-merges', null, sfCommandOption::PARAMETER_NONE, 'Don\'t perform merge stage, implies dry-run'),
+        new sfCommandOption('no-merges', null, sfCommandOption::PARAMETER_NONE, 'Don\'t perform merge stage'),
         new sfCommandOption('ignore-errors', null, sfCommandOption::PARAMETER_NONE, 'Ignore any errors (it is advisable to also use --dry-run)'),
+        new sfCommandOption('print-sql', null, sfCommandOption::PARAMETER_NONE, 'Print SQL commands executed'),
+        new sfCommandOption('debug-dump-tables', null, sfCommandOption::PARAMETER_NONE, 'Create a persistent copy of temporary tables'),
     ));
  
     $this->namespace = 'candle';
@@ -64,15 +66,17 @@ EOF;
     
   }
     
-  private function spit($message, $isError=true) {
-    if ($isError) {
-        throw new Exception($message);
-    }
-    else {
-        $this->logBlock($message, 'INFO');
-        $this->warnings++;
-        return true;
-    }
+  protected function executeSQL($sql) {
+      if ($this->printSQL) {
+          echo $sql;
+          echo ";\n";
+      }
+      return $this->connection->execute($sql);
+  }
+
+  protected function executePreparedSQL(Doctrine_Connection_Statement $prepared, array $params) {
+      $prepared->getQuery();
+      return $prepared->execute($params);
   }
 
   protected function createParseErrorMessage($parser, $description) {
@@ -448,44 +452,44 @@ EOF;
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_type ";
       $sql .= "(name varchar(30) not null, code varchar(1) not null)";
-      $res = $this->connection->execute($sql);
+      $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_room_type ";
       $sql .= "(name varchar(30) not null, code varchar(1) not null)";
-      $res = $this->connection->execute($sql);
+      $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_teacher ";
       $sql .= "(given_name varchar(50), family_name varchar(50) not null,";
       $sql .= "iniciala varchar(50), oddelenie varchar(50), katedra varchar(50),";
       $sql .= "external_id varchar(50) binary not null)";
-      $res = $this->connection->execute($sql);
+      $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_room ";
       $sql .= "(name varchar(30) not null, room_type varchar(1) not null, capacity integer not null)";
-      $res = $this->connection->execute($sql);
+      $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_subject ";
       $sql .= "(name varchar(100), code varchar(30), short_code varchar(10), ";
       $sql .= "credit_value integer not null, rozsah varchar(30), external_id varchar(30) binary not null)";
-      $res = $this->connection->execute($sql);
+      $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson ";
       $sql .= "(day integer not null, start integer not null, end integer not null, ";
       $sql .= "lesson_type varchar(1) not null, room varchar(30) not null, ";
       $sql .= "subject varchar(30) not null, external_id integer not null)";
-      $res = $this->connection->execute($sql);
+      $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_teacher ";
       $sql .= "(lesson_external_id integer not null, teacher_external_id varchar(50) binary not null)";
-      $res = $this->connection->execute($sql);
+      $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_student_group ";
       $sql .= "(lesson_external_id integer not null, student_group varchar(30) not null)";
-      $res = $this->connection->execute($sql);
+      $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_link ";
       $sql .= "(lesson1_external_id integer not null, lesson2_external_id integer not null)";
-      $res = $this->connection->execute($sql);
+      $res = $this->executeSQL($sql);
   }
 
   protected function prepareInsertStatements() {
@@ -531,27 +535,41 @@ EOF;
 
       $sql = 'ALTER TABLE tmp_insert_lesson_type';
       $sql .= ' ADD PRIMARY KEY (code)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'ALTER TABLE tmp_insert_room_type';
       $sql .= ' ADD PRIMARY KEY (code)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'ALTER TABLE tmp_insert_teacher';
       $sql .= ' ADD PRIMARY KEY (external_id)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'ALTER TABLE tmp_insert_room';
       $sql .= ' ADD PRIMARY KEY (name)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'ALTER TABLE tmp_insert_subject';
       $sql .= ' ADD PRIMARY KEY (external_id)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'ALTER TABLE tmp_insert_lesson';
       $sql .= ' ADD PRIMARY KEY (external_id)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
+  }
+
+  protected function debugDumpTables() {
+      $this->logSection('candle', 'Dumping temporary tables into debug tables');
+
+      $tables = array('tmp_insert_lesson_type', 'tmp_insert_room_type',
+          'tmp_insert_teacher', 'tmp_insert_room', 'tmp_insert_subject',
+          'tmp_insert_lesson', 'tmp_insert_lesson_teacher',
+          'tmp_insert_lesson_student_group', 'tmp_insert_lesson_link');
+
+      foreach ($tables as $table) {
+          $this->executeSQL('DROP TABLE IF EXISTS debug_'.$table);
+          $this->executeSQL('CREATE TABLE debug_'.$table.' SELECT * FROM '.$table);
+      }
   }
 
   protected function mergeLessonTypes() {
@@ -559,12 +577,12 @@ EOF;
 
       $sql = 'UPDATE lesson_type t, tmp_insert_lesson_type i';
       $sql .= ' SET t.name=i.name WHERE t.code = i.code';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'INSERT INTO lesson_type (name, code) SELECT name, code';
       $sql .= ' FROM tmp_insert_lesson_type i';
       $sql .= ' WHERE i.code NOT IN (SELECT code FROM lesson_type)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
   }
 
   protected function mergeRoomTypes() {
@@ -572,12 +590,12 @@ EOF;
 
       $sql = 'UPDATE room_type r, tmp_insert_room_type i';
       $sql .= ' SET r.name=i.name WHERE r.code = i.code';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'INSERT INTO room_type (name, code) SELECT name, code';
       $sql .= ' FROM tmp_insert_room_type i';
       $sql .= ' WHERE i.code NOT IN (SELECT code FROM room_type)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
   }
 
   protected function mergeTeachers() {
@@ -590,7 +608,7 @@ EOF;
       $sql .= ' t.oddelenie = i.oddelenie, ';
       $sql .= ' t.katedra = i.katedra';
       $sql .= ' WHERE t.external_id = i.external_id';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'INSERT INTO teacher (given_name, family_name, ';
       $sql .= ' iniciala, oddelenie, katedra, external_id) ';
@@ -598,7 +616,7 @@ EOF;
       $sql .= ' katedra, external_id';
       $sql .= ' FROM tmp_insert_teacher i';
       $sql .= ' WHERE i.external_id NOT IN (SELECT external_id FROM teacher)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
   }
 
   protected function mergeRooms() {
@@ -608,14 +626,14 @@ EOF;
       $sql .= ' SET r.room_type_id=rt.id, ';
       $sql .= ' r.capacity = i.capacity ';
       $sql .= ' WHERE r.name = i.name AND rt.code = i.room_type';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'INSERT INTO room (name, room_type_id, ';
       $sql .= ' capacity) ';
       $sql .= 'SELECT i.name, rt.id, i.capacity';
       $sql .= ' FROM tmp_insert_room i, room_type rt';
       $sql .= ' WHERE rt.code=i.room_type AND i.name NOT IN (SELECT name FROM room)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
   }
 
   protected function mergeSubjects() {
@@ -625,7 +643,7 @@ EOF;
       $sql .= ' SET s.name=i.name, s.code=i.code, s.short_code=i.short_code, ';
       $sql .= ' s.credit_value=i.credit_value, s.rozsah=i.rozsah';
       $sql .= ' WHERE s.external_id=i.external_id';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'INSERT INTO subject (name, code, short_code, ';
       $sql .= ' credit_value, rozsah, external_id) ';
@@ -633,7 +651,7 @@ EOF;
       $sql .= ' i.external_id';
       $sql .= ' FROM tmp_insert_subject i';
       $sql .= ' WHERE i.external_id NOT IN (SELECT external_id FROM subject)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
   }
 
   protected function mergeLessons() {
@@ -645,7 +663,7 @@ EOF;
       $sql .= ' l.lesson_type_id=lt.id, l.room_id=r.id, l.subject_id=s.id ';
       $sql .= ' WHERE lt.code = i.lesson_type AND r.name = i.room ';
       $sql .= ' AND s.external_id=i.subject AND l.external_id=i.external_id';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'INSERT INTO lesson (day, start, end, lesson_type_id, room_id, ';
       $sql .= ' subject_id, external_id) ';
@@ -654,45 +672,41 @@ EOF;
       $sql .= ' WHERE lt.code = i.lesson_type AND r.name = i.room ';
       $sql .= ' AND s.external_id=i.subject ';
       $sql .= ' AND i.external_id NOT IN (SELECT external_id FROM lesson)';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'DELETE FROM tl USING teacher_lessons tl, lesson l, tmp_insert_lesson i';
       $sql .= ' WHERE tl.lesson_id=l.id AND l.external_id=i.external_id';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'INSERT INTO teacher_lessons (teacher_id, lesson_id) ' ;
       $sql .= ' SELECT t.id, l.id ';
       $sql .= ' FROM lesson l, teacher t, tmp_insert_lesson_teacher i';
       $sql .= ' WHERE l.external_id=i.lesson_external_id AND t.external_id=i.teacher_external_id';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'DELETE FROM sgl';
       $sql .= ' USING student_group_lessons sgl, lesson l, tmp_insert_lesson i';
       $sql .= ' WHERE sgl.lesson_id=l.id ';
       $sql .= ' AND l.external_id=i.external_id';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'INSERT INTO student_group_lessons (student_group_id, lesson_id)';
       $sql .= ' SELECT sg.id, l.id';
       $sql .= ' FROM student_group sg, lesson l, tmp_insert_lesson_student_group i';
       $sql .= ' WHERE sg.name=i.student_group AND l.external_id=i.lesson_external_id';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
       $sql = 'INSERT INTO linked_lessons (lesson1_id, lesson2_id)';
       $sql .= ' SELECT l1.id, l2.id';
       $sql .= ' FROM lesson l1, lesson l2, tmp_insert_lesson_link i';
       $sql .= ' WHERE l1.external_id=i.lesson1_external_id ';
       $sql .= ' AND l2.external_id=i.lesson2_external_id';
-      $this->connection->execute($sql);
+      $this->executeSQL($sql);
 
   }
     
   protected function execute($arguments = array(), $options = array())
   {
-
-    if ($options['no-merges']) {
-        $options['dry-run'] = true;
-    }
 
     $databaseManager = new sfDatabaseManager($this->configuration);
     $this->connection = Doctrine_Manager::connection();
@@ -702,6 +716,7 @@ EOF;
     $this->state = self::STATE_ROOT;
     $this->currentElementPath = array();
     $this->ignoreErrors = $options['ignore-errors'];
+    $this->printSQL = $options['print-sql'];
 
 
     if (!$this->askConfirmation(array_merge(
@@ -745,12 +760,18 @@ EOF;
             $this->deleteAllData();
         }
 
-        $this->mergeLessonTypes();
-        $this->mergeRoomTypes();
-        $this->mergeTeachers();
-        $this->mergeRooms();
-        $this->mergeSubjects();
-        $this->mergeLessons();
+        if ($options['debug-dump-tables']) {
+            $this->debugDumpTables();
+        }
+
+        if (!$options['no-merges']) {
+            $this->mergeLessonTypes();
+            $this->mergeRoomTypes();
+            $this->mergeTeachers();
+            $this->mergeRooms();
+            $this->mergeSubjects();
+            $this->mergeLessons();
+        }
         
         if ($options['dry-run']) {
             $this->logSection('Done. This is dry run, executing rollback');
