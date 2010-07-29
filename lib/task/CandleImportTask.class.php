@@ -43,7 +43,7 @@ class CandleImportTask extends sfBaseTask
     $this->addOptions(array(
         new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application', 'frontend'),
         new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environement', 'prod'),
-        new sfCommandOption('skip-bad', null, sfCommandOption::PARAMETER_NONE, 'Whether to skip bad lessons'),
+        new sfCommandOption('replace', null, sfCommandOption::PARAMETER_NONE, 'Whether to replace data instead of merge'),
     ));
  
     $this->namespace = 'candle';
@@ -72,17 +72,21 @@ EOF;
     }
   }
 
-  protected function rethrowParseError($parser, Exception $exception) {
+  protected function createParseErrorMessage($parser, $description) {
       $message = 'Line '.xml_get_current_line_number($parser);
       $message .= ', Column '.xml_get_current_column_number($parser);
-      $message .= ': '.$exception->getMessage();
+      $message .= ' ('.implode('.', $this->currentElementPath).')';
+      $message .= ': '.$description;
+      return $message;
+  }
+
+  protected function rethrowParseError($parser, Exception $exception) {
+      $message = $this->createParseErrorMessage($parser, $exception->getMessage());
       throw new Exception($message, null, $exception);
   }
 
   protected function parseError($parser, $description) {
-      $message = 'Line '.xml_get_current_line_number($parser);
-      $message .= ', Column '.xml_get_current_column_number($parser);
-      $message .= ': '.$description;
+      $message = $this->createParseErrorMessage($parser, $description);
       throw new Exception($message);
   }
 
@@ -102,6 +106,7 @@ EOF;
 
   protected function parser_startElement($parser, $name, $attrs) {
       //echo '<'.$name.' '.$this->state."\n";
+      $this->currentElementPath[] = $name;
       if ($this->state == self::STATE_ROOT) {
           if ($name == 'rozvrh') {
               // skip
@@ -203,6 +208,7 @@ EOF;
                   $this->parseErrorUnexpectedElement ($parser, $name);
               }
               $this->elementData = array();
+              $this->elementData['id']=$attrs['id'];
               $this->dataFields = self::$predmetFields;
           }
           else if ($this->dataFields != null) {
@@ -218,6 +224,7 @@ EOF;
                   $this->parseErrorUnexpectedElement ($parser, $name);
               }
               $this->elementData = array();
+              $this->elementData['id']=$attrs['id'];
               $this->dataFields = self::$predmetFields;
           }
           else if ($this->dataFields != null) {
@@ -311,6 +318,8 @@ EOF;
               $this->elementData = null;
           }
       }
+      // Remove last path element
+      array_splice($this->currentElementPath, -1);
   }
 
   protected function parser_characterData($parser, $data) {
@@ -326,14 +335,14 @@ EOF;
   protected function handleTyp() {
     //print_r($this->elementData);
     $this->insertLessonType->execute(array(
-        $this->elementData['id'], $this->elementData['popis']
+        $this->elementData['popis'], $this->elementData['id']
     ));
   }
 
   protected function handleTypMiestnosti() {
     //print_r($this->elementData);
     $this->insertRoomType->execute(array(
-        $this->elementData['id'], $this->elementData['popis']
+        $this->elementData['popis'], $this->elementData['id']
     ));
   }
 
@@ -368,8 +377,8 @@ EOF;
     $lessonId = (int) $this->elementData['id'];
 
     $this->insertLesson->execute(array(
-        Candle::dayFromCode($this->elementData['den']), (int) $this->elementData['start'],
-        (int) $this->elementData['end'], $this->elementData['typ'],
+        Candle::dayFromCode($this->elementData['den']), (int) $this->elementData['zaciatok'],
+        (int) $this->elementData['koniec'], $this->elementData['typ'],
         $this->elementData['miestnost'], $this->elementData['predmet'],
         $lessonId
     ));
@@ -503,6 +512,167 @@ EOF;
       $sql .= 'lesson2_external_id) VALUES (?, ?)';
       $this->insertLessonLink = $this->connection->prepare($sql);
   }
+
+  protected function createPrimaryKeys() {
+      $this->logSection('candle', 'Creating primary keys on temporary tables');
+
+      $sql = 'ALTER TABLE tmp_insert_lesson_type';
+      $sql .= ' ADD PRIMARY KEY (code)';
+      $this->connection->execute($sql);
+
+      $sql = 'ALTER TABLE tmp_insert_room_type';
+      $sql .= ' ADD PRIMARY KEY (code)';
+      $this->connection->execute($sql);
+
+      $sql = 'ALTER TABLE tmp_insert_teacher';
+      $sql .= ' ADD PRIMARY KEY (external_id)';
+      $this->connection->execute($sql);
+
+      $sql = 'ALTER TABLE tmp_insert_room';
+      $sql .= ' ADD PRIMARY KEY (name)';
+      $this->connection->execute($sql);
+
+      $sql = 'ALTER TABLE tmp_insert_subject';
+      $sql .= ' ADD PRIMARY KEY (external_id)';
+      $this->connection->execute($sql);
+
+      $sql = 'ALTER TABLE tmp_insert_lesson';
+      $sql .= ' ADD PRIMARY KEY (external_id)';
+      $this->connection->execute($sql);
+  }
+
+  protected function mergeLessonTypes() {
+      $this->logSection('candle', 'Merging lesson types');
+
+      $sql = 'UPDATE lesson_type t, tmp_insert_lesson_type i';
+      $sql .= ' SET t.name=i.name WHERE t.code = i.code';
+      $this->connection->execute($sql);
+
+      $sql = 'INSERT INTO lesson_type (name, code) SELECT name, code';
+      $sql .= ' FROM tmp_insert_lesson_type i';
+      $sql .= ' WHERE i.code NOT IN (SELECT code FROM lesson_type)';
+      $this->connection->execute($sql);
+  }
+
+  protected function mergeRoomTypes() {
+      $this->logSection('candle', 'Merging room types');
+
+      $sql = 'UPDATE room_type r, tmp_insert_room_type i';
+      $sql .= ' SET r.name=i.name WHERE r.code = i.code';
+      $this->connection->execute($sql);
+
+      $sql = 'INSERT INTO room_type (name, code) SELECT name, code';
+      $sql .= ' FROM tmp_insert_room_type i';
+      $sql .= ' WHERE i.code NOT IN (SELECT code FROM room_type)';
+      $this->connection->execute($sql);
+  }
+
+  protected function mergeTeachers() {
+      $this->logSection('candle', 'Merging teachers');
+
+      $sql = 'UPDATE teacher t, tmp_insert_teacher i';
+      $sql .= ' SET t.given_name=i.given_name, ';
+      $sql .= ' t.family_name = i.family_name, ';
+      $sql .= ' t.iniciala = i.iniciala, ';
+      $sql .= ' t.oddelenie = i.oddelenie, ';
+      $sql .= ' t.katedra = i.katedra';
+      $sql .= ' WHERE t.external_id = i.external_id';
+      $this->connection->execute($sql);
+
+      $sql = 'INSERT INTO teacher (given_name, family_name, ';
+      $sql .= ' iniciala, oddelenie, katedra, external_id) ';
+      $sql .= ' SELECT given_name, family_name, iniciala, oddelenie, ';
+      $sql .= ' katedra, external_id';
+      $sql .= ' FROM tmp_insert_teacher i';
+      $sql .= ' WHERE i.external_id NOT IN (SELECT external_id FROM teacher)';
+      $this->connection->execute($sql);
+  }
+
+  protected function mergeRooms() {
+      $this->logSection('candle', 'Merging rooms');
+
+      $sql = 'UPDATE room r, tmp_insert_room i, room_type rt';
+      $sql .= ' SET r.room_type_id=rt.id, ';
+      $sql .= ' r.capacity = i.capacity ';
+      $sql .= ' WHERE r.name = i.name AND rt.code = i.room_type';
+      $this->connection->execute($sql);
+
+      $sql = 'INSERT INTO room (name, room_type_id, ';
+      $sql .= ' capacity) ';
+      $sql .= 'SELECT i.name, rt.id, i.capacity';
+      $sql .= ' FROM tmp_insert_room i, room_type rt';
+      $sql .= ' WHERE rt.code=i.room_type AND i.name NOT IN (SELECT name FROM room)';
+      $this->connection->execute($sql);
+  }
+
+  protected function mergeSubjects() {
+      $this->logSection('candle', 'Merging subjects');
+
+      $sql = 'UPDATE subject s, tmp_insert_subject i';
+      $sql .= ' SET s.name=i.name, s.code=i.code, s.short_code=i.short_code, ';
+      $sql .= ' s.credit_value=i.credit_value, s.rozsah=i.rozsah';
+      $sql .= ' WHERE s.external_id=i.external_id';
+      $this->connection->execute($sql);
+
+      $sql = 'INSERT INTO subject (name, code, short_code, ';
+      $sql .= ' credit_value, rozsah, external_id) ';
+      $sql .= 'SELECT i.name, i.code, i.short_code, i.credit_value, i.rozsah, ';
+      $sql .= ' i.external_id';
+      $sql .= ' FROM tmp_insert_subject i';
+      $sql .= ' WHERE i.external_id NOT IN (SELECT external_id FROM subject)';
+      $this->connection->execute($sql);
+  }
+
+  protected function mergeLessons() {
+      $this->logSection('candle', 'Merging lessons');
+
+      $sql = 'UPDATE lesson l, tmp_insert_lesson i, lesson_type lt, room r, subject s';
+      $sql .= ' SET l.day=i.day, ';
+      $sql .= ' l.start=i.start, l.end=i.end, ';
+      $sql .= ' l.lesson_type_id=lt.id, l.room_id=r.id, l.subject_id=s.id ';
+      $sql .= ' WHERE lt.code = i.lesson_type AND r.name = i.room ';
+      $sql .= ' AND s.external_id=i.subject AND l.external_id=i.external_id';
+      $this->connection->execute($sql);
+
+      $sql = 'INSERT INTO lesson (day, start, end, lesson_type_id, room_id, ';
+      $sql .= ' subject_id, external_id) ';
+      $sql .= 'SELECT i.day, i.start, i.end, lt.id, r.id, s.id, i.external_id ';
+      $sql .= ' FROM tmp_insert_lesson i, lesson_type lt, room r, subject s';
+      $sql .= ' WHERE lt.code = i.lesson_type AND r.name = i.room ';
+      $sql .= ' AND s.external_id=i.subject ';
+      $sql .= ' AND i.external_id NOT IN (SELECT external_id FROM lesson)';
+      $this->connection->execute($sql);
+
+      $sql = 'DELETE FROM tl USING teacher_lessons tl, lesson l, tmp_insert_lesson i';
+      $sql .= ' WHERE tl.lesson_id=l.id AND l.external_id=i.external_id';
+      $this->connection->execute($sql);
+
+      $sql = 'INSERT INTO teacher_lessons (teacher_id, lesson_id) ' ;
+      $sql .= ' SELECT t.id, l.id ';
+      $sql .= ' FROM lesson l, teacher t, tmp_insert_lesson_teacher i';
+      $sql .= ' WHERE l.external_id=i.lesson_external_id AND t.external_id=i.teacher_external_id';
+      $this->connection->execute($sql);
+
+      $sql = 'DELETE FROM sgl';
+      $sql .= ' USING student_group_lessons sgl, lesson l, tmp_insert_lesson i';
+      $sql .= ' WHERE sgl.lesson_id=l.id ';
+      $sql .= ' AND l.external_id=i.external_id';
+      $this->connection->execute($sql);
+
+      $sql = 'INSERT INTO student_group_lessons (student_group_id, lesson_id)';
+      $sql .= ' SELECT sg.id, l.id';
+      $sql .= ' FROM student_group sg, lesson l, tmp_insert_lesson_student_group i';
+      $sql .= ' WHERE sg.name=i.student_group AND l.external_id=i.lesson_external_id';
+      $this->connection->execute($sql);
+
+      $sql = 'INSERT INTO linked_lessons (lesson1_id, lesson2_id)';
+      $sql .= ' SELECT l1.id, l2.id';
+      $sql .= ' FROM lesson l1, lesson l2, tmp_insert_lesson_link i';
+      $sql .= ' WHERE l1.external_id=i.lesson1_external_id ';
+      $sql .= ' AND l2.external_id=i.lesson2_external_id';
+      $this->connection->execute($sql);
+
+  }
     
   protected function execute($arguments = array(), $options = array())
   {
@@ -513,6 +683,7 @@ EOF;
     $this->elementData = null;
     $this->dataField = null;
     $this->state = self::STATE_ROOT;
+    $this->currentElementPath = array();
 
 
     if (!$this->askConfirmation(array_merge(
@@ -541,13 +712,27 @@ EOF;
     try {
 
         $this->createTemporaryTables();
+        $this->createPrimaryKeys();
         $this->prepareInsertStatements();
 
         $this->logSection('candle', 'Loading xml data into database');
-        xml_parse($parser, file_get_contents($arguments['file']));
-        
-        $this->deleteAllData();
+        $parseResult = xml_parse($parser, file_get_contents($arguments['file']));
+        if ($parseResult == 0) {
+            // parse failed
+            $errorCode = xml_get_error_code($parser);
+            $this->parseError($parser, 'Parse error '. $errorCode. ': '.xml_error_string($errorCode));
+        }
 
+        if ($options['replace']) {
+            $this->deleteAllData();
+        }
+
+        $this->mergeLessonTypes();
+        $this->mergeRoomTypes();
+        $this->mergeTeachers();
+        $this->mergeRooms();
+        $this->mergeSubjects();
+        $this->mergeLessons();
         
 
         $this->connection->commit();
