@@ -44,6 +44,9 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application', 'frontend'),
         new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environement', 'prod'),
         new sfCommandOption('replace', null, sfCommandOption::PARAMETER_NONE, 'Whether to replace data instead of merge'),
+        new sfCommandOption('dry-run', null, sfCommandOption::PARAMETER_NONE, 'Don\'t modify data tables'),
+        new sfCommandOption('no-merges', null, sfCommandOption::PARAMETER_NONE, 'Don\'t perform merge stage, implies dry-run'),
+        new sfCommandOption('ignore-errors', null, sfCommandOption::PARAMETER_NONE, 'Ignore any errors (it is advisable to also use --dry-run)'),
     ));
  
     $this->namespace = 'candle';
@@ -82,12 +85,22 @@ EOF;
 
   protected function rethrowParseError($parser, Exception $exception) {
       $message = $this->createParseErrorMessage($parser, $exception->getMessage());
-      throw new Exception($message, null, $exception);
+      if ($this->ignoreErrors) {
+          $this->logBlock($message, 'ERROR');
+      }
+      else {
+        throw new Exception($message, null, $exception);
+      }
   }
 
   protected function parseError($parser, $description) {
       $message = $this->createParseErrorMessage($parser, $description);
-      throw new Exception($message);
+      if ($this->ignoreErrors) {
+          $this->logBlock($message);
+      }
+      else {
+          throw new Exception($message);
+      }
   }
 
   protected function parseErrorUnexpectedElement($parser, $name) {
@@ -444,7 +457,7 @@ EOF;
       $sql = "CREATE TEMPORARY TABLE tmp_insert_teacher ";
       $sql .= "(given_name varchar(50), family_name varchar(50) not null,";
       $sql .= "iniciala varchar(50), oddelenie varchar(50), katedra varchar(50),";
-      $sql .= "external_id varchar(50) not null)";
+      $sql .= "external_id varchar(50) binary not null)";
       $res = $this->connection->execute($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_room ";
@@ -453,7 +466,7 @@ EOF;
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_subject ";
       $sql .= "(name varchar(100), code varchar(30), short_code varchar(10), ";
-      $sql .= "credit_value integer not null, rozsah varchar(30), external_id varchar(30))";
+      $sql .= "credit_value integer not null, rozsah varchar(30), external_id varchar(30) binary not null)";
       $res = $this->connection->execute($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson ";
@@ -463,7 +476,7 @@ EOF;
       $res = $this->connection->execute($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_teacher ";
-      $sql .= "(lesson_external_id integer not null, teacher_external_id varchar(50) not null)";
+      $sql .= "(lesson_external_id integer not null, teacher_external_id varchar(50) binary not null)";
       $res = $this->connection->execute($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_student_group ";
@@ -676,7 +689,11 @@ EOF;
     
   protected function execute($arguments = array(), $options = array())
   {
-    
+
+    if ($options['no-merges']) {
+        $options['dry-run'] = true;
+    }
+
     $databaseManager = new sfDatabaseManager($this->configuration);
     $this->connection = Doctrine_Manager::connection();
     $environment = $this->configuration instanceof sfApplicationConfiguration ? $this->configuration->getEnvironment() : 'all';
@@ -684,6 +701,7 @@ EOF;
     $this->dataField = null;
     $this->state = self::STATE_ROOT;
     $this->currentElementPath = array();
+    $this->ignoreErrors = $options['ignore-errors'];
 
 
     if (!$this->askConfirmation(array_merge(
@@ -703,7 +721,7 @@ EOF;
     xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
 
     // Sice som uz znizil pamatove naroky, stale treba zvysit limit
-    ini_set("memory_limit","64M");
+    ini_set("memory_limit","96M");
 
     $this->connection->beginTransaction();
 
@@ -734,8 +752,13 @@ EOF;
         $this->mergeSubjects();
         $this->mergeLessons();
         
-
-        $this->connection->commit();
+        if ($options['dry-run']) {
+            $this->logSection('Done. This is dry run, executing rollback');
+            $this->connection->rollback();
+        }
+        else {
+            $this->connection->commit();
+        }
     }
     catch (Exception $e) {
         $this->logSection('candle', 'Exception occured, executing rollback');
