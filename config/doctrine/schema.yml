@@ -56,6 +56,12 @@ Lesson:
             foreign: lesson2_id
             refClass: LinkedLessons
             equal: true
+    indexes:
+        external_id_index:
+          fields:
+            external_id
+          type:
+            unique
 
 StudentGroupLessons:
     columns:
