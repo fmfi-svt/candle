@@ -92,6 +92,12 @@ abstract class BaseLesson extends sfDoctrineRecord
         $this->hasColumn('external_id', 'integer', null, array(
              'type' => 'integer',
              ));
+
+
+        $this->index('external_id_index', array(
+             'fields' => 'external_id',
+             'type' => 'unique',
+             ));
     }
 
     public function setUp()
