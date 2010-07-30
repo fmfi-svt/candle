@@ -57,7 +57,12 @@ class Candle {
     }
 
     static public function formatShortName($teacher) {
-        return ($teacher['given_name']?substr($teacher['given_name'], 0, 1).'. ':'').$teacher['family_name'];
+        $old_encoding = mb_internal_encoding();
+        
+        mb_internal_encoding(mb_detect_encoding($teacher['given_name']));
+        $shortName = ($teacher['given_name']?mb_substr($teacher['given_name'], 0, 1).'. ':'').$teacher['family_name'];
+        mb_internal_encoding($old_encoding);
+        return $shortName;
     }
 
     static public function formatLongName($teacher) {

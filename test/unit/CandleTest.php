@@ -1,6 +1,6 @@
 <?php require_once dirname(__FILE__).'/../bootstrap/unit.php';
 
-$t = new lime_test(23);
+$t = new lime_test(27);
 
 $t->is(Candle::formatTime(0),'0:00');
 $t->is(Candle::formatTime(5),'0:05');
@@ -29,3 +29,8 @@ $t->is(Candle::ceilTo(30, 60), 60);
 $t->is(Candle::ceilTo(0, 60), 0);
 $t->is(Candle::ceilTo(40, 30), 60);
 $t->is(Candle::ceilTo(60, 60), 60);
+
+$t->is(Candle::formatShortName(array('given_name'=>'Ľubomír', 'family_name'=>'Vráskavý')), 'Ľ. Vráskavý');
+$t->is(Candle::formatShortName(array('family_name'=>'Vráskavý')), 'Vráskavý');
+$t->is(Candle::formatShortName(array('given_name'=>'Igor', 'family_name'=>'Bud')), 'I. Bud');
+$t->is(Candle::formatShortName(array('given_name'=>'Šaňo', 'family_name'=>'Alexander')), 'Š. Alexander');
