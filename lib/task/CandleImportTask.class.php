@@ -49,6 +49,7 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('ignore-errors', null, sfCommandOption::PARAMETER_NONE, 'Ignore any errors (it is advisable to also use --dry-run)'),
         new sfCommandOption('print-sql', null, sfCommandOption::PARAMETER_NONE, 'Print SQL commands executed'),
         new sfCommandOption('debug-dump-tables', null, sfCommandOption::PARAMETER_NONE, 'Create a persistent copy of temporary tables'),
+        new sfCommandOption('warnings-as-errors', null, sfCommandOption::PARAMETER_NONE, 'Treat warnings as errors'),
     ));
  
     $this->namespace = 'candle';
@@ -88,7 +89,7 @@ EOF;
   }
 
   protected function rethrowParseError($parser, Exception $exception) {
-      $message = $this->createParseErrorMessage($parser, $exception->getMessage());
+      $message = 'Error: '.$this->createParseErrorMessage($parser, $exception->getMessage());
       if ($this->ignoreErrors) {
           $this->logBlock($message, 'ERROR');
       }
@@ -98,9 +99,19 @@ EOF;
   }
 
   protected function parseError($parser, $description) {
-      $message = $this->createParseErrorMessage($parser, $description);
+      $message = 'Error: '.$this->createParseErrorMessage($parser, $description);
       if ($this->ignoreErrors) {
           $this->logBlock($message);
+      }
+      else {
+          throw new Exception($message);
+      }
+  }
+
+  protected function parseWarning($parser, $description) {
+      $message = 'Warning: '.$this->createParseErrorMessage($parser, $description);
+      if (!$this->warningsAsErrors) {
+          $this->logBlock($message, 'INFO');
       }
       else {
           throw new Exception($message);
@@ -282,7 +293,7 @@ EOF;
           else if ($name == 'ucitel') {
               $this->dataFields = null;
               try {
-                $this->handleUcitel();
+                $this->handleUcitel($parser);
               }
               catch (Exception $e) {
                   $this->rethrowParseError($parser, $e);
@@ -297,7 +308,7 @@ EOF;
           else if ($name == 'miestnost') {
               $this->dataFields = null;
               try {
-                $this->handleMiestnost();
+                $this->handleMiestnost($parser);
               }
               catch (Exception $e) {
                   $this->rethrowParseError($parser, $e);
@@ -312,7 +323,7 @@ EOF;
           else if ($name == 'predmet') {
               $this->dataFields = null;
               try {
-                $this->handlePredmet();
+                $this->handlePredmet($parser);
               }
               catch (Exception $e) {
                   $this->rethrowParseError($parser, $e);
@@ -327,7 +338,7 @@ EOF;
           else if ($name == 'hodina') {
               $this->dataFields = null;
               try {
-                $this->handleHodina();
+                $this->handleHodina($parser);
               }
               catch (Exception $e) {
                   $this->rethrowParseError($parser, $e);
@@ -349,30 +360,30 @@ EOF;
       }
   }
 
-  protected function handleTyp() {
+  protected function handleTyp($parser) {
     //print_r($this->elementData);
     $this->insertLessonType->execute(array(
         $this->elementData['popis'], $this->elementData['id']
     ));
   }
 
-  protected function handleTypMiestnosti() {
+  protected function handleTypMiestnosti($parser) {
     //print_r($this->elementData);
     $this->insertRoomType->execute(array(
         $this->elementData['popis'], $this->elementData['id']
     ));
   }
 
-  protected function handleUcitel() {
+  protected function handleUcitel($parser) {
     //print_r($this->elementData);
     $this->insertTeacher->execute(array(
-        $this->elementData['meno'], $this->elementData['priezvisko'],
-        $this->elementData['iniciala'], $this->elementData['oddelenie'],
-        $this->elementData['katedra'], $this->elementData['id']
+        trim($this->elementData['meno']), trim($this->elementData['priezvisko']),
+        trim($this->elementData['iniciala']), trim($this->elementData['oddelenie']),
+        trim($this->elementData['katedra']), $this->elementData['id']
     ));
   }
 
-  protected function handleMiestnost() {
+  protected function handleMiestnost($parser) {
     //print_r($this->elementData);
     $this->insertRoom->execute(array(
         $this->elementData['nazov'], $this->elementData['typ'],
@@ -380,16 +391,24 @@ EOF;
     ));
   }
 
-  protected function handlePredmet() {
+  protected function handlePredmet($parser) {
     //print_r($this->elementData);
+    $myShortCode = Candle::subjectShortCodeFromLongCode($this->elementData['kod']);
+
+    if ($myShortCode !== false && $myShortCode != $this->elementData['kratkykod']) {
+        $this->parseWarning($parser, 
+                'Short code does not have expected value, got \''.
+                $this->elementData['kratkykod'].'\', expected \''.$myShortCode.'\'');
+    }
+
     $this->insertSubject->execute(array(
         $this->elementData['nazov'], $this->elementData['kod'],
-        $this->elementData['kratkykod'], (int) $this->elementData['kredity'],
+        $myShortCode, (int) $this->elementData['kredity'],
         $this->elementData['rozsah'], $this->elementData['id']
     ));
   }
 
-  protected function handleHodina() {
+  protected function handleHodina($parser) {
     //print_r($this->elementData);
     $lessonId = (int) $this->elementData['id'];
 
@@ -469,7 +488,7 @@ EOF;
       $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_subject ";
-      $sql .= "(name varchar(100), code varchar(30), short_code varchar(10), ";
+      $sql .= "(name varchar(100), code varchar(50), short_code varchar(20), ";
       $sql .= "credit_value integer not null, rozsah varchar(30), external_id varchar(30) binary not null)";
       $res = $this->executeSQL($sql);
 
@@ -717,6 +736,7 @@ EOF;
     $this->currentElementPath = array();
     $this->ignoreErrors = $options['ignore-errors'];
     $this->printSQL = $options['print-sql'];
+    $this->warningsAsErrors = $options['warnings-as-errors'];
 
 
     if (!$this->askConfirmation(array_merge(

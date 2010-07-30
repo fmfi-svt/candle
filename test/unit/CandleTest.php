@@ -1,6 +1,6 @@
 <?php require_once dirname(__FILE__).'/../bootstrap/unit.php';
 
-$t = new lime_test(27);
+$t = new lime_test(31);
 
 $t->is(Candle::formatTime(0),'0:00');
 $t->is(Candle::formatTime(5),'0:05');
@@ -34,3 +34,8 @@ $t->is(Candle::formatShortName(array('given_name'=>'Ľubomír', 'family_name'=>'
 $t->is(Candle::formatShortName(array('family_name'=>'Vráskavý')), 'Vráskavý');
 $t->is(Candle::formatShortName(array('given_name'=>'Igor', 'family_name'=>'Bud')), 'I. Bud');
 $t->is(Candle::formatShortName(array('given_name'=>'Šaňo', 'family_name'=>'Alexander')), 'Š. Alexander');
+
+$t->is(Candle::subjectShortCodeFromLongCode('PriF/1-UBI-004-1/7064/00'), '1-UBI-004-1');
+$t->is(Candle::subjectShortCodeFromLongCode('PriF/1-UBI-007-1/7054/00'), '1-UBI-007-1');
+$t->is(Candle::subjectShortCodeFromLongCode('FMFI.KI/1-INF-465/00'), '1-INF-465');
+$t->is(Candle::subjectShortCodeFromLongCode('FMFI.KI/1-INF-500-2/3051/00'), '1-INF-500-2');

@@ -92,4 +92,13 @@ class Candle {
     static public function addFormat(array $url, $format) {
         return array_merge($url, array('sf_format'=>$format));
     }
+
+    static public function subjectShortCodeFromLongCode($longCode) {
+        // PriF/1-UBI-004-1/7064/00 -> 1-UBI-004
+        $firstSlash = strpos($longCode, '/');
+        if ($firstSlash === false) return false;
+        $secondSlash = strpos($longCode, '/', $firstSlash+1);
+        if ($secondSlash === false) return false;
+        return substr($longCode, $firstSlash+1, $secondSlash-$firstSlash-1);
+    }
 }

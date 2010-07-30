@@ -43,15 +43,15 @@ abstract class BaseSubject extends sfDoctrineRecord
              'notnull' => true,
              'length' => '100',
              ));
-        $this->hasColumn('code', 'string', 30, array(
+        $this->hasColumn('code', 'string', 50, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '30',
+             'length' => '50',
              ));
-        $this->hasColumn('short_code', 'string', 10, array(
+        $this->hasColumn('short_code', 'string', 20, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '10',
+             'length' => '20',
              ));
         $this->hasColumn('credit_value', 'integer', null, array(
              'type' => 'integer',
