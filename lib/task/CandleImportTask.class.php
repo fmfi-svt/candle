@@ -744,9 +744,14 @@ EOF;
     $this->printSQL = $options['print-sql'];
     $this->warningsAsErrors = $options['warnings-as-errors'];
 
+    $messageToAsk = 'This command will update source timetable data in the "%s" connection.';
+
+    if ($options['replace']) {
+        $messageToAsk = 'This command will DELETE ALL timetable data in the "%s" connection.';
+    }
 
     if (!$this->askConfirmation(array_merge(
-        array(sprintf('This command will remove source timetable data in the "%s" connection.', $environment), ''),
+        array(sprintf($messageToAsk, $environment), ''),
         array('', 'Are you sure you want to proceed? (y/N)')
       ), 'QUESTION_LARGE', false)
     )
