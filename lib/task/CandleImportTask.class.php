@@ -715,6 +715,12 @@ EOF;
       $sql .= ' WHERE sg.name=i.student_group AND l.external_id=i.lesson_external_id';
       $this->executeSQL($sql);
 
+      $sql = 'DELETE FROM ll';
+      $sql .= ' USING linked_lessons ll, lesson l, tmp_insert_lesson i';
+      $sql .= ' WHERE (ll.lesson1_id=l.id OR ll.lesson2_id=l.id)';
+      $sql .= ' AND l.external_id=i.external_id';
+      $this->executeSQL($sql);
+
       $sql = 'INSERT INTO linked_lessons (lesson1_id, lesson2_id)';
       $sql .= ' SELECT l1.id, l2.id';
       $sql .= ' FROM lesson l1, lesson l2, tmp_insert_lesson_link i';
