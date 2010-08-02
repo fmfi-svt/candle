@@ -809,6 +809,7 @@ EOF;
             $this->connection->rollback();
         }
         else {
+            $this->logSection('Done. Commiting transaction...');
             $this->connection->commit();
         }
     }
