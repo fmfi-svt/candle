@@ -815,8 +815,5 @@ EOF;
 
     xml_parser_free($parser);
 
-
-    throw new Exception('TODO');
-
   }
 }
