@@ -10,6 +10,12 @@ Room:
         capacity: {type: integer, notnull: true }
     relations:
         RoomType: { local: room_type_id, foreign: id }
+    indexes:
+        external_id_index:
+          fields:
+            name
+          type:
+            unique
 
 LessonType:
     columns:
@@ -92,6 +98,12 @@ Subject:
         credit_value: { type: integer, notnull: true }
         rozsah: { type: string(30), notnull: true }
         external_id: { type: string(30) }
+    indexes:
+        external_id_index:
+          fields:
+            external_id
+          type:
+            unique
 
 UserTimetable:
     columns:

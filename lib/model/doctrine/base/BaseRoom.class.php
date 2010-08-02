@@ -45,6 +45,12 @@ abstract class BaseRoom extends sfDoctrineRecord
              'type' => 'integer',
              'notnull' => true,
              ));
+
+
+        $this->index('external_id_index', array(
+             'fields' => 'name',
+             'type' => 'unique',
+             ));
     }
 
     public function setUp()

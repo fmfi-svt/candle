@@ -1,11 +1,11 @@
 CREATE TABLE lesson (id BIGINT AUTO_INCREMENT, day BIGINT NOT NULL, start BIGINT NOT NULL, end BIGINT NOT NULL, lesson_type_id BIGINT NOT NULL, room_id BIGINT NOT NULL, subject_id BIGINT NOT NULL, external_id BIGINT, UNIQUE INDEX external_id_index_idx (external_id), INDEX lesson_type_id_idx (lesson_type_id), INDEX room_id_idx (room_id), INDEX subject_id_idx (subject_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE lesson_type (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, code VARCHAR(1) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE linked_lessons (lesson1_id BIGINT, lesson2_id BIGINT, PRIMARY KEY(lesson1_id, lesson2_id)) ENGINE = INNODB;
-CREATE TABLE room (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, room_type_id BIGINT NOT NULL, capacity BIGINT NOT NULL, INDEX room_type_id_idx (room_type_id), PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE room (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, room_type_id BIGINT NOT NULL, capacity BIGINT NOT NULL, UNIQUE INDEX external_id_index_idx (name), INDEX room_type_id_idx (room_type_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE room_type (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, code VARCHAR(1) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE student_group (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE student_group_lessons (student_group_id BIGINT, lesson_id BIGINT, PRIMARY KEY(student_group_id, lesson_id)) ENGINE = INNODB;
-CREATE TABLE subject (id BIGINT AUTO_INCREMENT, name VARCHAR(100) NOT NULL, code VARCHAR(50) NOT NULL, short_code VARCHAR(20) NOT NULL, credit_value BIGINT NOT NULL, rozsah VARCHAR(30) NOT NULL, external_id VARCHAR(30), PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE subject (id BIGINT AUTO_INCREMENT, name VARCHAR(100) NOT NULL, code VARCHAR(50) NOT NULL, short_code VARCHAR(20) NOT NULL, credit_value BIGINT NOT NULL, rozsah VARCHAR(30) NOT NULL, external_id VARCHAR(30), UNIQUE INDEX external_id_index_idx (external_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE teacher (id BIGINT AUTO_INCREMENT, given_name VARCHAR(50), family_name VARCHAR(50) NOT NULL, iniciala VARCHAR(50), oddelenie VARCHAR(50), katedra VARCHAR(50), external_id VARCHAR(30), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE teacher_lessons (id BIGINT AUTO_INCREMENT, teacher_id BIGINT NOT NULL, lesson_id BIGINT NOT NULL, INDEX teacher_id_idx (teacher_id), INDEX lesson_id_idx (lesson_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE user_timetable (id BIGINT AUTO_INCREMENT, name VARCHAR(50) NOT NULL, published TINYINT(1) NOT NULL, slug VARCHAR(30), user_id INT NOT NULL, UNIQUE INDEX slug_unique_index_idx (slug), INDEX user_id_idx (user_id), PRIMARY KEY(id)) ENGINE = INNODB;

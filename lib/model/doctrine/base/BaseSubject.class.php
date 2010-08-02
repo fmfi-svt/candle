@@ -66,6 +66,12 @@ abstract class BaseSubject extends sfDoctrineRecord
              'type' => 'string',
              'length' => '30',
              ));
+
+
+        $this->index('external_id_index', array(
+             'fields' => 'external_id',
+             'type' => 'unique',
+             ));
     }
 
     public function setUp()
