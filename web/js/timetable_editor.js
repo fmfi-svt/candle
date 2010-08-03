@@ -133,6 +133,12 @@ var TimetableEditor = new Class({
                 lessonIds.push(checkbox.value);
             });
         }
+        else if (selectionSource.value == 'all') {
+            $('timetable_editor').getElements('input[type=checkbox][name="lesson_selection[]"]')
+                    .each(function(checkbox) {
+                lessonIds.push(checkbox.value);
+            });
+        }
         return lessonIds;
     },
     timetableFormSubmit: function(event) {

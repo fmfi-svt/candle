@@ -22,10 +22,10 @@ if (!$sf_request->isXmlHttpRequest()) {
 
 <div id="timetable_editor_command_bar">
 
-Všetky
 <select name="selection_source" size="1" id="timetable_editor_selection_source">
-    <option value="selection" id="selection_source_selection">označené</option>
-    <option value="highlight" id="selection_source_highlight">zvýraznené</option>
+    <option value="selection" id="selection_source_selection">Označené</option>
+    <option value="highlight" id="selection_source_highlight">Zvýraznené</option>
+    <option value="all" id="selection_source_all">Všetky</option>
 </select>
 
 hodiny v rozvrhu

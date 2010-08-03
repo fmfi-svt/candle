@@ -59,6 +59,9 @@ class timetableActions extends sfActions {
         else if ($selectionSource == 'highlight') {
             $affectedLessons = $timetable->getHighlightedLessonIds();
         }
+        else if ($selectionSource == 'all') {
+            $affectedLessons = $timetable->getLessonIds();
+        }
         else {
             throw new Exception("Unknown value of selection_source");
         }

@@ -393,6 +393,10 @@ ul.vysledky_hladania li+li {
     padding-left: 25px;
 }
 
+#selection_source_all {
+    padding-left: 25px;
+}
+
 #rozvrh {
     border-collapse: collapse;
     width: 100%;
