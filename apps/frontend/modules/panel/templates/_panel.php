@@ -1,5 +1,5 @@
 <div class="panel_cast" id="panel_cast_hodiny">
-    <h2><a href="#panel_cast_hodiny">Hodiny</a></h2>
+    <h2><a href="#panel_cast_hodiny">Predmety a hodiny</a></h2>
     <div class="panel_cast_obsah">
         <?php include_stylesheets_for_form($lessonForm) ?>
         <?php include_javascripts_for_form($lessonForm) ?>
