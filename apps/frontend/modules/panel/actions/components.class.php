@@ -12,7 +12,12 @@ class panelComponents extends sfComponents {
 
         if ($this->lessonForm->isValid()) {
             $this->getUser()->setAttribute('panel_lesson_query', $queryString);
-            $this->subjects = Doctrine::getTable('Subject')->searchSubjectsByAll($queryString);
+            if (empty($queryString)) {
+                $this->subjects = null;
+            }
+            else {
+                $this->subjects = Doctrine::getTable('Subject')->searchSubjectsByAll($queryString);
+            }
         }
         else {
             $this->subjects = null;
@@ -29,7 +34,12 @@ class panelComponents extends sfComponents {
 
         if ($this->teacherForm->isValid()) {
             $this->getUser()->setAttribute('panel_teacher_query', $queryString);
-            $this->teachers = Doctrine::getTable('Teacher')->searchTeachersByName($queryString);
+            if (empty($queryString)) {
+                $this->teachers = null;
+            }
+            else {
+                $this->teachers = Doctrine::getTable('Teacher')->searchTeachersByName($queryString);
+            }
         }
         else {
             $this->teachers = null;

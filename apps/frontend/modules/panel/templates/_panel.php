@@ -17,6 +17,12 @@
                         'timetable' => $timetable,
                         'timetable_id' => $timetable_id
                     )); ?>
+        <?php else: ?>
+            <?php if ($timetable): ?>
+                <div>Upravovať rozvrh začnite vyhľadaním a začiarknutím predmetu alebo hodiny, ktorú chcete pridať</div>
+            <?php else: ?>
+                <div>Pomocou formuláru vyššie vyhľadajte predmety alebo hodiny</div>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 </div>

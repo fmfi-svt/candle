@@ -99,7 +99,7 @@ if ($timetable) {
     echo '<div>Výsledky vyhľadávania limitované na 50 výsledkov, skúste zadať presnejšie kritériá</div>';
 }
 ?>
-
+    
 <?php if ($timetable): ?>
 <button type="submit" class="jshide">Zmeniť hodiny</button>
 <?php endif ?>
