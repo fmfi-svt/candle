@@ -3,7 +3,7 @@
 slot('title', Candle::formatLongName($teacher));
 
 slot('panel');
-include_component('timetable','panel',array());
+include_component('panel','panel',array());
 end_slot();
 
 slot('top');

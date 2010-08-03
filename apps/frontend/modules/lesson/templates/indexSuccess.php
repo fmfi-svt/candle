@@ -1,3 +1,3 @@
 <?php slot('panel');
-include_component('timetable','panel');
+include_component('panel','panel');
 end_slot(); ?>

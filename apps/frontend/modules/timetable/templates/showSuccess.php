@@ -4,7 +4,7 @@ slot('title', $timetable->getName());
 
 if (!$sf_request->isXmlHttpRequest()) {
     slot('panel');
-    include_component('timetable','panel',array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
+    include_component('panel','panel',array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
     end_slot();
 
     slot('top');
