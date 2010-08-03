@@ -7,11 +7,11 @@ class EditableTimetablePublishForm extends sfForm {
         ));
 
         $this->setValidators(array(
-            'slug' => new sfValidatorString()
+            'slug' => new sfValidatorRegex(array('pattern'=>'/^[a-z0-9-]+$/'), array('invalid'=>'Povolené sú len malé písmená bez diakritiky, číslice a pomlčka'))
         ));
 
         $this->widgetSchema->setLabels(array(
-            'slug' => 'Publikovať ako'
+            'slug' => 'Zverejniť na /rozvrh/'
         ));
 
     }

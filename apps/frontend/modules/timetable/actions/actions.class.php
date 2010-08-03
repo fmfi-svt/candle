@@ -238,6 +238,7 @@ class timetableActions extends sfActions {
             $this->getUser()->setFlash('notice', 'Rozvrh úspešne publikovaný');
             $this->redirect('@timetable_show?id='.$this->timetable_id);
         }
+        $this->layout = new TimetableLayout($this->timetable->getLessons());
         $this->setTemplate('publish');
     }
 
@@ -273,6 +274,7 @@ class timetableActions extends sfActions {
         $this->publishCheckLogin();
         $this->fetchTimetable($request);
         $this->form = new EditableTimetablePublishForm();
+        $this->layout = new TimetableLayout($this->timetable->getLessons());
         /*if ($this->timetable->isPersisted()) {
             $userTimetable = Doctrine::getTable('UserTimetable')->find($this->timetable->getUserTimetableId());
             $this->form['slug']->setValue($userTimetable['slug']);
