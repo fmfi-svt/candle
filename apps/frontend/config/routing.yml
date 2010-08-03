@@ -7,55 +7,55 @@ homepage:
   param: { module: timetable, action: homepage }
 
 sf_guard_signin:
-    url: /login
+    url: /prihlasit
     param: { module: sfGuardAuth, action: signin }
 
 sf_guard_signout:
-    url: /logout
+    url: /odhlasit
     param: { module: sfGuardAuth, action: signout }
 
 register:
-    url: /register
+    url: /registrovat
     class: sfRequestRoute
     param: { module: user, action: register }
     requirements: {sf_method: get}
 
 register_post:
-    url: /register
+    url: /registrovat
     class: sfRequestRoute
     param: { module: user, action: registerDo }
     requirements: {sf_method: post}
 
 profile:
-    url: /profile
+    url: /profil
     class: sfRequestRoute
     param: { module: user, action: profile }
     requirements: {sf_method: get}
 
 change_password:
-    url: /change-password
+    url: /zmenit-heslo
     class: sfRequestRoute
     param: { module: user, action: changePassword }
     requirements: {sf_method: post}
 
 # zobrazenie vsetkych hodin
 lesson_list_all:
-    url: /lesson/list
+    url: /hodina
     param: { module: lesson, action: index }
 
 lesson_search_all:
-    url: /lesson/search
+    url: /hodina/hladat
     param: { module: lesson, action: query }
 
 timetable_show:
-    url: /timetable/:id.:sf_format
+    url: /moj/rozvrh/:id.:sf_format
     param: { module: timetable, action: show, sf_format: html }
     requirements:
         id: \d+
         sf_format: (?:html|txt|csv|ics|xml)
 
 timetable_show_published:
-    url: /timetable/published/:slug.:sf_format
+    url: /rozvrh/:slug.:sf_format
     class: sfDoctrineRoute
     options: { model: UserTimetable, type: object }
     param: { module: timetablePublished, action: show, sf_format: html }
@@ -65,35 +65,35 @@ timetable_show_published:
         sf_method: [get, post]
 
 timetable_new:
-    url: /timetable/new
+    url: /moj/rozvrh/novy
     param: { module: timetable, action: new }
 
 timetable_create:
-    url: /timetable
+    url: /moj/rozvrh
     param: { module: timetable, action: create }
     requirements:
         sf_method: post
 
 timetable_change_lessons:
-    url: /timetable/:id/change_lessons
+    url: /moj/rozvrh/:id/zmenit_hodiny
     param: { module: timetable, action: changeLessons }
     requirements:
         sf_method: post
 
 timetable_lesson_action:
-    url: /timetable/:id/lesson_action
+    url: /moj/rozvrh/:id/akcia_hodiny
     param: { module: timetable, action: lessonAction }
     requirements:
         sf_method: post
 
 timetable_duplicate:
-    url: /timetable/:id/duplicate
+    url: /moj/rozvrh/:id/duplikovat
     param: { module: timetable, action: duplicate }
     requirements:
         sf_method: post
 
 timetable_duplicate_published:
-    url: /timetable/published/:slug.:sf_format/duplicate
+    url: /rozvrh/:slug.:sf_format/duplikovat
     class: sfDoctrineRoute
     options: { model: UserTimetable, type: object }
     param: { module: timetablePublished, action: duplicate, sf_format: html }
@@ -102,31 +102,31 @@ timetable_duplicate_published:
         sf_format: (?:html|txt|csv|ics|xml)
 
 timetable_save:
-    url: /timetable/:id/save
+    url: /moj/rozvrh/:id/ulozit
     param: { module: timetable, action: save }
 
 timetable_delete:
-    url: /timetable/:id/delete
+    url: /moj/rozvrh/:id/zmazat
     param: { module: timetable, action: delete }
 
 timetable_import:
     class: sfRequestRoute
-    url: /timetable/:id/import
+    url: /moj/rozvrh/:id/importovat
     param: { module: timetable, action: import }
     requirements: { sf_method: get }
 
 timetable_importDo:
     class: sfRequestRoute
-    url: /timetable/:id/import
+    url: /moj/rozvrh/:id/importovat
     param: { module: timetable, action: importDo }
     requirements: { sf_method: post }
 
 timetable_export:
-    url: /timetable/:id/export
+    url: /moj/rozvrh/:id/exportovat
     param: { module: timetable, action: export }
 
 timetable_export_published:
-    url: /timetable/published/:slug.:sf_format/export
+    url: /rozvrh/:slug.:sf_format/exportovat
     class: sfDoctrineRoute
     options: { model: UserTimetable, type: object }
     param: { module: timetablePublished, action: export, sf_format: html }
@@ -136,29 +136,29 @@ timetable_export_published:
 
 timetable_publish_do:
     class: sfRequestRoute
-    url: /timetable/:id/publish
+    url: /moj/rozvrh/:id/zverejnit
     param: { module: timetable, action: publishExecute }
     requirements: { sf_method: post }
 
 timetable_unpublish_do:
     class: sfRequestRoute
-    url: /timetable/:id/unpublish
+    url: /moj/rozvrh/:id/nezverejnit
     param: { module: timetable, action: unpublishExecute }
 
 
 timetable_publish:
     class: sfRequestRoute
-    url: /timetable/:id/publish
+    url: /moj/rozvrh/:id/zverejnit
     param: { module: timetable, action: publish }
     requirements: { sf_method: get }
 
 timetable_unpublish:
     class: sfRequestRoute
-    url: /timetable/:id/unpublish
+    url: /moj/rozvrh/:id/nezverejnit
     param: { module: timetable, action: unpublish }
 
 timetable_teacher_show:
-    url: /timetable/teacher/:id.:sf_format
+    url: /ucitel/:id.:sf_format
     class: sfDoctrineRoute
     options: { model: Teacher, type: object }
     param: { module: timetableTeacher, action: show, sf_format: html }
@@ -167,7 +167,7 @@ timetable_teacher_show:
         sf_method: [get, post]
 
 timetable_teacher_export:
-    url: /timetable/teacher/:id.:sf_format/export
+    url: /ucitel/:id.:sf_format/rozvrh/exportovat
     class: sfDoctrineRoute
     options: { model: Teacher, type: object }
     param: { module: timetableTeacher, action: export, sf_format: html }
@@ -175,7 +175,7 @@ timetable_teacher_export:
         sf_format: (?:html|txt|csv|ics|xml)
 
 timetable_teacher_duplicate:
-    url: /timetable/teacher/:id.:sf_format/duplicate
+    url: /ucitel/:id.:sf_format/rozvrh/duplikovat
     class: sfDoctrineRoute
     options: { model: Teacher, type: object }
     param: { module: timetableTeacher, action: duplicate, sf_format: html }
