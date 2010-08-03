@@ -303,6 +303,7 @@ ul.vysledky_hladania li+li {
     display: block;
     font-size: 90%;
     position: relative;
+    padding-right: 1em;
 }
 
 .predmet_info table {
