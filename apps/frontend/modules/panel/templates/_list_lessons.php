@@ -9,6 +9,12 @@ endif
 
 <?php foreach ($subjects as $subject):
 
+$subjectInfoLink = null;
+
+if (preg_match('/^\d-INF-\d{3}(?:-\d+){0,2}$/',$subject['short_code'])) {
+    $subjectInfoLink = 'http://new.dcs.fmph.uniba.sk/index.php/'.urlencode($subject['short_code']);
+}
+
 $lessons = $subject['Lessons'];
 
 if ($timetable) {
@@ -37,18 +43,42 @@ if ($timetable) {
             <span class="predmet_nazov"><?php echo $subject['name'] ?></span>
         <?php endif ?>
 
-        <div class="predmet_info"
-            <span class="predmet_kod"><?php echo $subject['short_code'] ?></span>
-            <?php if ($subject['rozsah']): ?>
-                <span class="rozsah"><?php echo $subject['rozsah'] ?></span>
-            <?php endif; ?>
+        <div class="predmet_info">
+            <table>
+                <thead class="pristupnost">
+                    <tr>
+                        <th>ECTS kód</th>
+                        <th>Rozsah</th>
+                        <th>Odkazy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <?php if ($subject['short_code']): ?>
+                            <td class="predmet_kod"><?php echo $subject['short_code'] ?></td>
+                        <?php else: ?>
+                            <td class="predmet_kod">&nbsp;</td>
+                        <?php endif; ?>
+                        <?php if ($subject['rozsah']): ?>
+                            <td class="rozsah"><?php echo $subject['rozsah'] ?></td>
+                        <?php else: ?>
+                            <td class="rozsah">&nbsp;</td
+                        <?php endif; ?>
+                        <?php if ($subjectInfoLink): ?>
+                            <td class="odkazy"><a href="<?php echo $subjectInfoLink; ?>">viac info...</a></td>
+                        <?php else: ?>
+                            <td class="odkazy">&nbsp;</td
+                        <?php endif; ?>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <?php if ($timetable && $allSelected): ?>
         <input type="hidden" name="subjectBefore[]" value="<?php echo $subject['id']?>" />
         <?php endif; ?>
     </div>
 
-    <table>
+    <table class="vysledky">
       <thead>
         <tr>
           <th>Typ</th><th>Kedy</th><th>Kde</th><th>Kto</th>
