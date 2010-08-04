@@ -69,18 +69,18 @@ class Candle {
         return ($teacher['given_name']?$teacher['given_name'].' ':'').$teacher['family_name'];
     }
 
-    static public function setTimetableExportResponse(sfWebRequest $request) {
+    static public function setTimetableExportResponse(sfWebRequest $request, sfActions $actions) {
         $format = $request->getRequestFormat();
 
         switch ($format)
         {
             case 'csv':
-                $this->setLayout(false);
-                $this->getResponse()->setContentType('text/csv;header=present'); // vid RFC 4180
+                $actions->setLayout(false);
+                $actions->getResponse()->setContentType('text/csv;header=present'); // vid RFC 4180
                 break;
             case 'ics':
-                $this->setLayout(false);
-                $this->getResponse()->setContentType('text/calendar'); // vid RFC 2445
+                $actions->setLayout(false);
+                $actions->getResponse()->setContentType('text/calendar'); // vid RFC 2445
                 break;
         }
     }

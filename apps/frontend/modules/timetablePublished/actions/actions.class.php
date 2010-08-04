@@ -16,7 +16,7 @@ class timetablePublishedActions extends sfActions {
         $this->layout = new TimetableLayout($this->timetable->getLessons());
         if ($request->getRequestFormat() != 'html') {
             $this->setTemplate('show', 'timetable');
-            Candle::setTimetableExportResponse($request);
+            Candle::setTimetableExportResponse($request, $this);
         }
     }
 
