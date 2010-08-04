@@ -208,3 +208,30 @@ room_timetable_duplicate:
     requirements:
         sf_format: (?:html|txt|csv|ics|xml)
         sf_method: [get, post]
+
+studentGroup_show:
+    url: /kruzok/:id.:sf_format
+    class: sfDoctrineRoute
+    options: { model: StudentGroup, type: object }
+    param: { module: studentGroup, action: show, sf_format: html }
+    requirements:
+        sf_format: (?:html|txt|csv|ics|xml)
+        sf_method: [get, post]
+
+studentGroup_timetable_export:
+    url: /kruzok/:id.:sf_format/rozvrh/exportovat
+    class: sfDoctrineRoute
+    options: { model: StudentGroup, type: object }
+    param: { module: studentGroup, action: export, sf_format: html }
+    requirements:
+        sf_format: (?:html|txt|csv|ics|xml)
+        sf_method: [get, post]
+
+studentGroup_timetable_duplicate:
+    url: /miestnost/:id.:sf_format/rozvrh/duplikovat
+    class: sfDoctrineRoute
+    options: { model: StudentGroup, type: object }
+    param: { module: studentGroup, action: duplicate, sf_format: html }
+    requirements:
+        sf_format: (?:html|txt|csv|ics|xml)
+        sf_method: [get, post]

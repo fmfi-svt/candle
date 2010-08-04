@@ -69,8 +69,20 @@
 <div class="panel_cast" id="panel_cast_kruzky">
     <h2><a href="#panel_cast_kruzky">Krúžky</a></h2>
     <div class="panel_cast_obsah">
+        <?php include_stylesheets_for_form($studentGroupForm) ?>
+        <?php include_javascripts_for_form($studentGroupForm) ?>
+
         <form method="post" action=""><div class="panel_search">
-            <label for="hladaj_kruzky" class="pristupnost">Hľadaj krúžky</label><input id="hladaj_kruzky" type="text" /><button type="submit">Hľadaj</button>
+            <?php echo $studentGroupForm['showStudentGroups']->renderLabel();
+                echo $studentGroupForm['showStudentGroups'] ?><button type="submit">Hľadaj</button>
+            <?php echo $studentGroupForm['showStudentGroups']->renderError() ?>
         </div></form>
+
+        <?php if ($studentGroups): ?>
+            <div class="pristupnost">Výsledky hľadania:</div>
+            <?php include_partial('panel/list_studentGroups', array(
+                        'studentGroups' => $studentGroups,
+                    )); ?>
+        <?php endif; ?>
     </div>
 </div>

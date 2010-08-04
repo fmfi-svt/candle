@@ -66,6 +66,28 @@ class panelComponents extends sfComponents {
         else {
             $this->rooms = null;
         }
+
+        $this->studentGroupForm = new StudentGroupSearchForm();
+
+        $queryString = $this->getUser()->getAttribute('panel_studentGroup_query');
+        $queryString = $request->getParameter('showStudentGroups', $queryString);
+        $this->studentGroupForm->bind(
+            array('showStudentGroups' => $queryString),
+            array()
+          );
+
+        if ($this->studentGroupForm->isValid()) {
+            $this->getUser()->setAttribute('panel_studentGroup_query', $queryString);
+            if (empty($queryString)) {
+                $this->studentGroups = null;
+            }
+            else {
+                $this->studentGroups = Doctrine::getTable('StudentGroup')->searchStudentGroupsByName($queryString);
+            }
+        }
+        else {
+            $this->studentGroups = null;
+        }
         
         if (!isset($this->timetable)) $this->timetable = null;
         if (!isset($this->timetable_id)) $this->timetable_id = null;
