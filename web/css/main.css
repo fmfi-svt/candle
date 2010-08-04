@@ -508,6 +508,10 @@ ul.vysledky_hladania li+li {
     left: 0;
 }
 
+#rozvrh td.hodina .miestnost a {
+    color: black;
+}
+
 #rozvrh td.hodina .typ {
     position: absolute;
     top: 0;

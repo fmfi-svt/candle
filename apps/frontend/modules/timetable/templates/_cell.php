@@ -1,6 +1,8 @@
 <div class="wrap"><!--
     --><div class="predmet_wrap"><div class="predmet"><?php echo $lesson['Subject']['name']; ?></div></div><!--
-    --><div class="hodina_info"><div class="miestnost"><?php echo $lesson['Room']['name']; ?></div><!--
+    --><div class="hodina_info"><div class="miestnost"><?php
+                echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'id'=>$lesson['Room']['id'])); 
+    ?></div><!--
     --><div class="typ"><abbr title="<?php echo $lesson['LessonType']['name']; ?>"><?php echo Candle::upper($lesson['LessonType']['code']); ?></abbr></div></div>
     <?php if ($highlighted): ?>
     <div class="pristupnost">[zvýraznená hodina]</div>
