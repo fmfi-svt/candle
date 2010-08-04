@@ -481,15 +481,15 @@ ul.vysledky_hladania li+li {
 }
 
 #rozvrh td.hodina.highlighted {
-    background: #ffffff;
+    background: #f0ec96;
 }
 
 #rozvrh td.hodina.selected {
-    background: #ffff00;
+    background: #f5f7ff;
 }
 
 #rozvrh td.hodina.highlighted.selected {
-    background: #00ffff;
+    background: #fff9c2;
 }
 
 #rozvrh th.zaciatok {
