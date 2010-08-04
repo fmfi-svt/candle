@@ -101,4 +101,13 @@ class Candle {
         if ($secondSlash === false) return false;
         return substr($longCode, $firstSlash+1, $secondSlash-$firstSlash-1);
     }
+
+    static public function upper($string) {
+        $old_encoding = mb_internal_encoding();
+
+        mb_internal_encoding(mb_detect_encoding($string));
+        $result = mb_strtoupper($string);
+        mb_internal_encoding($old_encoding);
+        return $result;
+    }
 }
