@@ -181,3 +181,30 @@ timetable_teacher_duplicate:
     param: { module: timetableTeacher, action: duplicate, sf_format: html }
     requirements:
         sf_format: (?:html|txt|csv|ics|xml)
+
+room_show:
+    url: /miestnost/:id.:sf_format
+    class: sfDoctrineRoute
+    options: { model: Room, type: object }
+    param: { module: room, action: show, sf_format: html }
+    requirements:
+        sf_format: (?:html|txt|csv|ics|xml)
+        sf_method: [get, post]
+
+room_timetable_export:
+    url: /miestnost/:id.:sf_format/rozvrh/exportovat
+    class: sfDoctrineRoute
+    options: { model: Room, type: object }
+    param: { module: room, action: export, sf_format: html }
+    requirements:
+        sf_format: (?:html|txt|csv|ics|xml)
+        sf_method: [get, post]
+
+room_timetable_duplicate:
+    url: /miestnost/:id.:sf_format/rozvrh/duplikovat
+    class: sfDoctrineRoute
+    options: { model: Room, type: object }
+    param: { module: room, action: duplicate, sf_format: html }
+    requirements:
+        sf_format: (?:html|txt|csv|ics|xml)
+        sf_method: [get, post]

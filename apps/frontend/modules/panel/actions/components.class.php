@@ -44,6 +44,28 @@ class panelComponents extends sfComponents {
         else {
             $this->teachers = null;
         }
+
+        $this->roomForm = new RoomSearchForm();
+
+        $queryString = $this->getUser()->getAttribute('panel_room_query');
+        $queryString = $request->getParameter('showRooms', $queryString);
+        $this->roomForm->bind(
+            array('showRooms' => $queryString),
+            array()
+          );
+
+        if ($this->roomForm->isValid()) {
+            $this->getUser()->setAttribute('panel_room_query', $queryString);
+            if (empty($queryString)) {
+                $this->rooms = null;
+            }
+            else {
+                $this->rooms = Doctrine::getTable('Room')->searchRoomsByName($queryString);
+            }
+        }
+        else {
+            $this->rooms = null;
+        }
         
         if (!isset($this->timetable)) $this->timetable = null;
         if (!isset($this->timetable_id)) $this->timetable_id = null;
