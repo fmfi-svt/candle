@@ -1,6 +1,6 @@
 <?php
 
-class roomActions extends sfActions {
+class studentGroupActions extends sfActions {
 
     private function fetchStudentGroupTimetable() {
         $studentGroup = $this->getRoute()->getObject();

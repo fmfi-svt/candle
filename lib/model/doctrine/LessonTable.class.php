@@ -57,6 +57,16 @@ class LessonTable extends Doctrine_Table
         return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
     }
 
+    function fetchStudentGroupLessonIds($studentGroupId) {
+        $q = Doctrine_Query::create()
+                ->select('l.id')
+                ->from('Lesson l')
+                ->innerJoin('l.StudentGroup sg')
+                ->andWhere('sg.id = ?', $studentGroupId);
+
+        return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
+    }
+
 
     function getIDsBySubjectCodes($codes) {
         if (count($codes) == 0) return array();
