@@ -228,7 +228,7 @@ studentGroup_timetable_export:
         sf_method: [get, post]
 
 studentGroup_timetable_duplicate:
-    url: /miestnost/:id.:sf_format/rozvrh/duplikovat
+    url: /kruzok/:id.:sf_format/rozvrh/duplikovat
     class: sfDoctrineRoute
     options: { model: StudentGroup, type: object }
     param: { module: studentGroup, action: duplicate, sf_format: html }
