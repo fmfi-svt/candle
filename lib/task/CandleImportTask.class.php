@@ -703,6 +703,11 @@ EOF;
       $sql .= ' WHERE l.external_id=i.lesson_external_id AND t.external_id=i.teacher_external_id';
       $this->executeSQL($sql);
 
+      $sql = 'INSERT INTO student_group (name)';
+      $sql .= ' SELECT DISTINCT i.student_group';
+      $sql .= ' FROM tmp_insert_lesson_student_group i';
+      $this->executeSQL($sql);
+
       $sql = 'DELETE FROM sgl';
       $sql .= ' USING student_group_lessons sgl, lesson l, tmp_insert_lesson i';
       $sql .= ' WHERE sgl.lesson_id=l.id ';
