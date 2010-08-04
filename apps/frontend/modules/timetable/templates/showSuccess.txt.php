@@ -26,6 +26,7 @@ foreach ($layout->getLessons() as $lesson) {
         if (!$first) {
             echo ', ';
         }
+        $first = false;
         echo Candle::formatShortName($teacher);
     }
     echo "\n";
