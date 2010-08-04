@@ -49,6 +49,7 @@ foreach ($layout->getLessons() as $lesson) {
         if (!$first) {
             $teachers .= ', ';
         }
+        $first = false;
         $teachers .= Candle::formatShortName($teacher);
     }
     echo csv_esc($teachers);
