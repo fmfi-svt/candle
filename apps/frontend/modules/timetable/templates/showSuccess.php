@@ -2,7 +2,7 @@
 
 slot('title', $timetable->getName());
 
-if (!$sf_request->isXmlHttpRequest()) {
+if ($addSlots) {
     slot('panel');
     include_component('panel','panel',array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
     end_slot();

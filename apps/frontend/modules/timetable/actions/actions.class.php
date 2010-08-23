@@ -5,6 +5,10 @@ class timetableActions extends sfActions {
     public function executeShow(sfWebRequest $request) {
         $this->fetchTimetable($request);
         $this->layout = new TimetableLayout($this->timetable->getLessons());
+        if ($request->isXmlHttpRequest() || $request->hasParameter('onlyTimetable')) {
+            $this->setLayout(false);
+            $this->addSlots = false;
+        }
         Candle::setTimetableExportResponse($request, $this);
     }
 
@@ -17,6 +21,7 @@ class timetableActions extends sfActions {
         $this->timetable_id = $request->getParameter('id');
         $this->timetable = $this->manager->getTimetable($this->timetable_id);
         $this->forward404Unless($this->timetable);
+        $this->addSlots = true;
     }
     
     public function executeCreate(sfWebRequest $request) {
