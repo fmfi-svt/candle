@@ -13,6 +13,11 @@
         var candleFrontendDomain = "<?php echo $sf_request->getHost();?>";
     </script>
     <?php include_stylesheets() ?>
+
+    <!--[if lte IE 7]>
+    <?php echo stylesheet_tag('main_ie7'); ?>
+    <![endif]-->
+
     <?php include_javascripts() ?>
 </head>
 <body class="<?php if(!$panelText) echo 'panel_hidden'?>">

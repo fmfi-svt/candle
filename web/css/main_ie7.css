@@ -1,0 +1,6 @@
+/* IE <=7 hacks */
+
+#vrch_riadok1 ul li {
+    zoom: 1;
+    display: inline;
+}
