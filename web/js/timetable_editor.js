@@ -28,7 +28,7 @@ var TimetableEditor = new Class({
         // checkboxy na upravu zvyraznenia
         this.timetableForm.getElements('input[type=checkbox][name="lesson_selection[]"]')
                 .each(function(checkbox) {
-            checkbox.addEvent('change', this.lessonSelectionCheckboxChanged.create({
+            checkbox.addEvent('click', this.lessonSelectionCheckboxChanged.create({
                 event: true,
                 bind: this
             }));
@@ -264,14 +264,14 @@ var TimetableEditorPanel = new Class({
     bindCheckboxes: function() {
         // na hodiny
         this.panelForm.getElements('input[type=checkbox][name="lesson[]"]').each(function(checkbox) {
-            checkbox.addEvent('change', this.lessonCheckboxChanged.create({
+            checkbox.addEvent('click', this.lessonCheckboxChanged.create({
                 event: true,
                 bind: this
             }));
         }, this);
         // na cele predmety
         this.panelForm.getElements('input[type=checkbox][name="subject[]"]').each(function(checkbox) {
-            checkbox.addEvent('change', this.subjectCheckboxChanged.create({
+            checkbox.addEvent('click', this.subjectCheckboxChanged.create({
                 event: true,
                 bind: this
             }));
