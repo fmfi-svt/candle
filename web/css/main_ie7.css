@@ -1,6 +1,9 @@
 /* IE <=7 hacks */
 
-#vrch_riadok1 ul li {
+/* Hack, ktory ma rovnaky efekt ako display: inline-block */
+#vrch_riadok1 ul,
+#vrch_riadok1 ul li,
+#vrch_riadok2 li {
     zoom: 1;
     display: inline;
 }

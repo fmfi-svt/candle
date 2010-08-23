@@ -13,6 +13,11 @@ html.panel_hidden, body.panel_hidden {
     background-position: -290px 0px;
 }
 
+form {
+    margin: 0;
+    padding: 0;
+}
+
 #vrch {
     height: 90px;
     color: white;
@@ -203,6 +208,8 @@ html.panel_hidden, body.panel_hidden {
     color: white;
     background-position: right center;
     background-repeat: no-repeat;
+    margin: 0.5em 0;
+    padding: 0;
 }
 
 .jsactive .panel_cast h2 {
