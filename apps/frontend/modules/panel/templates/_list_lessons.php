@@ -32,14 +32,14 @@ if ($timetable) {
 
 <li class="predmet">
     <div class="predmet_header">
-        <?php if ($timetable): ?>
+        <?php if ($timetable): ?><!--
             <?php $cb_id = "panel_subject_cb_".$subject['id']; ?>
-            <input id="<?php echo $cb_id; ?>" class="predmet_check"
+            --><input id="<?php echo $cb_id; ?>" class="predmet_check"
                    type="checkbox" name="subject[]"
                    value="<?php echo $subject['id']?>"
                    <?php if ($allSelected) echo 'checked="checked"' ?>
-                   title="Zobraziť predmet"/>
-            <label for="<?php echo $cb_id; ?>" class="predmet_nazov"><?php echo $subject['name'] ?></label>
+                   title="Zobraziť predmet"/><!--
+            --><label for="<?php echo $cb_id; ?>" class="predmet_nazov"><?php echo $subject['name'] ?></label>
         <?php else: ?>
             <span class="predmet_nazov"><?php echo $subject['name'] ?></span>
         <?php endif ?>
