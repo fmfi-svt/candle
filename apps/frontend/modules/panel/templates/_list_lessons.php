@@ -11,8 +11,9 @@ endif
 
 $subjectInfoLink = null;
 
-if (preg_match('/^\d-INF-\d{3}(?:-\d+){0,2}$/',$subject['short_code'])) {
-    $subjectInfoLink = 'http://new.dcs.fmph.uniba.sk/index.php/'.urlencode($subject['short_code']);
+$matches = array();
+if (preg_match('/^(\d-INF-\d{3})(?:-\d+){0,2}$/',$subject['short_code'], $matches)) {
+    $subjectInfoLink = 'http://new.dcs.fmph.uniba.sk/index.php/'.urlencode($matches[1]);
 }
 
 $lessons = $subject['Lessons'];
