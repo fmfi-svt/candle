@@ -6,7 +6,7 @@ class CandleImportTask extends sfBaseTask
   protected static $ucitelFields = array('priezvisko', 'meno', 'iniciala', 'katedra', 'oddelenie');
   protected static $miestnostFields = array('nazov', 'kapacita', 'typ');
   protected static $predmetFields = array('nazov', 'kod', 'kratkykod', 'kredity', 'rozsah');
-  protected static $hodinaFields = array('den', 'zaciatok', 'koniec', 'miestnost', 'trvanie', 'predmet', 'ucitelia', 'kruzky', 'typ', 'zviazanehodiny');
+  protected static $hodinaFields = array('den', 'zaciatok', 'koniec', 'miestnost', 'trvanie', 'predmet', 'ucitelia', 'kruzky', 'typ', 'zviazanehodiny', 'oldid');
 
   const STATE_ROOT = 0;
   const STATE_TYPY = 1;
@@ -410,7 +410,7 @@ EOF;
 
   protected function handleHodina($parser) {
     //print_r($this->elementData);
-    $lessonId = (int) $this->elementData['id'];
+    $lessonId = (int) $this->elementData['oldid'];
 
     $this->insertLesson->execute(array(
         Candle::dayFromCode($this->elementData['den']), (int) $this->elementData['zaciatok'],
