@@ -42,6 +42,10 @@
                     <?php endif; ?>
 
                     <?php echo $sf_content ?>
+
+                    <hr />
+
+                    <?php include_component('layout', 'lastUpdate'); ?>
                 </div>
             </div>
         </div>
