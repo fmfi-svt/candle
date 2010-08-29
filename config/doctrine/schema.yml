@@ -126,3 +126,8 @@ UserTimetableLessons:
     relations:
         UserTimetable: { onDelete: CASCADE, local: user_timetable_id, foreign: id }
         Lesson: { onDelete: CASCADE, local: lesson_id, foreign: id }
+
+DataUpdate:
+    columns:
+        datetime: {type: datetime, notnull: true }
+        description: {type: string(255), notnull: true }
