@@ -50,6 +50,7 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('print-sql', null, sfCommandOption::PARAMETER_NONE, 'Print SQL commands executed'),
         new sfCommandOption('debug-dump-tables', null, sfCommandOption::PARAMETER_NONE, 'Create a persistent copy of temporary tables'),
         new sfCommandOption('warnings-as-errors', null, sfCommandOption::PARAMETER_NONE, 'Treat warnings as errors'),
+        new sfCommandOption('no-removes', null, sfCommandOption::PARAMETER_NONE, 'Don\'t remove objects in db that were deleted from xml'),
     ));
  
     $this->namespace = 'candle';
@@ -734,6 +735,28 @@ EOF;
       $this->executeSQL($sql);
 
   }
+
+  protected function deleteExcessSubjects() {
+      $this->logSection('candle', 'Removing excess subjects (not present in xml)');
+
+      $sql = 'DELETE FROM s';
+      $sql .= ' USING subject s';
+      $sql .= ' WHERE s.external_id NOT IN (SELECT s.external_id FROM tmp_insert_subject s)';
+      $this->executeSQL($sql);
+  }
+
+  protected function deleteExcessLessons() {
+      $this->logSection('candle', 'Removing excess lessons (not present in xml)');
+
+      // TODO: mozno nemazat, ale len pridat flag vymazane, alebo nejaky zaznam do historie
+
+      $sql = 'DELETE FROM l';
+      $sql .= ' USING lesson l';
+      $sql .= ' WHERE l.external_id NOT IN (SELECT i.external_id FROM tmp_insert_lesson i)';
+      $this->executeSQL($sql);
+  }
+
+
     
   protected function execute($arguments = array(), $options = array())
   {
@@ -807,6 +830,11 @@ EOF;
             $this->mergeRooms();
             $this->mergeSubjects();
             $this->mergeLessons();
+        }
+
+        if (!$options['no-removes']) {
+            $this->deleteExcessLessons();
+            $this->deleteExcessSubjects();
         }
         
         if ($options['dry-run']) {
