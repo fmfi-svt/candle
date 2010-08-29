@@ -51,6 +51,7 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('debug-dump-tables', null, sfCommandOption::PARAMETER_NONE, 'Create a persistent copy of temporary tables'),
         new sfCommandOption('warnings-as-errors', null, sfCommandOption::PARAMETER_NONE, 'Treat warnings as errors'),
         new sfCommandOption('no-removes', null, sfCommandOption::PARAMETER_NONE, 'Don\'t remove objects in db that were deleted from xml'),
+        new sfCommandOption('message', null, sfCommandOption::PARAMETER_OPTIONAL, 'Description of the update', ''),
     ));
  
     $this->namespace = 'candle';
@@ -756,7 +757,17 @@ EOF;
       $this->executeSQL($sql);
   }
 
+  protected function insertDataUpdate() {
+      $this->logSection('candle', 'Inserting information about data update');
 
+      $sql = 'INSERT INTO data_update';
+      $sql .= ' (datetime, description)';
+      $sql .= ' VALUES (NOW(), ?)';
+
+      $prepared = $this->connection->prepare($sql);
+      $this->executePreparedSQL($prepared, array($this->updateDescription));
+
+  }
     
   protected function execute($arguments = array(), $options = array())
   {
@@ -771,6 +782,7 @@ EOF;
     $this->ignoreErrors = $options['ignore-errors'];
     $this->printSQL = $options['print-sql'];
     $this->warningsAsErrors = $options['warnings-as-errors'];
+    $this->updateDescription = $options['message'];
 
     $messageToAsk = 'This command will update source timetable data in the "%s" connection.';
 
@@ -836,6 +848,8 @@ EOF;
             $this->deleteExcessLessons();
             $this->deleteExcessSubjects();
         }
+
+        $this->insertDataUpdate();
         
         if ($options['dry-run']) {
             $this->logSection('Done. This is dry run, executing rollback');
