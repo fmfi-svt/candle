@@ -809,14 +809,16 @@ EOF;
     // Sice som uz znizil pamatove naroky, stale treba zvysit limit
     ini_set("memory_limit","96M");
 
-    $this->connection->beginTransaction();
+    // Tieto DDL statementy musia byt pred createTransaction,
+    // pretoze MySQL automaticky commituje transakciu po akomkolvek
+    // DDL (aj napriek tomu, ze su to docasne tabulky)
+    $this->createTemporaryTables();
+    $this->createPrimaryKeys();
 
-    $this->connection->prepare('$statement');
+    $this->connection->beginTransaction();
 
     try {
 
-        $this->createTemporaryTables();
-        $this->createPrimaryKeys();
         $this->prepareInsertStatements();
 
         $this->logSection('candle', 'Loading xml data into database');
