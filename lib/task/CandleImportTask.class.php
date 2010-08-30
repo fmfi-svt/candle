@@ -734,6 +734,7 @@ EOF;
       $sql = 'INSERT INTO student_group (name)';
       $sql .= ' SELECT DISTINCT i.student_group';
       $sql .= ' FROM tmp_insert_lesson_student_group i';
+      $sql .= ' WHERE i.student_group NOT IN (SELECT name from student_group)';
       $this->executeSQL($sql);
 
       $sql = 'DELETE FROM sgl';
