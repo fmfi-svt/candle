@@ -73,6 +73,7 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('dry-run', null, sfCommandOption::PARAMETER_NONE, 'Don\'t modify data tables'),
         new sfCommandOption('no-merges', null, sfCommandOption::PARAMETER_NONE, 'Don\'t perform merge stage'),
         new sfCommandOption('ignore-errors', null, sfCommandOption::PARAMETER_NONE, 'Ignore any errors (it is advisable to also use --dry-run)'),
+        new sfCommandOption('ignore-warnings', null, sfCommandOption::PARAMETER_NONE, 'Ignore any warnings (i.e. don\'t ask about them at the end)'),
         new sfCommandOption('print-sql', null, sfCommandOption::PARAMETER_NONE, 'Print SQL commands executed'),
         new sfCommandOption('debug-dump-tables', null, sfCommandOption::PARAMETER_NONE, 'Create a persistent copy of temporary tables'),
         new sfCommandOption('warnings-as-errors', null, sfCommandOption::PARAMETER_NONE, 'Treat warnings as errors'),
@@ -128,6 +129,7 @@ EOF;
 
   protected function parseError($parser, $description) {
       $message = 'Error: '.$this->createParseErrorMessage($parser, $description);
+      $this->errorCount += 1;
       if ($this->ignoreErrors) {
           $this->logBlock($message);
       }
@@ -140,8 +142,10 @@ EOF;
       $message = 'Warning: '.$this->createParseErrorMessage($parser, $description);
       if (!$this->warningsAsErrors) {
           $this->logBlock($message, 'INFO');
+          $this->warningCount += 1;
       }
       else {
+          $this->errorCount += 1;
           throw new Exception($message);
       }
   }
@@ -812,6 +816,9 @@ EOF;
     $this->printSQL = $options['print-sql'];
     $this->warningsAsErrors = $options['warnings-as-errors'];
     $this->updateDescription = $options['message'];
+    $this->warningCount = 0;
+    $this->errorCount = 0;
+    $this->ignoreWarnings = $options['ignore-warnings'];
 
     $messageToAsk = 'This command will update source timetable data in the "%s" connection.';
 
@@ -881,15 +888,35 @@ EOF;
         }
 
         $this->insertDataUpdate();
-        
+
+        $commit = true;
+
         if ($options['dry-run']) {
-            $this->logSection('Done. This is dry run, executing rollback');
-            $this->connection->rollback();
+            $this->logSection('candle', 'This is dry run, so i\'ll rolback this transaction');
+            $commit = false;
         }
         else {
-            $this->logSection('Done. Commiting transaction...');
+            if (!$this->ignoreErrors && !$this->ignoreWarnings && $this->warningCount > 0) {
+                if (!$this->askConfirmation(array_merge(
+                    array(sprintf('%d warning(s) occured', $this->warningCount), ''),
+                    array('', 'Are you sure you want to commit this transaction? (y/N)')
+                  ), 'QUESTION_LARGE', false)
+                ) {
+                    $commit = false;
+                }
+            }
+        }
+
+        if ($commit) {
+            $this->logSection('candle', 'Committing transaction');
             $this->connection->commit();
         }
+        else {
+            $this->logSection('candle', 'Rolling back transaction');
+            $this->connection->rollback();
+        }
+
+        $this->logSection('Done.');
     }
     catch (Exception $e) {
         $this->logSection('candle', 'Exception occured, executing rollback');
@@ -897,7 +924,13 @@ EOF;
         $this->logBlock(array($e->getMessage(), $e->getTraceAsString()), 'ERROR');
     }
 
+    $this->logSection(sprintf('%d error(s), %d warning(s)', $this->errorCount, $this->warningCount));
+
     xml_parser_free($parser);
+
+    if ($this->errorCount>1) {
+        return 1;
+    }
 
   }
 }
