@@ -20,6 +20,7 @@
  * @property Doctrine_Collection $Linked
  * @property Doctrine_Collection $StudentGroupLessons
  * @property Doctrine_Collection $TeacherLessons
+ * @property Doctrine_Collection $LinkedLessons
  * @property Doctrine_Collection $UserTimetableLessons
  * 
  * @method integer             getDay()                  Returns the current record's "day" value
@@ -37,6 +38,7 @@
  * @method Doctrine_Collection getLinked()               Returns the current record's "Linked" collection
  * @method Doctrine_Collection getStudentGroupLessons()  Returns the current record's "StudentGroupLessons" collection
  * @method Doctrine_Collection getTeacherLessons()       Returns the current record's "TeacherLessons" collection
+ * @method Doctrine_Collection getLinkedLessons()        Returns the current record's "LinkedLessons" collection
  * @method Doctrine_Collection getUserTimetableLessons() Returns the current record's "UserTimetableLessons" collection
  * @method Lesson              setDay()                  Sets the current record's "day" value
  * @method Lesson              setStart()                Sets the current record's "start" value
@@ -53,6 +55,7 @@
  * @method Lesson              setLinked()               Sets the current record's "Linked" collection
  * @method Lesson              setStudentGroupLessons()  Sets the current record's "StudentGroupLessons" collection
  * @method Lesson              setTeacherLessons()       Sets the current record's "TeacherLessons" collection
+ * @method Lesson              setLinkedLessons()        Sets the current record's "LinkedLessons" collection
  * @method Lesson              setUserTimetableLessons() Sets the current record's "UserTimetableLessons" collection
  * 
  * @package    candle
@@ -139,6 +142,10 @@ abstract class BaseLesson extends sfDoctrineRecord
         $this->hasMany('TeacherLessons', array(
              'local' => 'id',
              'foreign' => 'lesson_id'));
+
+        $this->hasMany('LinkedLessons', array(
+             'local' => 'id',
+             'foreign' => 'lesson1_id'));
 
         $this->hasMany('UserTimetableLessons', array(
              'local' => 'id',

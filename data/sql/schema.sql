@@ -21,7 +21,8 @@ CREATE TABLE sf_guard_user_permission (user_id INT, permission_id INT, created_a
 ALTER TABLE lesson ADD CONSTRAINT lesson_subject_id_subject_id FOREIGN KEY (subject_id) REFERENCES subject(id) ON DELETE CASCADE;
 ALTER TABLE lesson ADD CONSTRAINT lesson_room_id_room_id FOREIGN KEY (room_id) REFERENCES room(id);
 ALTER TABLE lesson ADD CONSTRAINT lesson_lesson_type_id_lesson_type_id FOREIGN KEY (lesson_type_id) REFERENCES lesson_type(id);
-ALTER TABLE linked_lessons ADD CONSTRAINT linked_lessons_lesson1_id_lesson_id FOREIGN KEY (lesson1_id) REFERENCES lesson(id);
+ALTER TABLE linked_lessons ADD CONSTRAINT linked_lessons_lesson2_id_lesson_id FOREIGN KEY (lesson2_id) REFERENCES lesson(id) ON DELETE CASCADE;
+ALTER TABLE linked_lessons ADD CONSTRAINT linked_lessons_lesson1_id_lesson_id FOREIGN KEY (lesson1_id) REFERENCES lesson(id) ON DELETE CASCADE;
 ALTER TABLE room ADD CONSTRAINT room_room_type_id_room_type_id FOREIGN KEY (room_type_id) REFERENCES room_type(id);
 ALTER TABLE student_group_lessons ADD CONSTRAINT student_group_lessons_student_group_id_student_group_id FOREIGN KEY (student_group_id) REFERENCES student_group(id) ON DELETE CASCADE;
 ALTER TABLE student_group_lessons ADD CONSTRAINT student_group_lessons_lesson_id_lesson_id FOREIGN KEY (lesson_id) REFERENCES lesson(id) ON DELETE CASCADE;

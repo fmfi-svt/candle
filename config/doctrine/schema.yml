@@ -119,6 +119,9 @@ LinkedLessons:
     columns:
         lesson1_id: { type: integer, primary: true }
         lesson2_id: { type: integer, primary: true }
+    relations:
+        Lesson1: { class: Lesson, onDelete: CASCADE, local: lesson1_id, foreign: id}
+        Lesson2: { class: Lesson, onDelete: CASCADE, local: lesson2_id, foreign: id}
 
 Subject:
     columns:
