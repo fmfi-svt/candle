@@ -2,21 +2,6 @@
    Zatial len ovladanie panelu
 */
 
-Element.implement({
-    ensureReflow: function() {
-        if (!Browser.Engine.webkit) return;
-        var parentNode = this.parentNode;
-        var nextSibling = this.nextSibling;
-        parentNode.removeChild(this);
-        if (nextSibling) {
-            parentNode.insertBefore(this, nextSibling);
-        }
-        else {
-            parentNode.appendChild(this);
-        }
-    }
-});
-
 var Panel = new Class({
     Implements: Options,
     options: {
