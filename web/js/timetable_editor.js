@@ -91,10 +91,8 @@ var TimetableEditor = new Class({
     refreshTimetableSucceeded: function(responseTree, responseElements,
                 responseHTML, responseJavaScript) {
         var newTimetableEditor = $(responseTree[0]);
-        var parent = this.timetableEditorElement.getParent();
-        parent.removeChild(this.timetableEditorElement);
+        this.timetableEditorElement.replaceWith(newTimetableEditor);
         this.timetableEditorElement = newTimetableEditor;
-        parent.appendChild(this.timetableEditorElement);
         this.timetableForm = this.timetableEditorElement.getElement('form');
         this.bindEditor();
         //this.timetableEditorElement.set('html', responseHTML);
