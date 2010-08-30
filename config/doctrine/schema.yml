@@ -35,6 +35,11 @@ Room:
             name
           type:
             unique
+        name_index:
+          fields:
+            name
+          type:
+            unique
 
 LessonType:
     columns:
@@ -59,6 +64,12 @@ StudentGroup:
             local: student_group_id
             foreign: lesson_id
             refClass: StudentGroupLessons
+    indexes:
+        name_index:
+          fields:
+            name
+          type:
+            unique
 
 Lesson:
     columns:

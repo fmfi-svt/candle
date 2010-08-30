@@ -31,6 +31,12 @@ abstract class BaseStudentGroup extends sfDoctrineRecord
              'notnull' => true,
              'length' => '30',
              ));
+
+
+        $this->index('name_index', array(
+             'fields' => 'name',
+             'type' => 'unique',
+             ));
     }
 
     public function setUp()
