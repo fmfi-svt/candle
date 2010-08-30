@@ -32,7 +32,7 @@ class CandleImportTask extends sfBaseTask
   protected static $ucitelFields = array('priezvisko', 'meno', 'iniciala', 'katedra', 'oddelenie');
   protected static $miestnostFields = array('nazov', 'kapacita', 'typ');
   protected static $predmetFields = array('nazov', 'kod', 'kratkykod', 'kredity', 'rozsah');
-  protected static $hodinaFields = array('den', 'zaciatok', 'koniec', 'miestnost', 'trvanie', 'predmet', 'ucitelia', 'kruzky', 'typ', 'zviazanehodiny', 'oldid');
+  protected static $hodinaFields = array('den', 'zaciatok', 'koniec', 'miestnost', 'trvanie', 'predmet', 'ucitelia', 'kruzky', 'typ', 'zviazanehodiny', 'oldid', 'zviazaneoldid');
 
   const STATE_ROOT = 0;
   const STATE_TYPY = 1;
@@ -461,8 +461,8 @@ EOF;
         }
     }
 
-    if (isset($this->elementData['zviazanehodiny'])) {
-        $zviazaneHodiny = explode(',', $this->elementData['zviazanehodiny']);
+    if (isset($this->elementData['zviazaneoldid'])) {
+        $zviazaneHodiny = explode(',', $this->elementData['zviazaneoldid']);
         foreach ($zviazaneHodiny as $zviazanaHodina) {
             $this->insertLessonLink->execute(array($lessonId, $zviazanaHodina));
         }
