@@ -26,7 +26,7 @@
  */
 
 
-$t = new lime_test(31);
+$t = new lime_test(35);
 
 $t->is(Candle::formatTime(0),'0:00');
 $t->is(Candle::formatTime(5),'0:05');
@@ -65,3 +65,8 @@ $t->is(Candle::subjectShortCodeFromLongCode('PriF/1-UBI-004-1/7064/00'), '1-UBI-
 $t->is(Candle::subjectShortCodeFromLongCode('PriF/1-UBI-007-1/7054/00'), '1-UBI-007-1');
 $t->is(Candle::subjectShortCodeFromLongCode('FMFI.KI/1-INF-465/00'), '1-INF-465');
 $t->is(Candle::subjectShortCodeFromLongCode('FMFI.KI/1-INF-500-2/3051/00'), '1-INF-500-2');
+$t->is(Candle::subjectShortCodeFromLongCode('bla bla'), false);
+
+$t->is(Candle::subjectShorterCode('1-INF-100'), '1-INF-100');
+$t->is(Candle::subjectShorterCode('1-INF-100-1'), '1-INF-100');
+$t->is(Candle::subjectShorterCode('bla bla'), false);

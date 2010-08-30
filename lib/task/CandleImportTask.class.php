@@ -422,8 +422,10 @@ EOF;
   protected function handlePredmet($parser) {
     //print_r($this->elementData);
     $myShortCode = Candle::subjectShortCodeFromLongCode($this->elementData['kod']);
+    $myShorterCode = Candle::subjectShorterCode($myShortCode);
 
-    if ($myShortCode !== false && $myShortCode != $this->elementData['kratkykod']) {
+    if ($myShortCode !== false && $myShorterCode !== false && 
+            !($myShortCode == $this->elementData['kratkykod'] || $myShorterCode == $this->elementData['kratkykod'])) {
         $this->parseWarning($parser, 
                 'Short code does not have expected value, got \''.
                 $this->elementData['kratkykod'].'\', expected \''.$myShortCode.'\'');

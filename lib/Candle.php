@@ -119,13 +119,30 @@ class Candle {
         return array_merge($url, array('sf_format'=>$format));
     }
 
+    /**
+     * PriF/1-UBI-004-1/7064/00 -> 1-UBI-004-1
+     * @param string $longCode
+     * @return string short code
+     */
     static public function subjectShortCodeFromLongCode($longCode) {
-        // PriF/1-UBI-004-1/7064/00 -> 1-UBI-004
         $firstSlash = strpos($longCode, '/');
         if ($firstSlash === false) return false;
         $secondSlash = strpos($longCode, '/', $firstSlash+1);
         if ($secondSlash === false) return false;
         return substr($longCode, $firstSlash+1, $secondSlash-$firstSlash-1);
+    }
+
+    /**
+     * 1-UBI-004-1 -> 1-UBI-004
+     * @param string $shortCode
+     * @return string shorter code
+     */
+    static public function subjectShorterCode($shortCode) {
+        $matches = array();
+        if (!preg_match('@^(\d-[A-Z]{3}-\d{3})(?:-\d)?$@', $shortCode, $matches)) {
+            return false;
+        }
+        return $matches[1];
     }
 
     static public function upper($string) {
