@@ -34,6 +34,7 @@ class TeacherTable extends Doctrine_Table
         $q = Doctrine_Query::create()
                 ->from('Teacher t')
                 ->where('CONCAT(t.given_name,\' \',t.family_name) LIKE ?', $matchQueryString)
+                ->orWhere('CONCAT(t.family_name,\' \',t.given_name) LIKE ?', $matchQueryString)
                 ->orderBy('t.family_name')
                 ->limit($limit);
 
