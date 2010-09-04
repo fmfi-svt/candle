@@ -21,3 +21,8 @@ end_slot();
                 'editable'=>false
         )); ?>
 </div>
+<div>
+    <?php include_partial('timetable/exportOptionsSmall',
+            array('url'=>array('sf_route'=>'studentGroup_show', 'id'=>$studentGroup_id)));
+    ?>
+</div>

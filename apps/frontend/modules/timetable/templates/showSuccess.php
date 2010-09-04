@@ -40,3 +40,8 @@ hodiny v rozvrhu
 </div>
 <?php echo '</form>' ?>
 </div>
+<div>
+    <?php include_partial('timetable/exportOptionsSmall',
+            array('url'=>array('sf_route'=>'timetable_show', 'id'=>$timetable_id)));
+    ?>
+</div>

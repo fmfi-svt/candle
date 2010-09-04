@@ -17,3 +17,8 @@ end_slot();
                 'editable'=>false
         )); ?>
 </div>
+<div>
+    <?php include_partial('timetable/exportOptionsSmall',
+            array('url'=>array('sf_route'=>'timetable_show_published', 'slug'=>$timetable_slug)));
+    ?>
+</div>
