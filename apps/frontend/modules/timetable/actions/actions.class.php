@@ -285,9 +285,24 @@ class timetableActions extends sfActions {
 
     public function executeDelete(sfWebRequest $request) {
         $this->fetchTimetable($request);
-        $this->manager->removeTimetable($this->timetable_id);
-        $this->getUser()->setFlash('notice', 'Rozvrh úspešne zmazaný');
-        $this->redirect('@timetable_show?id='.$this->manager->getFirstTimetableId());
+
+        $this->form = new DeleteConfirmationForm();
+        $this->form->bind($request->getParameter('deleteConfirmation'));
+
+        if ($this->form->isValid()) {
+            $this->manager->removeTimetable($this->timetable_id);
+            $this->getUser()->setFlash('notice', 'Rozvrh úspešne zmazaný');
+            $this->redirect(array('sf_route'=>'timetable_show', 'id'=>$this->manager->getFirstTimetableId()));
+        }
+
+        $this->layout = new TimetableLayout($this->timetable->getLessons());
+        $this->setTemplate('deleteAsk');
+    }
+
+    public function executeDeleteAsk(sfWebRequest $request) {
+        $this->form = new DeleteConfirmationForm();
+        $this->fetchTimetable($request);
+        $this->layout = new TimetableLayout($this->timetable->getLessons());
     }
 
     public function executeHomepage(sfWebRequest $request) {

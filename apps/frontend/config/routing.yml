@@ -106,8 +106,16 @@ timetable_save:
     param: { module: timetable, action: save }
 
 timetable_delete:
+    class: sfRequestRoute
+    url: /moj/rozvrh/:id/zmazat
+    param: { module: timetable, action: deleteAsk }
+    requirements: { sf_method: get }
+
+timetable_delete_do:
+    class: sfRequestRoute
     url: /moj/rozvrh/:id/zmazat
     param: { module: timetable, action: delete }
+    requirements: { sf_method: post }
 
 timetable_import:
     class: sfRequestRoute
