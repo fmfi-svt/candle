@@ -43,44 +43,44 @@ abstract class BaseLessonForm extends BaseFormDoctrine
     ));
 
 
-Warning: array_shift() expects parameter 1 to be array, string given in /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/generator/sfDoctrineFormGenerator.class.php on line 579
+Warning: array_shift() expects parameter 1 to be array, string given in /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/generator/sfDoctrineFormGenerator.class.php on line 579
 
 Call Stack:
-    0.0003     635408   1. {main}() /home/anty/Skola/candle/candle/symfony:0
-    0.0033    1054496   2. include('/home/anty/Skola/candle/candle/lib/vendor/symfony/lib/command/cli.php') /home/anty/Skola/candle/candle/symfony:14
-    0.1213   11556432   3. sfSymfonyCommandApplication->run() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/command/cli.php:20
-    0.1258   11559968   4. sfTask->runFromCLI() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/command/sfSymfonyCommandApplication.class.php:76
-    0.1260   11561864   5. sfBaseTask->doRun() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/task/sfTask.class.php:97
-    0.1408   12595552   6. sfDoctrineBuildTask->execute() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/task/sfBaseTask.class.php:68
-    0.7761   15337912   7. sfTask->run() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/task/sfDoctrineBuildTask.class.php:169
-    0.7762   15344368   8. sfBaseTask->doRun() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/task/sfTask.class.php:173
-    0.7765   15348808   9. sfDoctrineBuildFormsTask->execute() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/task/sfBaseTask.class.php:68
-    0.7849   16575688  10. sfGeneratorManager->generate() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/task/sfDoctrineBuildFormsTask.class.php:64
-    0.8270   23271144  11. sfDoctrineFormGenerator->generate() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/generator/sfGeneratorManager.class.php:113
-    1.0193   28042568  12. sfGenerator->evalTemplate() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/generator/sfDoctrineFormGenerator.class.php:109
-    1.0198   28157040  13. require('/home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php') /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/generator/sfGenerator.class.php:84
-    1.0439   28241736  14. sfDoctrineFormGenerator->getUniqueColumnNames() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php:35
-    1.0442   28243952  15. array_shift() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/generator/sfDoctrineFormGenerator.class.php:579
+    0.0002     634272   1. {main}() /data/Data/Skola/candle/source/candle/symfony:0
+    0.0031    1053392   2. include('/data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/command/cli.php') /data/Data/Skola/candle/source/candle/symfony:14
+    0.0976   11651272   3. sfSymfonyCommandApplication->run() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/command/cli.php:20
+    0.1018   11654808   4. sfTask->runFromCLI() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/command/sfSymfonyCommandApplication.class.php:76
+    0.1020   11656704   5. sfBaseTask->doRun() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/task/sfTask.class.php:97
+    0.1123   12690896   6. sfDoctrineBuildTask->execute() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/task/sfBaseTask.class.php:68
+    0.7534   15443112   7. sfTask->run() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/task/sfDoctrineBuildTask.class.php:169
+    0.7536   15449568   8. sfBaseTask->doRun() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/task/sfTask.class.php:173
+    0.7539   15453952   9. sfDoctrineBuildFormsTask->execute() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/task/sfBaseTask.class.php:68
+    0.7605   16682400  10. sfGeneratorManager->generate() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/task/sfDoctrineBuildFormsTask.class.php:64
+    0.8156   23378944  11. sfDoctrineFormGenerator->generate() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/generator/sfGeneratorManager.class.php:113
+    0.9724   28409008  12. sfGenerator->evalTemplate() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/generator/sfDoctrineFormGenerator.class.php:109
+    0.9729   28524712  13. require('/data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php') /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/generator/sfGenerator.class.php:84
+    0.9953   28652760  14. sfDoctrineFormGenerator->getUniqueColumnNames() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php:35
+    0.9956   28654984  15. array_shift() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/generator/sfDoctrineFormGenerator.class.php:579
 
     $this->validatorSchema->setPostValidator(
       new sfValidatorDoctrineUnique(array('model' => 'Lesson', 'column' => array('
-Warning: implode(): Invalid arguments passed in /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php on line 44
+Warning: implode(): Invalid arguments passed in /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php on line 44
 
 Call Stack:
-    0.0003     635408   1. {main}() /home/anty/Skola/candle/candle/symfony:0
-    0.0033    1054496   2. include('/home/anty/Skola/candle/candle/lib/vendor/symfony/lib/command/cli.php') /home/anty/Skola/candle/candle/symfony:14
-    0.1213   11556432   3. sfSymfonyCommandApplication->run() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/command/cli.php:20
-    0.1258   11559968   4. sfTask->runFromCLI() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/command/sfSymfonyCommandApplication.class.php:76
-    0.1260   11561864   5. sfBaseTask->doRun() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/task/sfTask.class.php:97
-    0.1408   12595552   6. sfDoctrineBuildTask->execute() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/task/sfBaseTask.class.php:68
-    0.7761   15337912   7. sfTask->run() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/task/sfDoctrineBuildTask.class.php:169
-    0.7762   15344368   8. sfBaseTask->doRun() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/task/sfTask.class.php:173
-    0.7765   15348808   9. sfDoctrineBuildFormsTask->execute() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/task/sfBaseTask.class.php:68
-    0.7849   16575688  10. sfGeneratorManager->generate() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/task/sfDoctrineBuildFormsTask.class.php:64
-    0.8270   23271144  11. sfDoctrineFormGenerator->generate() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/generator/sfGeneratorManager.class.php:113
-    1.0193   28042568  12. sfGenerator->evalTemplate() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/generator/sfDoctrineFormGenerator.class.php:109
-    1.0198   28157040  13. require('/home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php') /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/generator/sfGenerator.class.php:84
-    1.0444   28242520  14. implode() /home/anty/Skola/candle/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php:44
+    0.0002     634272   1. {main}() /data/Data/Skola/candle/source/candle/symfony:0
+    0.0031    1053392   2. include('/data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/command/cli.php') /data/Data/Skola/candle/source/candle/symfony:14
+    0.0976   11651272   3. sfSymfonyCommandApplication->run() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/command/cli.php:20
+    0.1018   11654808   4. sfTask->runFromCLI() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/command/sfSymfonyCommandApplication.class.php:76
+    0.1020   11656704   5. sfBaseTask->doRun() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/task/sfTask.class.php:97
+    0.1123   12690896   6. sfDoctrineBuildTask->execute() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/task/sfBaseTask.class.php:68
+    0.7534   15443112   7. sfTask->run() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/task/sfDoctrineBuildTask.class.php:169
+    0.7536   15449568   8. sfBaseTask->doRun() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/task/sfTask.class.php:173
+    0.7539   15453952   9. sfDoctrineBuildFormsTask->execute() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/task/sfBaseTask.class.php:68
+    0.7605   16682400  10. sfGeneratorManager->generate() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/task/sfDoctrineBuildFormsTask.class.php:64
+    0.8156   23378944  11. sfDoctrineFormGenerator->generate() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/generator/sfGeneratorManager.class.php:113
+    0.9724   28409008  12. sfGenerator->evalTemplate() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/generator/sfDoctrineFormGenerator.class.php:109
+    0.9729   28524712  13. require('/data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php') /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/generator/sfGenerator.class.php:84
+    0.9959   28653544  14. implode() /data/Data/Skola/candle/source/candle/lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/data/generator/sfDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php:44
 
 ')))
     );
