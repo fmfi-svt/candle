@@ -99,6 +99,15 @@ Lesson:
           type:
             unique
 
+FreeRoomInterval:
+    columns:
+        day: { type: integer, notnull: true }
+        start: { type: integer, notnull: true }
+        end: { type: integer, notnull: true }
+        room_id: { type: integer, notnull: true }
+    relations:
+        Room: { local: room_id, foreign: id }
+
 StudentGroupLessons:
     columns:
         student_group_id: { type: integer, primary: true }

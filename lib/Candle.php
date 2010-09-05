@@ -45,6 +45,31 @@ class Candle {
         $days = array('Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok');
         return $days[$dayNum];
     }
+
+    /**
+     * Parse day from day name. If ambiguous, return day that is earlier.
+     * If bad day, return false.
+     * @param string $name
+     */
+    static public function parseDay($name) {
+        $days = array(array('pondelok'),
+                    array('utorok'),
+                    array('streda'),
+                    array('štvrtok', 'stvrtok'),
+                    array('piatok'));
+
+        $name = self::lower($name);
+
+        foreach ($days as $key=>$day) {
+            foreach ($day as $variant) {
+                if (self::startsWith($variant, $name)) {
+                    return $key;
+                }
+            }
+        }
+
+        return false;
+    }
     
     static public function formatRowspan($rowspan) {
         if ($rowspan <= 1) {
@@ -152,5 +177,26 @@ class Candle {
         $result = mb_strtoupper($string);
         mb_internal_encoding($old_encoding);
         return $result;
+    }
+
+    static public function lower($string) {
+        $old_encoding = mb_internal_encoding();
+
+        mb_internal_encoding(mb_detect_encoding($string));
+        $result = mb_strtolower($string);
+        mb_internal_encoding($old_encoding);
+        return $result;
+    }
+
+    /**
+     * Decide if string $a starts with string $b
+     * @param string $a
+     * @param string $b
+     */
+    static public function startsWith($a, $b, $caseInsensitive=false) {
+        if (strlen($b) == 0) return true;
+        if (strlen($b)>strlen($a)) return false;
+
+        return substr_compare($a, $b, 0, strlen($b), $caseInsensitive) === 0;
     }
 }

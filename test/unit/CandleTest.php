@@ -26,7 +26,7 @@
  */
 
 
-$t = new lime_test(35);
+$t = new lime_test(63);
 
 $t->is(Candle::formatTime(0),'0:00');
 $t->is(Candle::formatTime(5),'0:05');
@@ -70,3 +70,35 @@ $t->is(Candle::subjectShortCodeFromLongCode('bla bla'), false);
 $t->is(Candle::subjectShorterCode('1-INF-100'), '1-INF-100');
 $t->is(Candle::subjectShorterCode('1-INF-100-1'), '1-INF-100');
 $t->is(Candle::subjectShorterCode('bla bla'), false);
+
+$t->ok(Candle::startsWith('String',''));
+$t->ok(Candle::startsWith('String','Str'));
+$t->ok(!Candle::startsWith('String','str'));
+$t->ok(Candle::startsWith('String','str', true));
+$t->ok(Candle::startsWith('String','String'));
+$t->ok(!Candle::startsWith('String','Stringa'));
+$t->ok(Candle::startsWith('',''));
+
+$t->is(Candle::parseDay('Pondelok'),0);
+$t->is(Candle::parseDay('Utorok'),1);
+$t->is(Candle::parseDay('Streda'),2);
+$t->is(Candle::parseDay('Stvrtok'),3);
+$t->is(Candle::parseDay('Štvrtok'),3);
+$t->is(Candle::parseDay('Piatok'),4);
+$t->is(Candle::parseDay('Po'),0);
+$t->is(Candle::parseDay('Ut'),1);
+$t->is(Candle::parseDay('St'),2);
+$t->is(Candle::parseDay('Stv'),3);
+$t->is(Candle::parseDay('Št'),3,'Kratky stvrtok');
+$t->is(Candle::parseDay('Pi'),4);
+$t->is(Candle::parseDay('Blabla'),false);
+$t->is(Candle::parseDay('pondelok'),0);
+$t->is(Candle::parseDay('stvrtok'),3);
+$t->is(Candle::parseDay('ut'),1);
+$t->is(Candle::parseDay('pi'),4);
+
+$t->is(Candle::upper('Slanina'),'SLANINA');
+$t->is(Candle::upper('Piškót'),'PIŠKÓT');
+
+$t->is(Candle::lower('VidlY'),'vidly');
+$t->is(Candle::lower('ČAJNÍK'),'čajník');
