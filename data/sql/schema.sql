@@ -1,4 +1,5 @@
 CREATE TABLE data_update (id BIGINT AUTO_INCREMENT, datetime datetime NOT NULL, description VARCHAR(255) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE free_room_interval (id BIGINT AUTO_INCREMENT, day BIGINT NOT NULL, start BIGINT NOT NULL, end BIGINT NOT NULL, room_id BIGINT NOT NULL, INDEX room_id_idx (room_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE lesson (id BIGINT AUTO_INCREMENT, day BIGINT NOT NULL, start BIGINT NOT NULL, end BIGINT NOT NULL, lesson_type_id BIGINT NOT NULL, room_id BIGINT NOT NULL, subject_id BIGINT NOT NULL, external_id BIGINT, UNIQUE INDEX external_id_index_idx (external_id), INDEX lesson_type_id_idx (lesson_type_id), INDEX room_id_idx (room_id), INDEX subject_id_idx (subject_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE lesson_type (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, code VARCHAR(1) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE linked_lessons (lesson1_id BIGINT, lesson2_id BIGINT, PRIMARY KEY(lesson1_id, lesson2_id)) ENGINE = INNODB;
@@ -18,6 +19,7 @@ CREATE TABLE sf_guard_remember_key (id INT AUTO_INCREMENT, user_id INT, remember
 CREATE TABLE sf_guard_user (id INT AUTO_INCREMENT, username VARCHAR(128) NOT NULL UNIQUE, algorithm VARCHAR(128) DEFAULT 'sha1' NOT NULL, salt VARCHAR(128), password VARCHAR(128), is_active TINYINT(1) DEFAULT '1', is_super_admin TINYINT(1) DEFAULT '0', last_login DATETIME, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX is_active_idx_idx (is_active), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE sf_guard_user_group (user_id INT, group_id INT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(user_id, group_id)) ENGINE = INNODB;
 CREATE TABLE sf_guard_user_permission (user_id INT, permission_id INT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(user_id, permission_id)) ENGINE = INNODB;
+ALTER TABLE free_room_interval ADD CONSTRAINT free_room_interval_room_id_room_id FOREIGN KEY (room_id) REFERENCES room(id);
 ALTER TABLE lesson ADD CONSTRAINT lesson_subject_id_subject_id FOREIGN KEY (subject_id) REFERENCES subject(id) ON DELETE CASCADE;
 ALTER TABLE lesson ADD CONSTRAINT lesson_room_id_room_id FOREIGN KEY (room_id) REFERENCES room(id);
 ALTER TABLE lesson ADD CONSTRAINT lesson_lesson_type_id_lesson_type_id FOREIGN KEY (lesson_type_id) REFERENCES lesson_type(id);

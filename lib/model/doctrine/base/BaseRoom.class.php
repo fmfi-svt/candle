@@ -10,17 +10,20 @@
  * @property integer $capacity
  * @property RoomType $RoomType
  * @property Doctrine_Collection $Lesson
+ * @property Doctrine_Collection $FreeRoomInterval
  * 
- * @method string              getName()         Returns the current record's "name" value
- * @method integer             getRoomTypeId()   Returns the current record's "room_type_id" value
- * @method integer             getCapacity()     Returns the current record's "capacity" value
- * @method RoomType            getRoomType()     Returns the current record's "RoomType" value
- * @method Doctrine_Collection getLesson()       Returns the current record's "Lesson" collection
- * @method Room                setName()         Sets the current record's "name" value
- * @method Room                setRoomTypeId()   Sets the current record's "room_type_id" value
- * @method Room                setCapacity()     Sets the current record's "capacity" value
- * @method Room                setRoomType()     Sets the current record's "RoomType" value
- * @method Room                setLesson()       Sets the current record's "Lesson" collection
+ * @method string              getName()             Returns the current record's "name" value
+ * @method integer             getRoomTypeId()       Returns the current record's "room_type_id" value
+ * @method integer             getCapacity()         Returns the current record's "capacity" value
+ * @method RoomType            getRoomType()         Returns the current record's "RoomType" value
+ * @method Doctrine_Collection getLesson()           Returns the current record's "Lesson" collection
+ * @method Doctrine_Collection getFreeRoomInterval() Returns the current record's "FreeRoomInterval" collection
+ * @method Room                setName()             Sets the current record's "name" value
+ * @method Room                setRoomTypeId()       Sets the current record's "room_type_id" value
+ * @method Room                setCapacity()         Sets the current record's "capacity" value
+ * @method Room                setRoomType()         Sets the current record's "RoomType" value
+ * @method Room                setLesson()           Sets the current record's "Lesson" collection
+ * @method Room                setFreeRoomInterval() Sets the current record's "FreeRoomInterval" collection
  * 
  * @package    candle
  * @subpackage model
@@ -65,6 +68,10 @@ abstract class BaseRoom extends sfDoctrineRecord
              'foreign' => 'id'));
 
         $this->hasMany('Lesson', array(
+             'local' => 'id',
+             'foreign' => 'room_id'));
+
+        $this->hasMany('FreeRoomInterval', array(
              'local' => 'id',
              'foreign' => 'room_id'));
     }
