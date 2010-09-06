@@ -62,7 +62,42 @@ class FreeRoomIntervalTable extends Doctrine_Table
             }
         }
 
+    }
 
+    /**
+     * Find valid matching intervals
+     * @param int $minLength Minimum interval length in minutes
+     * @param array $inIntervals array of array(day, start, end)
+     */
+    public function findIntervals($minLength, array $inIntervals, $hydration=Doctrine::HYDRATE_ON_DEMAND) {
+
+        $q = Doctrine_Query::create();
+
+        $q->from('FreeRoomInterval f')
+                ->innerJoin('f.Room r')
+                ->where('f.end-f.start>=?', $minLength);
+
+        $params = array();
+        $intervalWhere = '(('; //DQL
+        $firstInterval = true;
+
+        foreach ($inIntervals as $interval) {
+            if (!$firstInterval) {
+                $intervalWhere .= ') OR (';
+            }
+            $firstInterval = false;
+
+            $intervalWhere .= 'f.day = ? AND f.start <= ? AND f.end >= ?';
+            $params[] = $interval[0]; //day
+            $params[] = $interval[2]-$minLength; // end-minLength
+            $params[] = $interval[1]+$minLength; // start+minLength
+        }
+
+        $intervalWhere .= '))';
+
+        $q->andWhere($intervalWhere, $params);
+
+        return $q->execute(null, $hydration);
     }
 
 }
