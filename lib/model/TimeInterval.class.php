@@ -127,6 +127,44 @@ class TimeInterval {
         return true;
     }
 
+    public function isEmpty() {
+        return $this->getLength() == 0;
+    }
+
+    /**
+     * Intersect with a single interval, if the intervals
+     * do not intersect, return an empty interval.
+     * @param TimeInterval $other
+     */
+    public function intersect(TimeInterval $other) {
+
+        $newStart = max($this->getStart(), $other->getStart());
+        $newEnd = min($this->getEnd(), $other->getEnd());
+
+        if ($newStart > $newEnd) {
+            // TODO: maybe there should be one static
+            // instance of zero length interval
+            return new TimeInterval(0,0);
+        }
+
+        return new TimeInterval($newStart, $newEnd);
+    }
+
+    /**
+     * Intersect this interval with an array of intervals,
+     * producing an array containg result of intersection
+     */
+    public function intersectArray(array $more) {
+        $result = array();
+        foreach ($more as $other) {
+            $intersection = $this->intersect($other);
+            if (!$intersection->isEmpty()) {
+                $result[] = $intersection;
+            }
+        }
+        return $result;
+    }
+
     /**
      * Join any overlapping intervals in the array
      * @param array $intervals

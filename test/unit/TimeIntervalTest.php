@@ -25,7 +25,7 @@
  *
  */
 
-$t = new lime_test(38);
+$t = new lime_test(42);
 
 $i1 = new TimeInterval(123,456);
 $i2 = new TimeInterval(1440+123, 1440+456);
@@ -109,3 +109,10 @@ $t->ok(TimeInterval::intervalArraysEqual(TimeInterval::mergeIntervals($arr1), $a
 $t->ok(TimeInterval::intervalArraysEqual(TimeInterval::splitIntervalsByDays($arr2), $arr3),'splitIntervalsByDays');
 
 $t->is_deeply(TimeInterval::convertIntervalsToTriplesArray($arr3), $triples, 'convertIntervalsToTriplesArray');
+
+$t->ok(TimeInterval::intervalArraysEqual(array($i1->intersect($i5)), array(new TimeInterval(234, 456))));
+$t->ok(TimeInterval::intervalArraysEqual(array($i1->intersect($i6)), array(new TimeInterval(456, 456))));
+$t->is($i1->intersect($i7)->getLength(), 0);
+
+$t->ok(TimeInterval::intervalArraysEqual($i5->intersectArray(array($i1, $i6)),
+            array(new TimeInterval(234, 456), new TimeInterval(456, 567))));
