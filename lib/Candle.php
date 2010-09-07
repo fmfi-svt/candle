@@ -109,9 +109,15 @@ class Candle {
 
     static public function formatShortName($teacher) {
         $old_encoding = mb_internal_encoding();
+
+        if (isset($teacher['given_name'])) {
+            $given_name = $teacher['given_name'];
+        } else {
+            $given_name = null;
+        }
         
-        mb_internal_encoding(mb_detect_encoding($teacher['given_name']));
-        $shortName = ($teacher['given_name']?mb_substr($teacher['given_name'], 0, 1).'. ':'').$teacher['family_name'];
+        mb_internal_encoding(mb_detect_encoding($given_name));
+        $shortName = ($given_name?mb_substr($given_name, 0, 1).'. ':'').$teacher['family_name'];
         mb_internal_encoding($old_encoding);
         return $shortName;
     }
