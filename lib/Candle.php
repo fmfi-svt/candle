@@ -199,4 +199,21 @@ class Candle {
 
         return substr_compare($a, $b, 0, strlen($b), $caseInsensitive) === 0;
     }
+
+    /**
+     * Parse a date in YYYY-MM-DD format
+     * and return it in a unix timestamp
+     *
+     * @param string $date
+     * @return int the timestamp or false on error
+     */
+    static public function parseDate($date) {
+        $matches = array();
+
+        if (!preg_match('/^(\\d{4})-(\\d{2})-(\\d{2})$/', $date, $matches)) {
+            return false;
+        }
+
+        return mktime(0,0,0,intval($matches[2]), intval($matches[3]), intval($matches[1]));
+    }
 }

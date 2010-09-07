@@ -26,7 +26,7 @@
  */
 
 
-$t = new lime_test(63);
+$t = new lime_test(64);
 
 $t->is(Candle::formatTime(0),'0:00');
 $t->is(Candle::formatTime(5),'0:05');
@@ -102,3 +102,5 @@ $t->is(Candle::upper('Piškót'),'PIŠKÓT');
 
 $t->is(Candle::lower('VidlY'),'vidly');
 $t->is(Candle::lower('ČAJNÍK'),'čajník');
+
+$t->is(Candle::parseDate('2010-01-02'), mktime(0,0,0,1,2,2010));
