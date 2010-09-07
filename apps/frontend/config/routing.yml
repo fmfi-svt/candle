@@ -243,3 +243,7 @@ studentGroup_timetable_duplicate:
     requirements:
         sf_format: (?:html|txt|csv|ics|xml)
         sf_method: [get, post]
+
+freeRoom_search:
+    url: /volne-miestnosti/vyhladavanie
+    param: { module: freeRoom, action: search }

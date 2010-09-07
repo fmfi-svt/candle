@@ -32,10 +32,29 @@ class freeRoomActions extends sfActions {
 
         $this->form = new FreeRoomSearchForm();
 
-        $this->form->bind($request[$this->form->getName()]);
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        $this->roomIntervals = null;
 
         if ($this->form->isValid()) {
-            
+
+            $minLength = $this->form->getValue('requiredAmount');
+            $rawQueryIntervals = $this->form->getValue('searchIntervals');
+            $mergedIntervals = TimeInterval::mergeIntervals($rawQueryIntervals);
+            $queryIntervalsTriples = TimeInterval::convertIntervalsToTriplesArray($mergedIntervals);
+
+
+            $this->queryIntervals = $queryIntervalsTriples;
+            $this->roomIntervals = Doctrine::getTable('FreeRoomInterval')
+                    ->findIntervals($minLength, $queryIntervalsTriples, Doctrine::HYDRATE_ARRAY);
+
+            foreach ($this->roomIntervals as &$roomInterval) {
+                $timeInterval = TimeInterval::fromTriple($roomInterval['day'],
+                        $roomInterval['start'], $roomInterval['end']);
+                $printableIntervals = $timeInterval->intersectArray($mergedIntervals);
+                $printableIntervals = TimeInterval::filterByMinLength($printableIntervals, $minLength);
+                $roomInterval['printableIntervals'] = $printableIntervals;
+            }
         }
 
     }

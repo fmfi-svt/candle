@@ -165,6 +165,23 @@ class TimeInterval {
         return $result;
     }
 
+    public function toString() {
+        $str = Candle::formatShortDay($this->getStartDay());
+        $str .= ' ';
+        $str .= Candle::formatTime($this->getStartTime());
+        $str .= '-';
+        if ($this->overlapsDay()) {
+            $str .= Candle::formatShortDay($this->getEndDay());
+            $str .= ' ';
+        }
+        $str .= Candle::formatTime($this->getEndTime());
+        return $str;
+    }
+
+    public function __toString() {
+        return $this->toString();
+    }
+
     /**
      * Join any overlapping intervals in the array
      * @param array $intervals
@@ -276,6 +293,31 @@ class TimeInterval {
         }
 
         return true;
+    }
+
+    /**
+     * Create a new interval from day, start, and end
+     * @param array $triple
+     */
+    public static function fromTriple($day, $start, $end) {
+        $dayBase = $day*1440;
+        return new TimeInterval($dayBase+$start, $dayBase+$end);
+    }
+
+    /**
+     * Filter intervals, removing those that have lower length than specified
+     * @param array $intervals
+     * @param int $minLength
+     * @return array filtered intervals
+     */
+    public static function filterByMinLength(array $intervals, $minLength) {
+        $ret = array();
+        foreach ($intervals as $interval) {
+            if ($interval->getLength()>=$minLength) {
+                $ret[] = $interval;
+            }
+        }
+        return $ret;
     }
     
 

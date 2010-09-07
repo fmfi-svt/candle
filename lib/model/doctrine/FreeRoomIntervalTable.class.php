@@ -100,7 +100,7 @@ class FreeRoomIntervalTable extends Doctrine_Table
 
         $q->from('FreeRoomInterval f')
                 ->innerJoin('f.Room r')
-                ->where('f.end-f.start>=?', $minLength);
+                ->where('f.end - f.start >= ?', $minLength);
 
         $params = array();
         $intervalWhere = '(('; //DQL
