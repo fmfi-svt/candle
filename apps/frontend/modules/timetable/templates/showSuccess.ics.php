@@ -29,14 +29,11 @@ function lessonTime($basetime, $day, $time) {
 $calendar= new vcalendar();
 $calendar->setConfig('unique_id', $sf_request->getHost()); // todo pridat konfiguracnu volbu
 
-// vypocitaj zakladny cas od ktoreho budu vyexportovane hodiny
-// momentalne zaciatok letneho semestra 2010
-// TODO pridat konfiguracnu volbu
-$basetime = mktime(0,0,0,2,15,2010);
+// zakladny cas od ktoreho budu vyexportovane hodiny
+$basetime = sfConfig::get('app_semester_start');
 
-// koncovy cas opakovania - momentalne koniec letneho semestra 2010
-// TODO pridat konfiguracnu volbu
-$endtime = mktime(0,0,0,5,15,2010);
+// koncovy cas opakovania (koniec semestra)
+$endtime = sfConfig::get('app_semester_end')+86400;
 
 foreach ($layout->getLessons() as $lesson) {
 

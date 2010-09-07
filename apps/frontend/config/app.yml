@@ -2,6 +2,8 @@
 # http://www.symfony-project.org/reference/1_4/en/11-App
 
 all:
+    semester_start: 2010-09-20
+    semester_end: 2010-12-17
     sf_guard_plugin:
         routes_register: false
         success_signin_url: @homepage # the plugin use the referer as default
