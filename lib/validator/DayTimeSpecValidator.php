@@ -33,7 +33,7 @@ class DayTimeSpecValidator extends sfValidatorString {
 
     /**
      * Validate a string specifying intervals and convert
-     * it into array of array(start, end) [in week times in minutes]
+     * it into array of TimeInterval objects
      *
      * Po 14:30-15:20,Ut 17:00-St 20:00, Po 14:20-15:30
      *
@@ -77,7 +77,7 @@ class DayTimeSpecValidator extends sfValidatorString {
                 throw new sfValidatorError($this, 'invalid', array('value' => $value, 'spec'=>$spec));
             }
 
-            $items[] = array($time1, $time2);
+            $items[] = new TimeInterval($time1, $time2);
 
         }
 

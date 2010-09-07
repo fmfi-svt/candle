@@ -31,35 +31,35 @@ $t = new lime_test(7);
 $v = new DayTimeSpecValidator();
 
 try {
-    $t->is_deeply($v->clean('Po 00:00-00:10'), array(array(0,10)));
+    $t->ok(TimeInterval::intervalArraysEqual($v->clean('Po 00:00-00:10'), array(new TimeInterval(0,10))));
 }
 catch (sfValidatorError $e) {
     $t->fail('This input did not validate');
 }
 
 try {
-    $t->is_deeply($v->clean('Po 00:00-Po 00:10'), array(array(0,10)));
+    $t->ok(TimeInterval::intervalArraysEqual($v->clean('Po 00:00-Po 00:10'), array(new TimeInterval(0,10))));
 }
 catch (sfValidatorError $e) {
     $t->fail('This input did not validate');
 }
 
 try {
-    $t->is_deeply($v->clean('Po 1:10-2:20'), array(array(70,140)));
+    $t->ok(TimeInterval::intervalArraysEqual($v->clean('Po 1:10-2:20'), array(new TimeInterval(70,140))));
 }
 catch (sfValidatorError $e) {
     $t->fail('This input did not validate');
 }
 
 try {
-    $t->is_deeply($v->clean('Ut 00:00-00:00'), array(array(24*60,24*60)), 'Funguje jeden den');
+    $t->ok(TimeInterval::intervalArraysEqual($v->clean('Ut 00:00-00:00'), array(new TimeInterval(24*60,24*60))), 'Funguje jeden den');
 }
 catch (sfValidatorError $e) {
     $t->fail('This input did not validate. Funguje jeden den.');
 }
 
 try {
-    $t->is_deeply($v->clean('Ut 00:00-St 00:00'), array(array(24*60,2*24*60)), 'Funguju dva dni');
+    $t->ok(TimeInterval::intervalArraysEqual($v->clean('Ut 00:00-St 00:00'), array(new TimeInterval(24*60,2*24*60))), 'Funguju dva dni');
 }
 catch (sfValidatorError $e) {
     $t->fail('This input did not validate. Funguju dva dni');
@@ -74,7 +74,7 @@ catch (sfValidatorError $e) {
 }
 
 try {
-    $t->is_deeply($v->clean('  Ut 00:00-St 00:00, Po 1:00-2:00, Ut 00:00-2:00'), array(array(24*60,2*24*60), array(60,120),array(24*60,26*60)), 'Funguju dva dni');
+    $t->ok(TimeInterval::intervalArraysEqual($v->clean('  Ut 00:00-St 00:00, Po 1:00-2:00, Ut 00:00-2:00'), array(new TimeInterval(24*60,2*24*60), new TimeInterval(60,120), new TimeInterval(24*60,26*60))), 'Funguje komplexne zadanie');
 }
 catch (sfValidatorError $e) {
     $t->fail('This input did not validate. Funguje zoznam specifikacii');

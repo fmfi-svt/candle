@@ -218,6 +218,27 @@ class TimeInterval {
             return 1;
         }
     }
+
+    public static function intervalArraysEqual($array1, $array2) {
+        if (count($array1) != count($array2)) {
+            return false;
+        }
+
+        for ($i = 0; $i < count($array1); $i++) {
+            $a = $array1[$i];
+            $b = $array2[$i];
+
+            if ($a->getStart() != $b->getStart()) {
+                return false;
+            }
+
+            if ($a->getEnd() != $b->getEnd()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
     
 
 }

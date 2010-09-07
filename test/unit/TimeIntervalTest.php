@@ -25,27 +25,6 @@
  *
  */
 
-function intervalArraysMatch($array1, $array2) {
-    if (count($array1) != count($array2)) {
-        return false;
-    }
-
-    for ($i = 0; $i < count($array1); $i++) {
-        $a = $array1[$i];
-        $b = $array2[$i];
-
-        if ($a->getStart() != $b->getStart()) {
-            return false;
-        }
-
-        if ($a->getEnd() != $b->getEnd()) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 $t = new lime_test(38);
 
 $i1 = new TimeInterval(123,456);
@@ -122,11 +101,11 @@ $t->is($i1->union($i5)->getStart(), 123);
 $t->is($i1->union($i5)->getEnd(), 567);
 
 // tests of this test
-$t->ok(intervalArraysMatch($arr1, $arr1));
-$t->ok(!intervalArraysMatch($arr1, $arr2));
+$t->ok(TimeInterval::intervalArraysEqual($arr1, $arr1));
+$t->ok(!TimeInterval::intervalArraysEqual($arr1, $arr2));
 
-$t->ok(intervalArraysMatch(TimeInterval::mergeIntervals($arr1), $arr2));
+$t->ok(TimeInterval::intervalArraysEqual(TimeInterval::mergeIntervals($arr1), $arr2));
 
-$t->ok(intervalArraysMatch(TimeInterval::splitIntervalsByDays($arr2), $arr3),'splitIntervalsByDays');
+$t->ok(TimeInterval::intervalArraysEqual(TimeInterval::splitIntervalsByDays($arr2), $arr3),'splitIntervalsByDays');
 
 $t->is_deeply(TimeInterval::convertIntervalsToTriplesArray($arr3), $triples, 'convertIntervalsToTriplesArray');
