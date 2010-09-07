@@ -79,6 +79,7 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('warnings-as-errors', null, sfCommandOption::PARAMETER_NONE, 'Treat warnings as errors'),
         new sfCommandOption('no-removes', null, sfCommandOption::PARAMETER_NONE, 'Don\'t remove objects in db that were deleted from xml'),
         new sfCommandOption('message', null, sfCommandOption::PARAMETER_OPTIONAL, 'Description of the update', ''),
+        new sfCommandOption('no-recalculate-free-rooms', null, sfCommandOption::PARAMETER_NONE, 'Don\'t recalculate free room intervals'),
     ));
  
     $this->namespace = 'candle';
@@ -843,7 +844,7 @@ EOF;
     xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
 
     // Sice som uz znizil pamatove naroky, stale treba zvysit limit
-    ini_set("memory_limit","96M");
+    ini_set("memory_limit","128M");
 
     // Tieto DDL statementy musia byt pred createTransaction,
     // pretoze MySQL automaticky commituje transakciu po akomkolvek
@@ -885,6 +886,11 @@ EOF;
         if (!$options['no-removes']) {
             $this->deleteExcessLessons();
             $this->deleteExcessSubjects();
+        }
+
+        if (!$options['no-recalculate-free-rooms']) {
+            $this->logSection('candle', 'Calculating free room intervals');
+            Doctrine::getTable('FreeRoomInterval')->calculate();
         }
 
         $this->insertDataUpdate();
