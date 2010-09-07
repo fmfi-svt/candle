@@ -80,6 +80,7 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('no-removes', null, sfCommandOption::PARAMETER_NONE, 'Don\'t remove objects in db that were deleted from xml'),
         new sfCommandOption('message', null, sfCommandOption::PARAMETER_OPTIONAL, 'Description of the update', ''),
         new sfCommandOption('no-recalculate-free-rooms', null, sfCommandOption::PARAMETER_NONE, 'Don\'t recalculate free room intervals'),
+        new sfCommandOption('memory', null, sfCommandOption::PARAMETER_OPTIONAL, 'Memory limit for this task, e.g. 128M', '128M'),
     ));
  
     $this->namespace = 'candle';
@@ -844,7 +845,7 @@ EOF;
     xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
 
     // Sice som uz znizil pamatove naroky, stale treba zvysit limit
-    ini_set("memory_limit","128M");
+    ini_set("memory_limit",$options['memory']);
 
     // Tieto DDL statementy musia byt pred createTransaction,
     // pretoze MySQL automaticky commituje transakciu po akomkolvek
