@@ -170,11 +170,17 @@ class TimeInterval {
         $str .= ' ';
         $str .= Candle::formatTime($this->getStartTime());
         $str .= '-';
+        $endDay = $this->getEndDay();
+        $endTime = $this->getEndTime();
+        if ($endTime == 0) {
+            $endDay -= 1;
+            $endTime = 1440; // 24:00
+        }
         if ($this->overlapsDay()) {
-            $str .= Candle::formatShortDay($this->getEndDay());
+            $str .= Candle::formatShortDay($endDay);
             $str .= ' ';
         }
-        $str .= Candle::formatTime($this->getEndTime());
+        $str .= Candle::formatTime($endTime);
         return $str;
     }
 

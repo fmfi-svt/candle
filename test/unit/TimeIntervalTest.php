@@ -25,7 +25,7 @@
  *
  */
 
-$t = new lime_test(42);
+$t = new lime_test(46);
 
 $i1 = new TimeInterval(123,456);
 $i2 = new TimeInterval(1440+123, 1440+456);
@@ -116,3 +116,8 @@ $t->is($i1->intersect($i7)->getLength(), 0);
 
 $t->ok(TimeInterval::intervalArraysEqual($i5->intersectArray(array($i1, $i6)),
             array(new TimeInterval(234, 456), new TimeInterval(456, 567))));
+
+$t->is($i1->toString(), 'Po 2:03-7:36');
+$t->is($i2->toString(), 'Ut 2:03-7:36');
+$t->is($i3->toString(), 'Ut 0:00-24:00');
+$t->is($i4->toString(), 'Ut 2:03-St 0:01');
