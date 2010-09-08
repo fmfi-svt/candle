@@ -70,7 +70,7 @@ end_slot();
     if ($queryIntervals):
 
         echo '<p>';
-        echo sprintf('Dotazu na prienik pohyblivého aspoň %d minútového intervalu so zjednotením intervalov ', $minLength);
+        echo sprintf('Dotazu na prienik pohyblivého aspoň %d minútového intervalu so zjednotením intervalov (', $minLength);
 
         $first = true;
         foreach ($queryIntervals as $queryInterval) {
@@ -84,7 +84,11 @@ end_slot();
             echo '&gt;';
         }
 
-        echo '</p>';
+        if (count($queryIntervals) == 0) {
+            echo '∅';
+        }
+
+        echo ')</p>';
 
     endif;
 
