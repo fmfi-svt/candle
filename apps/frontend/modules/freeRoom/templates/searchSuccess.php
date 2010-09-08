@@ -93,7 +93,9 @@ end_slot();
     else:
 
 ?>
-
+<p>Výsledky nezahrnujú externé miestnosti a seminárne miestnosti (do seminárnych miestností sa
+    ťažko presúva nejaká výučba, pretože obsadenie týchto miestností podlieha
+    samostatnému schvaľovaciemu procesu) .</p>
 <table class="vysledky_podrobneho_hladania">
     <thead>
         <tr><th colspan="4">Voľno</th><th colspan="3">Miestnosť</th></tr>
