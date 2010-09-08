@@ -46,6 +46,12 @@
                     <hr />
 
                     <?php include_component('layout', 'lastUpdate'); ?>
+                    <br />
+                    Copyright 2010 Martin Sucha. Zdrojové kódy sa nachádzajú na
+                    <a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">stránke projektu</a>.
+                    Táto aplikácia je študentský projekt a nie je oficiálne podporovaná
+                    pracovníkmi CIT, všetky otázky smerujte na <a href="mailto:sucha14@st.fmph.uniba.sk">autora</a>,
+                    časté odpovede nájdete v sekcii <a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki/FAQ">FAQ</a> />
                 </div>
             </div>
         </div>
@@ -76,7 +82,8 @@
             --><li><a href="https://ne.st.dcs.fmph.uniba.sk/">projekty</a></li><!--
             --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">issue tracker rozvrhu</a></li><!--
             --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/issues/new">nahlásiť chybu</a></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki">Wiki / FAQ / Podpora</a></li><!--
+            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki">Dokumentácia / Podpora</a></li><!--
+            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki/FAQ">FAQ</a></li><!--
         --></ul>
     </div>    
 </div>
