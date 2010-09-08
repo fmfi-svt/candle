@@ -35,18 +35,20 @@ class freeRoomActions extends sfActions {
         $this->form->bind($request->getParameter($this->form->getName()));
 
         $this->roomIntervals = null;
+        $this->queryIntervals = null;
 
         if ($this->form->isValid()) {
 
             $minLength = $this->form->getValue('requiredAmount');
             $rawQueryIntervals = $this->form->getValue('searchIntervals');
             $mergedIntervals = TimeInterval::mergeIntervals($rawQueryIntervals);
+            $mergedIntervals = TimeInterval::filterByMinLength($mergedIntervals, $minLength);
             $queryIntervalsTriples = TimeInterval::convertIntervalsToTriplesArray($mergedIntervals);
-
-
-            $this->queryIntervals = $queryIntervalsTriples;
+            $minRoomCapacity = $this->form->getValue('minimalRoomCapacity');
+            
+            $this->queryIntervals = $mergedIntervals;
             $this->roomIntervals = Doctrine::getTable('FreeRoomInterval')
-                    ->findIntervals($minLength, $queryIntervalsTriples, Doctrine::HYDRATE_ARRAY);
+                    ->findIntervals($minLength, $queryIntervalsTriples, $minRoomCapacity);
 
             foreach ($this->roomIntervals as &$roomInterval) {
                 $timeInterval = TimeInterval::fromTriple($roomInterval['day'],

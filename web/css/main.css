@@ -703,3 +703,29 @@ h1 {
 h1.posunuty {
     margin-left: 32px;
 }
+
+.form_box {
+    margin: 0.5em;
+    margin-top: 1em;
+}
+
+.form_box label {
+    display: block;
+    font-weight: bold;
+}
+
+.form_box_content {
+    padding-left: 1em;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+span.example {
+    padding: 0.2em 0.4em;
+    font-family: monospace;
+    font-weight: bold;
+    border: 1px dotted white;
+    display: inline-block;
+}
