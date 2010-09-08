@@ -47,29 +47,41 @@ class DayTimeSpecValidator extends sfValidatorString {
 
         $items = array();
 
+        $carryDay = -1;
+
         foreach ($spl as $spec) {
 
             $matches = array();
 
-            if (!preg_match('/^ *(?P<day1>[A-Za-z]{2,}) (?P<hour1>\\d{1,2}):(?P<min1>\\d{2})-(?:(?P<day2>[A-Za-z]{2,}) )?(?P<hour2>\\d{1,2}):(?P<min2>\\d{2}) *$/', $spec, $matches)) {
+            if (!preg_match('/^ *(?:(?P<day1>[A-Za-z]{2,}) )?(?P<hour1>\\d{1,2}):(?P<min1>\\d{2})-(?:(?P<day2>[A-Za-z]{2,}) )?(?P<hour2>\\d{1,2}):(?P<min2>\\d{2}) *$/', $spec, $matches)) {
                 throw new sfValidatorError($this, 'invalid', array('value' => $value, 'spec'=>$spec));
             }
 
-            $day1 = $matches['day1'];
+            if (!empty($matches['day1'])) {
+                $day1 = $matches['day1'];
+                $dayIndex1 = Candle::parseDay($day1);
+                $carryDay = $dayIndex1;
+            }
+            else if ($carryDay>=0) {
+                $dayIndex1 = $carryDay;
+            }
+            else {
+                throw new sfValidatorError($this, 'invalid', array('value' => $value, 'spec'=>$spec));
+            }
             $hour1 = intval($matches['hour1']);
             $min1 = intval($matches['min1']);
             if (!empty($matches['day2'])) {
                 $day2 = $matches['day2'];
+                $dayIndex2 = Candle::parseDay($day2);
+                $carryDay = -1;
             }
             else {
-                $day2 = $day1;
+                $dayIndex2 = $dayIndex1;
             }
             $hour2 = intval($matches['hour2']);
             $min2 = intval($matches['min2']);
 
-            $dayIndex1 = Candle::parseDay($day1);
-            $dayIndex2 = Candle::parseDay($day2);
-
+            
             $time1 = $dayIndex1*24*60+$hour1*60+$min1;
             $time2 = $dayIndex2*24*60+$hour2*60+$min2;
 

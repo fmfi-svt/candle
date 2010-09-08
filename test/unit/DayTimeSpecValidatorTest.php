@@ -26,7 +26,7 @@
  */
 
 
-$t = new lime_test(7);
+$t = new lime_test(9);
 
 $v = new DayTimeSpecValidator();
 
@@ -78,4 +78,18 @@ try {
 }
 catch (sfValidatorError $e) {
     $t->fail('This input did not validate. Funguje zoznam specifikacii');
+}
+try {
+    $t->ok(TimeInterval::intervalArraysEqual($v->clean('  Ut 00:00-10:00, 11:00-20:00, Ut 00:00-2:00'), array(new TimeInterval(24*60,34*60), new TimeInterval(35*60,44*60), new TimeInterval(24*60,26*60))), 'Funguje komplexne zadanie');
+}
+catch (sfValidatorError $e) {
+    $t->fail('This input did not validate. Funguje zoznam specifikacii');
+}
+
+try {
+    $v->clean('St 10:00-Stv 00:10,12:00-13:00');
+    $t->fail('Carries ambigous day');
+}
+catch (sfValidatorError $e) {
+    $t->pass();
 }
