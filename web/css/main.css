@@ -722,7 +722,7 @@ h1.posunuty {
     width: 100%;
 }
 
-span.example {
+#obsah_in span.example {
     padding: 0.2em 0.4em;
     font-family: monospace;
     font-weight: bold;
@@ -730,28 +730,32 @@ span.example {
     display: inline-block;
 }
 
-span.bad.example {
+#obsah_in span.bad.example {
     text-decoration: line-through;
 }
 
-table.vysledky_podrobneho_hladania {
+#obsah_in table.vysledky_podrobneho_hladania {
     width: 100%;
 }
 
-table.vysledky_podrobneho_hladania th {
+#obsah_in table.vysledky_podrobneho_hladania th {
     background: #D3D5DD;
     color: black;
     padding: 0.5em;
     font-weight: normal;
 }
 
-table.vysledky_podrobneho_hladania td {
+#obsah_in table.vysledky_podrobneho_hladania td {
     color: white;
     background: #666B7E;
     padding: 0.3em;
 }
 
-table.vysledky_podrobneho_hladania tbody tr:hover td {
+#obsah_in table.vysledky_podrobneho_hladania tbody tr:hover td {
     background: #D3D5DD;
     color: black;
+}
+
+#obsah_in table.vysledky_podrobneho_hladania tbody tr:hover td a {
+    color: blue;
 }
