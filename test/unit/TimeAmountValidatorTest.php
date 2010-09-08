@@ -26,7 +26,7 @@
  */
 
 
-$t = new lime_test(12);
+$t = new lime_test(13);
 
 $v = new TimeAmountValidator();
 
@@ -87,6 +87,7 @@ catch (sfValidatorError $e) {
 }
 
 $t->is($v->clean('2 v.h'),90);
+$t->is($v->clean('2 v.h.'),90);
 
 try {
     $v->clean('jksdjdks');
