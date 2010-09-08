@@ -94,12 +94,13 @@ class FreeRoomIntervalTable extends Doctrine_Table
      * @param int $minLength Minimum interval length in minutes
      * @param array $inIntervals array of array(day, start, end)
      */
-    public function findIntervals($minLength, array $inIntervals, $hydration=Doctrine::HYDRATE_ON_DEMAND) {
+    public function findIntervals($minLength, array $inIntervals, $minKapacitaMiestnosti=0, $seminarne=false) {
 
         $q = Doctrine_Query::create();
 
         $q->from('FreeRoomInterval f')
                 ->innerJoin('f.Room r')
+                ->leftJoin('r.RoomType t')
                 ->where('f.end - f.start >= ?', $minLength);
 
         $params = array();
@@ -122,7 +123,13 @@ class FreeRoomIntervalTable extends Doctrine_Table
 
         $q->andWhere($intervalWhere, $params);
 
-        return $q->execute(null, $hydration);
+        $q->andWhere('r.capacity >= ?', $minKapacitaMiestnosti);
+
+        if (!$seminarne) {
+            $q->andWhere('t.code != ?', 's');
+        }
+
+        return $q->execute(null, Doctrine::HYDRATE_ARRAY);
     }
 
 }

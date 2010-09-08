@@ -21,7 +21,11 @@ end_slot();
 
 <?php if ($roomIntervals): ?>
 
-<table><thead><tr><th>Deň</th><th>Od</th><th>Do</th><th>Miestnosť</th><th>Kapacita miestnosti</th></tr></thead>
+<table>
+    <thead>
+        <tr><th colspan="3">Voľno</th><th colspan="3">Miestnosť</th></tr>
+        <tr><th>Deň</th><th>Od</th><th>Do</th><th>Názov</th><th>Kapacita</th><th>Typ</th></tr>
+    </thead>
 <?php foreach ($roomIntervals as $interval) {
     foreach ($interval['printableIntervals'] as $timeInterval) {
         echo '<tr>';
@@ -39,6 +43,9 @@ end_slot();
         echo '</td>';
         echo '<td>';
         echo $interval['Room']['capacity'];
+        echo '</td>';
+        echo '<td>';
+        echo $interval['Room']['RoomType']['name'];
         echo '</td>';
         echo '</tr>';
     }
