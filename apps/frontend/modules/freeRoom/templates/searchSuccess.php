@@ -12,7 +12,7 @@ include_component('timetable','top');
 end_slot();
 
 ?>
-<h1>Vyhľadávanie voľných miestností</h1>
+<h1 class="posunuty">Vyhľadávanie voľných miestností</h1>
 
 <?php echo form_tag('@freeRoom_search'); ?>
 <?php echo $form; ?>
@@ -21,25 +21,28 @@ end_slot();
 
 <?php if ($roomIntervals): ?>
 
-<table><thead><tr><th>Čas</th><th>Miestnosť</th></tr></thead>
+<table><thead><tr><th>Deň</th><th>Od</th><th>Do</th><th>Miestnosť</th><th>Kapacita miestnosti</th></tr></thead>
 <?php foreach ($roomIntervals as $interval) {
-    echo '<tr>';
-    echo '<td>';
-    $first = true;
     foreach ($interval['printableIntervals'] as $timeInterval) {
-        if (!$first) {
-            echo ', ';
-        }
-        $first = false;
-        echo $timeInterval;
+        echo '<tr>';
+        echo '<td>';
+        echo Candle::formatShortDay($timeInterval->getStartDay());
+        echo '</td>';
+        echo '<td>';
+        echo Candle::formatTime($timeInterval->getStartTime());
+        echo '</td>';
+        echo '<td>';
+        echo Candle::formatTime($timeInterval->getEndTime());
+        echo '</td>';
+        echo '<td>';
+        echo $interval['Room']['name'];
+        echo '</td>';
+        echo '<td>';
+        echo $interval['Room']['capacity'];
+        echo '</td>';
+        echo '</tr>';
     }
-    echo ' | ';
-    echo $interval['day'].' '.$interval['start'].' '.$interval['end'];
-    echo '</td>';
-    echo '<td>';
-    echo $interval['Room']['name'];
-    echo '</td>';
-    echo '</tr>';
+    
 }
 ?>
 </table>
