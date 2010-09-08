@@ -27,7 +27,7 @@
     </div>
 </div>
 <div class="panel_cast" id="panel_cast_ucitelia">
-    <h2><a href="#panel_cast_ucitelia">Učitelia</a></h2>
+    <h2><a href="#panel_cast_ucitelia">Rozvrhy pre učiteľov</a></h2>
     <div class="panel_cast_obsah">
         <?php include_stylesheets_for_form($teacherForm) ?>
         <?php include_javascripts_for_form($teacherForm) ?>
@@ -47,7 +47,7 @@
     </div>
 </div>
 <div class="panel_cast" id="panel_cast_miestnosti">
-    <h2><a href="#panel_cast_miestnosti">Miestnosti</a></h2>
+    <h2><a href="#panel_cast_miestnosti">Rozvrhy pre miestnosti</a></h2>
     <div class="panel_cast_obsah">
         <?php include_stylesheets_for_form($roomForm) ?>
         <?php include_javascripts_for_form($roomForm) ?>
@@ -67,7 +67,7 @@
     </div>
 </div>
 <div class="panel_cast" id="panel_cast_kruzky">
-    <h2><a href="#panel_cast_kruzky">Krúžky</a></h2>
+    <h2><a href="#panel_cast_kruzky">Rozvrhy pre krúžky</a></h2>
     <div class="panel_cast_obsah">
         <?php include_stylesheets_for_form($studentGroupForm) ?>
         <?php include_javascripts_for_form($studentGroupForm) ?>
@@ -84,5 +84,14 @@
                         'studentGroups' => $studentGroups,
                     )); ?>
         <?php endif; ?>
+    </div>
+</div>
+
+<div class="panel_cast_no_collapse" id="panel_cast_nastroje">
+    <h2>Nástroje</h2>
+    <div class="panel_cast_obsah">
+        <ul><li>
+        <?php echo link_to('Vyhľadávanie voľných miestností','@freeRoom_search_parameters'); ?>
+        </li></ul>
     </div>
 </div>

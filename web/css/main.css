@@ -202,7 +202,7 @@ form {
     padding: 5px;
 }
 
-.panel_cast h2 {
+.panel_cast h2, .panel_cast_no_collapse h2 {
     font-size: 100%;
     background: #333;
     color: white;
@@ -221,7 +221,7 @@ form {
     
 }
 
-.panel_cast h2 a {
+.panel_cast h2 a, .panel_cast_no_collapse h2 {
     display: block;
     color: white;
     text-decoration: none;
@@ -270,6 +270,21 @@ form {
 
 .panel_cast.collapsed .panel_cast_obsah {
     display: none;
+}
+
+#panel_cast_nastroje .panel_cast_obsah {
+    padding: 0.3em;
+}
+
+#panel_cast_nastroje .panel_cast_obsah ul {
+    margin-top: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-left: 1.5em;
+}
+
+#panel_cast_nastroje a {
+    color: white;
 }
 
 ul.vysledky_hladania {
