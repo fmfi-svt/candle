@@ -35,6 +35,29 @@ class Candle {
         }
         return $h.':'.$m;
     }
+
+    static public function formatTimeAmount($timeVal) {
+        $ret = '';
+
+        if ($timeVal == 0) return '-';
+
+        $h = intval($timeVal/60);
+        $m = $timeVal % 60;
+
+        if ($h > 0) {
+            $ret .= $h.'h';
+        }
+
+        if ($h > 0 && $m > 0) {
+            $ret .= ' ';
+        }
+
+        if ($m > 0) {
+            $ret .= $m.'m';
+        }
+        
+        return $ret;
+    }
     
     static public function formatShortDay($dayNum) {
         $days = array('Po', 'Ut', 'St', 'Št', 'Pi');

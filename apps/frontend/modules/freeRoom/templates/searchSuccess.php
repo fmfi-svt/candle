@@ -97,7 +97,7 @@ end_slot();
 <table>
     <thead>
         <tr><th colspan="3">Voľno</th><th colspan="3">Miestnosť</th></tr>
-        <tr><th>Deň</th><th>Od</th><th>Do</th><th>Názov</th><th>Kapacita</th><th>Typ</th></tr>
+        <tr><th>Deň</th><th>Od</th><th>Do</th><th>Dĺžka</th><th>Názov</th><th>Kapacita</th><th>Typ</th></tr>
     </thead>
 <?php foreach ($roomIntervals as $interval) {
     foreach ($interval['printableIntervals'] as $timeInterval) {
@@ -109,7 +109,15 @@ end_slot();
         echo Candle::formatTime($timeInterval->getStartTime());
         echo '</td>';
         echo '<td>';
-        echo Candle::formatTime($timeInterval->getEndTime());
+        if (!$timeInterval->isEmpty() && $timeInterval->getEndTime() == 0) {
+            echo '24:00';
+        }
+        else {
+            echo Candle::formatTime($timeInterval->getEndTime());
+        }
+        echo '</td>';
+        echo '<td>';
+        echo Candle::formatTimeAmount($timeInterval->getLength());
         echo '</td>';
         echo '<td>';
         echo $interval['Room']['name'];

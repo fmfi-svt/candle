@@ -26,7 +26,7 @@
  */
 
 
-$t = new lime_test(64);
+$t = new lime_test(68);
 
 $t->is(Candle::formatTime(0),'0:00');
 $t->is(Candle::formatTime(5),'0:05');
@@ -34,6 +34,11 @@ $t->is(Candle::formatTime(60),'1:00');
 $t->is(Candle::formatTime(65),'1:05');
 $t->is(Candle::formatTime(990),'16:30');
 $t->is(Candle::formatTime(1090),'18:10');
+
+$t->is(Candle::formatTimeAmount(0), '-');
+$t->is(Candle::formatTimeAmount(25), '25m');
+$t->is(Candle::formatTimeAmount(60), '1h');
+$t->is(Candle::formatTimeAmount(85), '1h 25m');
 
 $t->is(Candle::formatShortDay(0),'Po');
 $t->is(Candle::formatShortDay(1),'Ut');
