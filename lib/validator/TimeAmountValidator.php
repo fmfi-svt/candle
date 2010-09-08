@@ -86,7 +86,7 @@ class TimeAmountValidator extends sfValidatorString {
 
         $matches = array();
 
-        if (preg_match('/^(\d+(?:[.,]\d+)?) ?v\\.? ?h$/', $clean, $matches)) {
+        if (preg_match('/^(\d+(?:[.,]\d+)?) ?v\\.? ?h\\.?$/', $clean, $matches)) {
             $float = str_replace(',', '.', $matches[1]);
             $timeInMinutes = intval(floatval($float)*45);
             return $timeInMinutes;
