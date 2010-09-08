@@ -729,3 +729,7 @@ span.example {
     border: 1px dotted white;
     display: inline-block;
 }
+
+span.bad.example {
+    text-decoration: line-through;
+}
