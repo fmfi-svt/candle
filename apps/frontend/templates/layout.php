@@ -69,11 +69,14 @@
         <?php include_component('user','menu'); ?>
     </div>
     <div id="vrch_riadok1_vlavo">
-        <h2 class="pristupnost">Užitočné stránky</h2>
+        <h2 class="pristupnost">Linky</h2>
         <ul><!--
             --><li><?php echo link_to('Rozvrh', '@homepage', array('class'=>'selected')) ?></li><!--
             --><li><a href="https://fajr.dcs.fmph.uniba.sk/">fajr</a></li><!--
             --><li><a href="https://ne.st.dcs.fmph.uniba.sk/">projekty</a></li><!--
+            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">issue tracker rozvrhu</a></li><!--
+            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/issues/new">nahlásiť chybu</a></li><!--
+            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki">Wiki / FAQ / Podpora</a></li><!--
         --></ul>
     </div>    
 </div>
