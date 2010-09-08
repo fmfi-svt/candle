@@ -59,4 +59,10 @@ class freeRoomActions extends sfActions {
 
     }
 
+    public function executeParams(sfWebRequest $request) {
+        $this->form = new FreeRoomSearchForm();
+        $this->roomIntervals = null;
+        $this->setTemplate('search');
+    }
+
 }
