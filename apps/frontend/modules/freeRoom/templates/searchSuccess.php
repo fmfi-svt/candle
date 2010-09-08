@@ -94,11 +94,12 @@ end_slot();
 
 ?>
 
-<table>
+<table class="vysledky_podrobneho_hladania">
     <thead>
         <tr><th colspan="4">Voľno</th><th colspan="3">Miestnosť</th></tr>
         <tr><th>Deň</th><th>Od</th><th>Do</th><th>Dĺžka</th><th>Názov</th><th>Kapacita</th><th>Typ</th></tr>
     </thead>
+    <tbody>
 <?php foreach ($roomIntervals as $interval) {
     foreach ($interval['printableIntervals'] as $timeInterval) {
         echo '<tr>';
@@ -133,6 +134,7 @@ end_slot();
     
 }
 ?>
+    </tbody>
 </table>
 
 <?php
