@@ -45,7 +45,8 @@ class freeRoomActions extends sfActions {
             $mergedIntervals = TimeInterval::filterByMinLength($mergedIntervals, $minLength);
             $queryIntervalsTriples = TimeInterval::convertIntervalsToTriplesArray($mergedIntervals);
             $minRoomCapacity = $this->form->getValue('minimalRoomCapacity');
-            
+
+            $this->minLength = $minLength;
             $this->queryIntervals = $mergedIntervals;
             $this->roomIntervals = Doctrine::getTable('FreeRoomInterval')
                     ->findIntervals($minLength, $queryIntervalsTriples, $minRoomCapacity);

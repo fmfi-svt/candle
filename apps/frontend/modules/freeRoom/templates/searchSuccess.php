@@ -64,7 +64,29 @@ end_slot();
 
 <?php if ($roomIntervals): ?>
 <hr />
+<h2>Výsledky vyhľadávania</h2>
 <?php
+
+    if ($queryIntervals):
+
+        echo '<p>';
+        echo sprintf('Dotazu na prienik pohyblivého aspoň %d minútového intervalu so zjednotením intervalov ', $minLength);
+
+        $first = true;
+        foreach ($queryIntervals as $queryInterval) {
+            if (!$first) {
+                echo " ∪ ";
+            }
+            $first = false;
+
+            echo '&lt;';
+            echo $queryInterval;
+            echo '&gt;';
+        }
+
+        echo '</p>';
+
+    endif;
 
     if (count($roomIntervals) == 0):
         echo '<p>Výsledkom vyhľadávania nevyhovuje žiaden záznam</p>';
