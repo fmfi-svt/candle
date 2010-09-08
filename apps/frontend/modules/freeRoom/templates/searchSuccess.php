@@ -96,7 +96,7 @@ end_slot();
 
 <table>
     <thead>
-        <tr><th colspan="3">Voľno</th><th colspan="3">Miestnosť</th></tr>
+        <tr><th colspan="4">Voľno</th><th colspan="3">Miestnosť</th></tr>
         <tr><th>Deň</th><th>Od</th><th>Do</th><th>Dĺžka</th><th>Názov</th><th>Kapacita</th><th>Typ</th></tr>
     </thead>
 <?php foreach ($roomIntervals as $interval) {
