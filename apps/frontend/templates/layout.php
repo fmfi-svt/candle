@@ -79,9 +79,9 @@
         <ul><!--
             --><li><?php echo link_to('Rozvrh', '@homepage', array('class'=>'selected')) ?></li><!--
             --><li><a href="https://fajr.dcs.fmph.uniba.sk/">fajr</a></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/">projekty</a></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">issue tracker rozvrhu</a></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/issues/new">nahlásiť chybu</a></li><!--
+            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/">Projekty</a></li><!--
+            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">Issue tracker rozvrhu</a></li><!--
+            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/issues/new">Nahlásiť chybu</a></li><!--
             --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki">Dokumentácia / Podpora</a></li><!--
             --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki/FAQ">FAQ</a></li><!--
         --></ul>
