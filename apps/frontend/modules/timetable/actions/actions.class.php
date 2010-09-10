@@ -244,10 +244,10 @@ class timetableActions extends sfActions {
         ));
 
         if ($this->form->isValid()) {
-            if ($this->timetable->isModified()) {
+            if ($this->timetable->isModified() || $this->timetable->getUserTimetableId() == null) {
                 $this->timetable->save($user->getId());
             }
-            $userTimetable = Doctrine::getTable('UserTimetable')->find($this->timetable->getUserTimetableId());
+            $userTimetable = Doctrine::getTable('UserTimetable')->find($this->timetable->getUserTimetableId(), Doctrine::HYDRATE_RECORD);
 
             $userTimetable['slug'] = $request->getParameter('slug');
             $userTimetable['published'] = true;
