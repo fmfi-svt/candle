@@ -9,6 +9,7 @@
                 echo $lessonForm['showLessons'] ?><button type="submit">Hľadaj</button>
             <?php echo $lessonForm['showLessons']->renderError() ?>
         </div></form>
+        (názov/kód predmetu, učiteľ, miestnosť)
         <?php if ($subjects): ?>
             <div class="pristupnost">Výsledky hľadania:</div>
             <?php include_partial('panel/list_lessons', array(
@@ -19,9 +20,9 @@
                     )); ?>
         <?php else: ?>
             <?php if ($timetable): ?>
-                <div>Upravovať rozvrh začnite vyhľadaním a začiarknutím predmetu alebo hodiny, ktorú chcete pridať</div>
+                <p>Upravovať rozvrh začnite vyhľadaním a začiarknutím predmetu alebo hodiny, ktorú chcete pridať</p>
             <?php else: ?>
-                <div>Pomocou formuláru vyššie vyhľadajte predmety alebo hodiny</div>
+                <p>Pomocou formuláru vyššie vyhľadajte predmety alebo hodiny</p>
             <?php endif; ?>
         <?php endif; ?>
     </div>
@@ -37,6 +38,8 @@
                 echo $teacherForm['showTeachers'] ?><button type="submit">Hľadaj</button>
             <?php echo $teacherForm['showTeachers']->renderError() ?>
         </div></form>
+
+        (meno a/alebo priezvisko učiteľa)
 
         <?php if ($teachers): ?>
             <div class="pristupnost">Výsledky hľadania:</div>
@@ -58,6 +61,8 @@
             <?php echo $roomForm['showRooms']->renderError() ?>
         </div></form>
 
+        (názov miestnosti)
+
         <?php if ($rooms): ?>
             <div class="pristupnost">Výsledky hľadania:</div>
             <?php include_partial('panel/list_rooms', array(
@@ -77,6 +82,8 @@
                 echo $studentGroupForm['showStudentGroups'] ?><button type="submit">Hľadaj</button>
             <?php echo $studentGroupForm['showStudentGroups']->renderError() ?>
         </div></form>
+
+        (názov krúžku)
 
         <?php if ($studentGroups): ?>
             <div class="pristupnost">Výsledky hľadania:</div>
