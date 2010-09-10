@@ -1,3 +1,7 @@
+<?php
+slot('title', 'Podmienky používania');
+?>
+<h1>Podmienky použivania</h1>
 <ol class="termsofuse">
 <li> Súhlas s podmienkami:
     <ol>
