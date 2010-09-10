@@ -38,6 +38,12 @@ change_password:
     param: { module: user, action: changePassword }
     requirements: {sf_method: post}
 
+terms_of_use:
+    url: /podmienky-pouzivania
+    class: sfRequestRoute
+    param: { module: about, action: termsOfUse }
+    requirements: {sf_method: get}
+
 # zobrazenie vsetkych hodin
 lesson_list_all:
     url: /hodina

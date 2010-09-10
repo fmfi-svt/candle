@@ -772,3 +772,7 @@ h1.posunuty {
     /*color: white;*/
     font-weight: bold;
 }
+
+.termsofuse li {
+    margin: 0.3em auto;
+}
