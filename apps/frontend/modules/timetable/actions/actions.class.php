@@ -243,6 +243,8 @@ class timetableActions extends sfActions {
             '_csrf_token' => $request->getParameter('_csrf_token')
         ));
 
+        $this->layout = new TimetableLayout($this->timetable->getLessons());
+
         if ($this->form->isValid()) {
             if ($this->timetable->isModified() || $this->timetable->getUserTimetableId() == null) {
                 $this->timetable->save($user->getId());
@@ -268,7 +270,6 @@ class timetableActions extends sfActions {
             $this->getUser()->setFlash('notice', 'Rozvrh úspešne publikovaný');
             $this->redirect('@timetable_show?id='.$this->timetable_id);
         }
-        $this->layout = new TimetableLayout($this->timetable->getLessons());
         $this->setTemplate('publish');
     }
 
