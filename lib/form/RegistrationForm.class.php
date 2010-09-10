@@ -35,9 +35,11 @@ class RegistrationForm extends sfForm {
 
         $this->setValidators(array(
             'username' => new sfValidatorString(),
-            'password' => new sfValidatorString(),
-            'password_repeat' => new sfValidatorString()
+            'password' => new sfValidatorString(array('min_length'=>6)),
+            'password_repeat' => new sfValidatorString(array('min_length'=>6)),
         ));
+
+        //$this->validatorSchema->setPostValidator(new sfValidatorSchemaCompare('password_repeat', sfValidatorSchemaCompare::EQUAL, 'password'));
 
         $this->widgetSchema->setLabels(array(
             'username' => 'Prihlasovacie meno',

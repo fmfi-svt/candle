@@ -35,8 +35,8 @@ class ChangePasswordForm extends sfForm {
 
         $this->setValidators(array(
             'old_password' => new sfValidatorString(),
-            'password' => new sfValidatorString(),
-            'password_repeat' => new sfValidatorString()
+            'password' => new sfValidatorString(array('min_length'=>6)),
+            'password_repeat' => new sfValidatorString(array('min_length'=>6))
         ));
 
         $this->widgetSchema->setLabels(array(
