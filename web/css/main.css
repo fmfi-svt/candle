@@ -759,3 +759,11 @@ h1.posunuty {
 #obsah_in table.vysledky_podrobneho_hladania tbody tr:hover td a {
     color: blue;
 }
+
+#obsah_in div.footer {
+    color: #D3D5DD;
+}
+
+#obsah_in div.footer a {
+    color: white;
+}
