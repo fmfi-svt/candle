@@ -165,6 +165,18 @@ timetable_unpublish:
     url: /moj/rozvrh/:id/nezverejnit
     param: { module: timetable, action: unpublish }
 
+timetable_rename:
+    class: sfRequestRoute
+    url: /moj/rozvrh/:id/premenovat
+    param: { module: timetable, action: rename }
+    requirements: { sf_method: get }
+
+timetable_rename_do:
+    class: sfRequestRoute
+    url: /moj/rozvrh/:id/premenovat
+    param: { module: timetable, action: renameExecute }
+    requirements: { sf_method: post }
+
 timetable_teacher_show:
     url: /ucitel/:id.:sf_format
     class: sfDoctrineRoute

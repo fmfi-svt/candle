@@ -40,6 +40,23 @@ class timetableActions extends sfActions {
     public function executeNew(sfWebRequest $request) {
         $this->form = new EditableTimetableForm();
     }
+
+    public function executeRename(sfWebRequest $request) {
+        $this->fetchTimetable($request);
+        $this->form = new EditableTimetableForm();
+        $this->form->setDefault('name', $this->timetable->getName());
+    }
+
+    public function executeRenameExecute(sfWebRequest $request) {
+        $this->form = new EditableTimetableForm();
+        $this->fetchTimetable($request);
+        $this->processForm($this->form, $request);
+        if ($this->form->isValid()) {
+            $this->timetable->setName($request->getParameter('name'));
+            $this->redirect(array('sf_route'=>'timetable_show', 'id'=>$this->timetable_id));
+        }
+        $this->setTemplate('rename');
+    }
     
     private function fetchTimetable(sfWebRequest $request) {
         $this->manager = $this->getUser()->getTimetableManager();
