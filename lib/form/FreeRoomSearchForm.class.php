@@ -71,6 +71,5 @@ class FreeRoomSearchForm extends sfForm {
         ));
 
         $this->disableLocalCSRFProtection();
-        $this->widgetSchema->setNameFormat('freeRoomSearch[%s]');
     }
 }

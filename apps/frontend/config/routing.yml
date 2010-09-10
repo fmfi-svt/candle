@@ -245,13 +245,12 @@ studentGroup_timetable_duplicate:
         sf_method: [get, post]
 
 freeRoom_search:
-    url: /volne-miestnosti/vyhladavanie
-    class: sfRequestRoute
-    param: { module: freeRoom, action: search }
-    requirements: { sf_method: post }
+    url: /volne-miestnosti/zoznam.:sf_format
+    param: { module: freeRoom, action: search, sf_format: html }
+    requirements: { sf_format: (?:html|csv) }
 
 freeRoom_search_parameters:
-    url: /volne-miestnosti/vyhladavanie
+    url: /volne-miestnosti/parametre-vyhladavania
     class: sfRequestRoute
     param: { module: freeRoom, action: params }
     requirements: { sf_method: get }

@@ -150,8 +150,10 @@ class Candle {
     }
 
     static public function setTimetableExportResponse(sfWebRequest $request, sfActions $actions) {
-        $format = $request->getRequestFormat();
+        self::setResponseFormat($request->getRequestFormat(), $actions);
+    }
 
+    static public function setResponseFormat($format, sfActions $actions) {
         switch ($format)
         {
             case 'csv':

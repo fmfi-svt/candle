@@ -144,6 +144,8 @@ end_slot();
 </table>
 
 <?php
+$rawThisUrl = $sf_data->getRaw('thisUrl');
+echo link_to('CSV', array_merge($rawThisUrl, array('sf_format'=>'csv')));
 
     endif;
     

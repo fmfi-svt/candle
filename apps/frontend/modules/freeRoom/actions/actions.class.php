@@ -32,12 +32,28 @@ class freeRoomActions extends sfActions {
 
         $this->form = new FreeRoomSearchForm();
 
-        $this->form->bind($request->getParameter($this->form->getName()));
+        $formParamNames = array('requiredAmount', 'searchIntervals', 'minimalRoomCapacity');
+
+        $formParamValues = array();
+
+        foreach ($formParamNames as $param) {
+            $formParamValues[$param] = $request->getParameterHolder()->get($param);
+        }
+
+        $this->form->bind($formParamValues);
 
         $this->roomIntervals = null;
         $this->queryIntervals = null;
 
         if ($this->form->isValid()) {
+
+            $thisUrl = array(
+                'sf_route'=>'freeRoom_search',
+                'requiredAmount'=>$formParamValues['requiredAmount'],
+                'searchIntervals'=>$formParamValues['searchIntervals'],
+                'minimalRoomCapacity'=>$formParamValues['minimalRoomCapacity']);
+
+            $this->thisUrl = $thisUrl;
 
             $minLength = $this->form->getValue('requiredAmount');
             $rawQueryIntervals = $this->form->getValue('searchIntervals');
@@ -58,6 +74,8 @@ class freeRoomActions extends sfActions {
                 $printableIntervals = TimeInterval::filterByMinLength($printableIntervals, $minLength);
                 $roomInterval['printableIntervals'] = $printableIntervals;
             }
+
+            Candle::setResponseFormat($request->getRequestFormat(), $this);
         }
 
     }
