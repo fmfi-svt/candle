@@ -767,3 +767,8 @@ h1.posunuty {
 #obsah_in div.footer a {
     color: white;
 }
+
+#obsah_in div.footer .last_update {
+    /*color: white;*/
+    font-weight: bold;
+}
