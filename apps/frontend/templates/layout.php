@@ -5,7 +5,7 @@
 <head>
     <?php include_http_metas() ?>
     <?php include_metas() ?>
-    <title><?php if (!include_slot('title')) echo 'Rozvrh'; ?></title>
+    <title><?php if (include_slot('title')) echo ' - ' ?>Rozvrh pre FMFI UK</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <script type="text/javascript">
         var candleFrontendRelativeUrl = "<?php echo url_for('@homepage');?>";
