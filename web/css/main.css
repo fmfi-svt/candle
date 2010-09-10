@@ -676,8 +676,8 @@ ul.vysledky_hladania li+li {
 .flash_error {
     margin: 0 30px;
     padding: 0.4em;
-    background: #fb7;
-    color: red;
+    background: #d55;
+    color: white;
     font-weight: bold;
     margin-bottom: 0.8em;
 }
