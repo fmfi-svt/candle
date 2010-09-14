@@ -82,7 +82,6 @@
         <h2 class="pristupnost">Linky</h2>
         <ul><!--
             --><li><?php echo link_to('Rozvrh', '@homepage', array('class'=>'selected')) ?></li><!--
-            --><li><a href="https://fajr.dcs.fmph.uniba.sk/">fajr</a></li><!--
             --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">Zoznam chýb</a></li><!--
             --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki">Dokumentácia</a></li><!--
             --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki/FAQ">FAQ</a></li><!--
