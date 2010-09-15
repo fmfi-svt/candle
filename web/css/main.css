@@ -538,6 +538,10 @@ ul.vysledky_hladania li+li {
     color: black;
 }
 
+#rozvrh td.hodina span.subjectName {
+    cursor: help;
+}
+
 #rozvrh td.hodina .typ {
     position: absolute;
     top: 0;

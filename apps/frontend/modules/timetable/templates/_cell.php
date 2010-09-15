@@ -1,8 +1,12 @@
 <?php
-$subjectInfoLink = Candle::makeSubjectInfoLink($lesson['Subject']['short_code']);
+$shortCode = $lesson['Subject']['short_code'];
+$subjectInfoLink = Candle::makeSubjectInfoLink($shortCode);
 $subjectName = $lesson['Subject']['name'];
 if ($subjectInfoLink) {
-    $subjectName = link_to($subjectName, $subjectInfoLink, array('class'=>'subjectName'));
+    $subjectName = link_to($subjectName, $subjectInfoLink, array('class'=>'subjectName', 'title'=>$shortCode));
+}
+else {
+    $subjectName = '<span class="subjectName" title="'.$shortCode.'">'.$subjectName.'</span>';
 }
 ?>
 <div class="wrap"><!--
