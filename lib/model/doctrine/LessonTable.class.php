@@ -50,7 +50,7 @@ class LessonTable extends Doctrine_Table
         if (count($lessonIdentifiers) == 0) return array(); // inac to robi strasne haluze
 
         $q = Doctrine_Query::create()
-                ->select('l.id, l.day, l.start, l.end, s.name, r.name, t.name, t.code, tt.given_name, tt.family_name')
+                ->select('l.id, l.day, l.start, l.end, s.name, s.short_code, r.name, t.name, t.code, tt.given_name, tt.family_name')
                 ->from('Lesson l')
                 ->innerJoin('l.Subject s')
                 ->innerJoin('l.Room r')

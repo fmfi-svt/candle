@@ -1,5 +1,12 @@
+<?php
+$subjectInfoLink = Candle::makeSubjectInfoLink($lesson['Subject']['short_code']);
+$subjectName = $lesson['Subject']['name'];
+if ($subjectInfoLink) {
+    $subjectName = link_to($subjectName, $subjectInfoLink, array('class'=>'subjectName'));
+}
+?>
 <div class="wrap"><!--
-    --><div class="predmet_wrap"><div class="predmet"><?php echo $lesson['Subject']['name']; ?></div></div><!--
+    --><div class="predmet_wrap"><div class="predmet"><?php echo $subjectName; ?></div></div><!--
     --><div class="hodina_info"><div class="miestnost"><?php
                 echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'id'=>$lesson['Room']['id'])); 
     ?></div><!--

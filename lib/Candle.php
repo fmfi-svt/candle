@@ -247,4 +247,12 @@ class Candle {
 
         return mktime(0,0,0,intval($matches[2]), intval($matches[3]), intval($matches[1]));
     }
+
+    static public function makeSubjectInfoLink($shortCode) {
+        $matches = array();
+        if (preg_match('/^(\d-INF-\d{3})(?:-\d+){0,2}$/',$shortCode, $matches)) {
+            return 'http://new.dcs.fmph.uniba.sk/index.php/'.urlencode($matches[1]);
+        }
+        return null;
+    }
 }

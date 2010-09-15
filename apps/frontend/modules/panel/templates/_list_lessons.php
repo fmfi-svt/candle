@@ -9,12 +9,7 @@ endif
 
 <?php foreach ($subjects as $subject):
 
-$subjectInfoLink = null;
-
-$matches = array();
-if (preg_match('/^(\d-INF-\d{3})(?:-\d+){0,2}$/',$subject['short_code'], $matches)) {
-    $subjectInfoLink = 'http://new.dcs.fmph.uniba.sk/index.php/'.urlencode($matches[1]);
-}
+$subjectInfoLink = Candle::makeSubjectInfoLink($subject['short_code']);
 
 $lessons = $subject['Lessons'];
 

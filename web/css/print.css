@@ -107,6 +107,11 @@ root {
     padding-top: 1em;
 }
 
+#rozvrh td.hodina a {
+    color: black;
+    text-decoration: none;
+}
+
 abbr {
     text-decoration: none;
     border-bottom: none;

@@ -534,6 +534,10 @@ ul.vysledky_hladania li+li {
     color: black;
 }
 
+#rozvrh td.hodina a.subjectName {
+    color: black;
+}
+
 #rozvrh td.hodina .typ {
     position: absolute;
     top: 0;
