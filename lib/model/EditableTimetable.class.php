@@ -226,4 +226,8 @@ class EditableTimetable {
         $this->modified = true;
     }
 
+    public function markModified() {
+        $this->modified = true;
+    }
+
 }

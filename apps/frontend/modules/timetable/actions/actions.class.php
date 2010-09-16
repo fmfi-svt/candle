@@ -53,6 +53,7 @@ class timetableActions extends sfActions {
         $this->processForm($this->form, $request);
         if ($this->form->isValid()) {
             $this->timetable->setName($request->getParameter('name'));
+            $this->timetable->markModified();
             $this->redirect(array('sf_route'=>'timetable_show', 'id'=>$this->timetable_id));
         }
         $this->setTemplate('rename');
