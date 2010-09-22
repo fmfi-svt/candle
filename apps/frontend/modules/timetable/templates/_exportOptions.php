@@ -9,6 +9,8 @@
         OpenOffice.org Calc, MS Excel, Google Docs, KOffice KSpread a ďaľšie</li>
     <li><?php echo link_to('Text (.txt)', Candle::addFormat($rawUrl, 'txt')); ?>
         - jednoduchý textový zoznam hodín, určený pre čítanie človekom</li>
+    <li><?php echo link_to('Zoznam kódov predmetov (.list)', Candle::addFormat($rawUrl, 'list')); ?>
+        - jednoduchý textový zoznam kódov predmetov, oddelených novým riadkom</li>
     <li><?php echo link_to('eXtensible Markup Language (.xml)', Candle::addFormat($rawUrl, 'xml')); ?>
         - XML reprezentácia hodín v rozvrhu, pravdepodobne zaujímavé len pre programátorov a ľudí, čo si chcú spraviť štýl na xml</li>
 </ul>
