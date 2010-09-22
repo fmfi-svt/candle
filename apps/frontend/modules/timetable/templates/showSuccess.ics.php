@@ -41,6 +41,8 @@ $endtime = sfConfig::get('app_semester_end')+86400;
 
 $datetime_fields = array('TZID='.sfConfig::get('app_calendar_timezone'));
 
+$uid_suffix = '-semester('.date('mY',$basetime).'-'.date('mY',$endtime).')-candle@'.$sf_request->getHost();
+
 foreach ($layout->getLessons() as $lesson) {
 
     $vevent = new vevent();
@@ -49,6 +51,7 @@ foreach ($layout->getLessons() as $lesson) {
     $vevent->setProperty( 'location', $lesson['Room']['name'] );
     $vevent->setProperty( 'summary', $lesson['Subject']['name'] );
     $vevent->setProperty( 'categories', $lesson['LessonType']['name']);
+    $vevent->setProperty( 'uid', 'lesson('.$lesson['id'].')'.$uid_suffix);
     $description = $lesson['LessonType']['name']."\r\n\r\n";
     $description .= 'Vyučujúci:'."\r\n";
     foreach ($lesson['Teacher'] as $teacher) {
