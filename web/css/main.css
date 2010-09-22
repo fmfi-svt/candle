@@ -784,3 +784,8 @@ h1.posunuty {
 .termsofuse li {
     margin: 0.3em auto;
 }
+
+#timetable_full_url {
+    text-align: right;
+    padding-right: 1.5em;
+}

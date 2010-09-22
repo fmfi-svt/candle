@@ -140,3 +140,7 @@ abbr {
 .footer hr {
     display: none;
 }
+
+#timetable_full_url {
+    display: none;
+}

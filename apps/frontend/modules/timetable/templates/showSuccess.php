@@ -9,10 +9,17 @@ if ($addSlots) {
 
     slot('top');
     include_component('timetable','top', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
-    include_component('timetable', 'editMenu', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
+    include_component('timetable', 'editMenu', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id, 'published_slug'=>$published_slug));
     end_slot();
 }
 
+if($published_slug) {
+    $publishedInternalUrl = array('sf_route'=>'timetable_show_published', 'slug'=>$published_slug);
+    echo '<div id="timetable_full_url">';
+    echo 'Rozvrh zverejnený na: ';
+    echo link_to(url_for($publishedInternalUrl, true),$publishedInternalUrl);
+    echo '</div>';
+}
 ?>
 <div id="timetable_editor">
 <script type="text/javascript" >var timetableEditor_changeLessonsURL="<?php echo url_for('@timetable_change_lessons?id='.$timetable_id); ?>";</script>
