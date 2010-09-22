@@ -28,6 +28,9 @@ function lessonTime($basetime, $day, $time) {
 
 $calendar= new vcalendar();
 $calendar->setConfig('unique_id', $sf_request->getHost()); // todo pridat konfiguracnu volbu
+$calendar->setProperty( "x-wr-calname", $timetable->getName() );
+$calendar->setProperty( "X-WR-CALDESC", "Rozvrh hodín vyexportovaný pomocou Candle, https://ne.st.dcs.fmph.uniba.sk/projects/candle" );
+$calendar->setProperty( "X-WR-TIMEZONE", sfConfig::get('app_calendar_timezone') );
 
 // zakladny cas od ktoreho budu vyexportovane hodiny
 $basetime = sfConfig::get('app_semester_start');
@@ -35,11 +38,13 @@ $basetime = sfConfig::get('app_semester_start');
 // koncovy cas opakovania (koniec semestra)
 $endtime = sfConfig::get('app_semester_end')+86400;
 
+$datetime_fields = array('TZID='.sfConfig::get('app_calendar_timezone'));
+
 foreach ($layout->getLessons() as $lesson) {
 
     $vevent = new vevent();
-    $vevent->setProperty( 'dtstart', lessonTime($basetime, $lesson['day'], $lesson['start']));
-    $vevent->setProperty( 'dtend', lessonTime($basetime, $lesson['day'], $lesson['end']));
+    $vevent->setProperty( 'dtstart', lessonTime($basetime, $lesson['day'], $lesson['start']), $datetime_fields);
+    $vevent->setProperty( 'dtend', lessonTime($basetime, $lesson['day'], $lesson['end']), $datetime_fields);
     $vevent->setProperty( 'location', $lesson['Room']['name'] );
     $vevent->setProperty( 'summary', $lesson['Subject']['name'] );
     $vevent->setProperty( 'categories', $lesson['LessonType']['name']);
