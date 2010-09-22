@@ -164,6 +164,10 @@ class Candle {
                 $actions->setLayout(false);
                 $actions->getResponse()->setContentType('text/calendar'); // vid RFC 2445
                 break;
+            case 'list':
+                $actions->setLayout(false);
+                $actions->getResponse()->setContentType('text/plain');
+                break;
         }
     }
 

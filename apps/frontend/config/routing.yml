@@ -58,7 +58,7 @@ timetable_show:
     param: { module: timetable, action: show, sf_format: html }
     requirements:
         id: \d+
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
 
 timetable_show_published:
     url: /rozvrh/:slug.:sf_format
@@ -67,7 +67,7 @@ timetable_show_published:
     param: { module: timetablePublished, action: show, sf_format: html }
     requirements:
         #slug: \[a-z-\]+
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 timetable_new:
@@ -105,7 +105,7 @@ timetable_duplicate_published:
     param: { module: timetablePublished, action: duplicate, sf_format: html }
     requirements:
         #slug: \[a-z-\]+
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
 
 timetable_save:
     url: /moj/rozvrh/:id/ulozit
@@ -146,7 +146,7 @@ timetable_export_published:
     param: { module: timetablePublished, action: export, sf_format: html }
     requirements:
         #slug: \[a-z-\]+
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
 
 timetable_publish_do:
     class: sfRequestRoute
@@ -189,7 +189,7 @@ timetable_teacher_show:
     options: { model: Teacher, type: object }
     param: { module: timetableTeacher, action: show, sf_format: html }
     requirements:
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 timetable_teacher_export:
@@ -198,7 +198,7 @@ timetable_teacher_export:
     options: { model: Teacher, type: object }
     param: { module: timetableTeacher, action: export, sf_format: html }
     requirements:
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
 
 timetable_teacher_duplicate:
     url: /ucitel/:id.:sf_format/rozvrh/duplikovat
@@ -206,7 +206,7 @@ timetable_teacher_duplicate:
     options: { model: Teacher, type: object }
     param: { module: timetableTeacher, action: duplicate, sf_format: html }
     requirements:
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
 
 room_show:
     url: /miestnost/:id.:sf_format
@@ -214,7 +214,7 @@ room_show:
     options: { model: Room, type: object }
     param: { module: room, action: show, sf_format: html }
     requirements:
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 room_timetable_export:
@@ -223,7 +223,7 @@ room_timetable_export:
     options: { model: Room, type: object }
     param: { module: room, action: export, sf_format: html }
     requirements:
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 room_timetable_duplicate:
@@ -232,7 +232,7 @@ room_timetable_duplicate:
     options: { model: Room, type: object }
     param: { module: room, action: duplicate, sf_format: html }
     requirements:
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 studentGroup_show:
@@ -241,7 +241,7 @@ studentGroup_show:
     options: { model: StudentGroup, type: object }
     param: { module: studentGroup, action: show, sf_format: html }
     requirements:
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 studentGroup_timetable_export:
@@ -250,7 +250,7 @@ studentGroup_timetable_export:
     options: { model: StudentGroup, type: object }
     param: { module: studentGroup, action: export, sf_format: html }
     requirements:
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 studentGroup_timetable_duplicate:
@@ -259,7 +259,7 @@ studentGroup_timetable_duplicate:
     options: { model: StudentGroup, type: object }
     param: { module: studentGroup, action: duplicate, sf_format: html }
     requirements:
-        sf_format: (?:html|txt|csv|ics|xml)
+        sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 freeRoom_search:
