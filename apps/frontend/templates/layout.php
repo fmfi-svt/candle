@@ -49,12 +49,12 @@
 
                         <?php include_component('layout', 'lastUpdate'); ?>
                         <br />
-                        Aplikácia Candle Copyright 2010 Martin Sucha. Zdrojové kódy sa nachádzajú na
+                        Aplikácia Candle Copyright 2010 Martin Sucha. <span class="disclaimer2">Zdrojové kódy sa nachádzajú na
                         <a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">stránke projektu</a>.
                         Táto aplikácia je študentský projekt a nie je oficiálne podporovaná
                         pracovníkmi CIT, všetky prípadné otázky smerujte priamo na <a href="mailto:sucha14@st.fmph.uniba.sk">autora stránky</a>,
                         časté odpovede nájdete v sekcii <a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki/FAQ">FAQ</a>.
-                        Používaním služby súhlasíte s <?php echo link_to('podmienkami používania', '@terms_of_use'); ?>
+                        Používaním služby súhlasíte s <?php echo link_to('podmienkami používania', '@terms_of_use'); ?></span>
                     </div>
                 </div>
             </div>

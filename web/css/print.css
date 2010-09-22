@@ -8,6 +8,10 @@ root {
     display: block;
 }
 
+body {
+    font-size: 10pt;
+}
+
 #vrch, #panel, #panel_schovat, #vrch2, #vrch_riadok1 {
     display: none;
 }
@@ -50,7 +54,7 @@ root {
 
 #rozvrh td {
     vertical-align: top;
-    height: 30pt;
+    height: 27pt;
     /* Hm, spodny border sa renderoval vo FF aj do nasledujucej bunky,
        ak sa v tabulke vyskytol rowspan. Nasledovne nastavenie vyzera, ze
        problem potlaci.
@@ -115,4 +119,24 @@ root {
 abbr {
     text-decoration: none;
     border-bottom: none;
+}
+
+.flash_notice, .flash_error {
+    display: none;
+}
+
+.timetableExportOptionsSmall {
+    display: none;
+}
+
+.disclaimer2 {
+    display: none;
+}
+
+.footer {
+    font-size: 7pt;
+}
+
+.footer hr {
+    display: none;
 }
