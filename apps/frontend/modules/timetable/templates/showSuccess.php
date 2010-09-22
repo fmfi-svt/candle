@@ -11,14 +11,14 @@ if ($addSlots) {
     include_component('timetable','top', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
     include_component('timetable', 'editMenu', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id, 'published_slug'=>$published_slug));
     end_slot();
-}
 
-if($published_slug) {
-    $publishedInternalUrl = array('sf_route'=>'timetable_show_published', 'slug'=>$published_slug);
-    echo '<div id="timetable_full_url">';
-    echo 'Rozvrh zverejnený na: ';
-    echo link_to(url_for($publishedInternalUrl, true),$publishedInternalUrl);
-    echo '</div>';
+    if($published_slug) {
+        $publishedInternalUrl = array('sf_route'=>'timetable_show_published', 'slug'=>$published_slug);
+        echo '<div id="timetable_full_url">';
+        echo 'Rozvrh zverejnený na: ';
+        echo link_to(url_for($publishedInternalUrl, true),$publishedInternalUrl);
+        echo '</div>';
+    }
 }
 ?>
 <div id="timetable_editor">
@@ -47,8 +47,11 @@ hodiny v rozvrhu
 </div>
 <?php echo '</form>' ?>
 </div>
+<?php if ($addSlots): ?>
 <div>
     <?php include_partial('timetable/exportOptionsSmall',
             array('url'=>array('sf_route'=>'timetable_show', 'id'=>$timetable_id)));
     ?>
 </div>
+
+<?php endif; ?>
