@@ -28,6 +28,7 @@ function lessonTime($basetime, $day, $time) {
 
 $calendar= new vcalendar();
 $calendar->setConfig('unique_id', $sf_request->getHost()); // todo pridat konfiguracnu volbu
+$calendar->setProperty( 'METHOD', 'PUBLISH');
 $calendar->setProperty( "x-wr-calname", $timetable->getName() );
 $calendar->setProperty( "X-WR-CALDESC", "Rozvrh hodín vyexportovaný pomocou Candle, https://ne.st.dcs.fmph.uniba.sk/projects/candle" );
 $calendar->setProperty( "X-WR-TIMEZONE", sfConfig::get('app_calendar_timezone') );
