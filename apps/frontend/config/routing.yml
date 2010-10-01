@@ -269,6 +269,6 @@ freeRoom_search:
 
 freeRoom_search_parameters:
     url: /volne-miestnosti/parametre-vyhladavania
-    class: sfRequestRoute
+    #class: sfRequestRoute
     param: { module: freeRoom, action: params }
-    requirements: { sf_method: get }
+    #requirements: { sf_method: get }

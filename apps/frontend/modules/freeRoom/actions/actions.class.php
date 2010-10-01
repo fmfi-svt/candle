@@ -84,6 +84,9 @@ class freeRoomActions extends sfActions {
         $this->form = new FreeRoomSearchForm();
         $this->roomIntervals = null;
         $this->setTemplate('search');
+        $thisUrl = array('sf_route'=>'freeRoom_search');
+
+        $this->thisUrl = $thisUrl;
     }
 
 }
