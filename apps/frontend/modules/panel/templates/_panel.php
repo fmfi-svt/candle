@@ -97,8 +97,9 @@
 <div class="panel_cast_no_collapse" id="panel_cast_nastroje">
     <h2>Nástroje</h2>
     <div class="panel_cast_obsah">
-        <ul><li>
-        <?php echo link_to('Vyhľadávanie voľných miestností','@freeRoom_search_parameters'); ?>
-        </li></ul>
+        <ul>
+            <li><?php echo link_to('Vyhľadávanie voľných miestností','@freeRoom_search_parameters'); ?></li>
+            <li><?php echo link_to('Vyhľadávanie hodín podľa času','@lessonSearch_search_parameters'); ?></li>
+        </ul>
     </div>
 </div>

@@ -269,6 +269,13 @@ freeRoom_search:
 
 freeRoom_search_parameters:
     url: /volne-miestnosti/parametre-vyhladavania
-    #class: sfRequestRoute
     param: { module: freeRoom, action: params }
-    #requirements: { sf_method: get }
+
+lessonSearch_search:
+    url: /hodiny-v-intervaloch/zoznam.:sf_format
+    param: { module: lessonSearch, action: search, sf_format: html }
+    requirements: { sf_format: (?:html|csv) }
+
+lessonSearch_search_parameters:
+    url: /hodiny-v-intervaloch/parametre-vyhladavania
+    param: { module: lessonSearch, action: params }

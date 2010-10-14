@@ -105,4 +105,44 @@ class LessonTable extends Doctrine_Table
         return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
     }
 
+    /**
+     * Find lessons in time intervals
+     * @param array $inIntervals array of array(day, start, end)
+     */
+    public function findIntervals(array $inIntervals) {
+
+        // Fix a bug with bad SQL syntax on empty intervals
+        if (count($inIntervals) == 0) return array();
+
+        $q = Doctrine_Query::create();
+
+        $q->from('Lesson l')
+                ->innerJoin('l.Room r')
+                ->leftJoin('l.Subject s')
+                ->leftJoin('l.Teacher t')
+                ->orderBy('l.day, l.start, l.end, r.name');
+
+        $params = array();
+        $intervalWhere = '(('; //DQL
+        $firstInterval = true;
+
+        foreach ($inIntervals as $interval) {
+            if (!$firstInterval) {
+                $intervalWhere .= ') OR (';
+            }
+            $firstInterval = false;
+
+            $intervalWhere .= 'l.day = ? AND l.start <= ? AND l.end >= ?';
+            $params[] = $interval[0]; //day
+            $params[] = $interval[2]; // end
+            $params[] = $interval[1]; // start
+        }
+
+        $intervalWhere .= '))';
+
+        $q->andWhere($intervalWhere, $params);
+
+        return $q->execute(null, Doctrine::HYDRATE_ARRAY);
+    }
+
 }
