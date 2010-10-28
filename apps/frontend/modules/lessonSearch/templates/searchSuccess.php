@@ -2,7 +2,7 @@
 
 $rawThisUrl = $sf_data->getRaw('thisUrl');
 
-slot('title', 'Vyhľadávanie voľných miestností');
+slot('title', 'Vyhľadávanie hodín podľa času');
 
 
 slot('panel');
