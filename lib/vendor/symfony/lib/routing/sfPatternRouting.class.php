@@ -16,7 +16,7 @@
  * @package    symfony
  * @subpackage routing
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPatternRouting.class.php 24061 2009-11-16 22:35:03Z FabianLange $
+ * @version    SVN: $Id: sfPatternRouting.class.php 29418 2010-05-12 07:36:59Z fabien $
  */
 class sfPatternRouting extends sfRouting
 {
@@ -251,7 +251,7 @@ class sfPatternRouting extends sfRouting
    * Adds a new route at the end of the current list of routes.
    *
    * A route string is a string with 2 special constructions:
-   * - :string: :string denotes a named paramater (available later as $request->getParameter('string'))
+   * - :string: :string denotes a named parameter (available later as $request->getParameter('string'))
    * - *: * match an indefinite number of parameters in a route
    *
    * Here is a very common rule in a symfony project:
@@ -312,7 +312,8 @@ class sfPatternRouting extends sfRouting
       {
         throw new sfConfigurationException(sprintf('The route "%s" does not exist.', $name));
       }
-      $route = $this->routes[$name];      $this->ensureDefaultParametersAreSet();
+      $route = $this->routes[$name];
+      $this->ensureDefaultParametersAreSet();
     }
     else
     {
