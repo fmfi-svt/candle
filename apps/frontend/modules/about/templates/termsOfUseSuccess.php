@@ -1,7 +1,7 @@
 <?php
 slot('title', 'Podmienky používania');
 ?>
-<h1>Podmienky použivania</h1>
+<h1>Podmienky používania</h1>
 <ol class="termsofuse">
 <li> Súhlas s podmienkami:
     <ol>
@@ -114,3 +114,7 @@ slot('title', 'Podmienky používania');
     </ol>
 </li>
 </ol>
+
+<div>
+    <?php echo link_to('Späť na hlavnú stránku', '@homepage') ?>
+</div>
