@@ -21,7 +21,10 @@
 */
 
 /**
+ * Komponent na panel
  *
+ * TODO: presunut do samostatnych akcii a pamatat si vysledky vyhladavania v
+ * session, alebo to vymysliet este nejak inak
  */
 class panelComponents extends sfComponents {
     public function executePanel(sfWebRequest $request) {
@@ -62,6 +65,12 @@ class panelComponents extends sfComponents {
             }
             else {
                 $this->teachers = Doctrine::getTable('Teacher')->searchTeachersByName($queryString);
+                // automatically redirect to teacher if the search returned
+                // only one result, see #46
+                // perform the redirect only if we are changing the search text
+                if ($request->hasParameter('showTeachers') && count($this->teachers) == 1) {
+                    $this->getController()->redirect(array('sf_route'=>'timetable_teacher_show', 'id'=>$this->teachers[0]['id']), 0, 302);
+                }
             }
         }
         else {
@@ -84,6 +93,12 @@ class panelComponents extends sfComponents {
             }
             else {
                 $this->rooms = Doctrine::getTable('Room')->searchRoomsByName($queryString);
+                // automatically redirect to room if the search returned
+                // only one result, see #46
+                // perform the redirect only if we are changing the search text
+                if ($request->hasParameter('showRooms') && count($this->rooms) == 1) {
+                    $this->getController()->redirect(array('sf_route'=>'room_show', 'id'=>$this->rooms[0]['id']), 0, 302);
+                }
             }
         }
         else {
@@ -106,6 +121,12 @@ class panelComponents extends sfComponents {
             }
             else {
                 $this->studentGroups = Doctrine::getTable('StudentGroup')->searchStudentGroupsByName($queryString);
+                // automatically redirect to student group if the search returned
+                // only one result, see #46
+                // perform the redirect only if we are changing the search text
+                if ($request->hasParameter('showStudentGroups') && count($this->studentGroups) == 1) {
+                    $this->getController()->redirect(array('sf_route'=>'studentGroup_show', 'id'=>$this->studentGroups[0]['id']), 0, 302);
+                }
             }
         }
         else {
