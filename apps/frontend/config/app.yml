@@ -5,6 +5,7 @@ all:
     semester_start: 2011-02-14
     semester_end: 2011-05-13
     calendar_timezone: Europe/Bratislava
+    analytics_account: UA-21193959-1
     sf_guard_plugin:
         routes_register: false
         success_signin_url: @homepage # the plugin use the referer as default

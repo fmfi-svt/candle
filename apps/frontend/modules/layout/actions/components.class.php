@@ -27,4 +27,8 @@ class layoutComponents extends sfComponents {
     public function executeLastUpdate(sfWebRequest $request) {
         $this->lastUpdate = Doctrine::getTable('DataUpdate')->getLastUpdate();
     }
+
+    public function executeAnalytics(sfWebRequest $request) {
+        $this->analyticsAccount = sfConfig::get('app_analytics_account');
+    }
 }

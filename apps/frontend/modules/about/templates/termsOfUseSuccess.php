@@ -115,6 +115,29 @@ slot('title', 'Podmienky používania');
 </li>
 </ol>
 
+<h2>Google Analytics</h2>
+
+Tieto webové stránky používajú nástroj Google Analytics,
+službu na webovú analýzu, ktorú poskytuje spoločnosť Google, Inc. (Google).
+Služba Google Analytics používa súbory cookie, teda textové súbory umiestnené
+v počítači, ktoré pomáhajú analyzovať, ako používatelia používajú dané webové
+stránky. Informácie generované súborom cookie o tom, ako používate webové
+stránky (vrátane adresy IP), budú odoslané a uložené spoločnosťou Google
+na serveroch v Spojených štátoch. Spoločnosť Google použije tieto informácie
+na zhodnotenie používania webových stránok, na vytvorenie prehľadov o aktivite
+na webových stránkach pre jej operátorov a na poskytnutie iných služieb
+súvisiacich s aktivitou na webových stránkach a s používaním Internetu.
+Spoločnosť Google môže postúpiť takéto informácie tretím stranám,
+ak to vyžaduje zákon alebo ak takéto tretie strany spracovávajú informácie
+v mene spoločnosti Google. Spoločnosť Google nepriradí vašu adresu IP k žiadnym
+iným údajom, ktoré uchováva.  Používanie súborov cookie môžete odmietnuť
+vybratím príslušného nastavenia prehliadača. Upozorňujeme však, že ak to
+urobíte, nebudete môcť úplne využívať funkčnosť týchto webových stránok.
+Používaním týchto stránok vyjadrujete súhlas so spracovaním údajov o vás
+spoločnosťou Google spôsobom a na účely uvedené vyššie.
+
+<hr />
+
 <div>
     <?php echo link_to('Späť na hlavnú stránku', '@homepage') ?>
 </div>
