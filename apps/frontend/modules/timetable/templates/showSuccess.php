@@ -47,11 +47,7 @@ hodiny v rozvrhu
 </div>
 <?php echo '</form>' ?>
 </div>
-<?php if ($addSlots): ?>
-<div>
-    <?php include_partial('timetable/exportOptionsSmall',
+<?php if ($addSlots):
+    include_partial('timetable/footer',
             array('url'=>array('sf_route'=>'timetable_show', 'id'=>$timetable_id)));
-    ?>
-</div>
-
-<?php endif; ?>
+endif; ?>

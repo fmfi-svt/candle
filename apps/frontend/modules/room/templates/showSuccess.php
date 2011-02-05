@@ -27,7 +27,7 @@ end_slot();
         )); ?>
 </div>
 <div>
-    <?php include_partial('timetable/exportOptionsSmall',
-            array('url'=>array('sf_route'=>'room_show', 'id'=>$room_id)));
-    ?>
+<?php include_partial('timetable/footer',
+        array('url'=>array('sf_route'=>'room_show', 'id'=>$room_id)));
+?>
 </div>

@@ -21,8 +21,6 @@ end_slot();
                 'editable'=>false
         )); ?>
 </div>
-<div>
-    <?php include_partial('timetable/exportOptionsSmall',
-            array('url'=>array('sf_route'=>'timetable_teacher_show', 'id'=>$teacher_id)));
-    ?>
-</div>
+<?php include_partial('timetable/footer',
+        array('url'=>array('sf_route'=>'timetable_teacher_show', 'id'=>$teacher_id)));
+?>
