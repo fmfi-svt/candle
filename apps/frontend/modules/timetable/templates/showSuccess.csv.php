@@ -22,15 +22,7 @@ foreach ($layout->getLessons() as $lesson) {
     echo ',';
     echo CSV::esc($lesson['Subject']['name']);
     echo ',';
-    $teachers = '';
-    $first = true;
-    foreach ($lesson['Teacher'] as $teacher) {
-        if (!$first) {
-            $teachers .= ', ';
-        }
-        $first = false;
-        $teachers .= Candle::formatShortName($teacher);
-    }
+    $teachers = Candle::formatShortNameList($lesson['Teacher']);
     echo CSV::esc($teachers);
     echo "\r\n"; // vid rfc uvedene vyssie
 }

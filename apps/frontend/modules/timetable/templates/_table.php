@@ -95,8 +95,17 @@ else {
                         if ($highlighted) {
                             $cell_classes[] = 'highlighted';
                         }
+                        $teachers = Candle::formatShortNameList($lesson['Teacher']);
+                        $lessonTimeInfo = Candle::formatShortDay($lesson['day']) . ' ' .
+                                                Candle::formatTime($lesson['start']). '-' .
+                                                Candle::formatTime($lesson['end']);
+                        $lessonTitle = $lesson['Room']['name'] . ', ' .
+                                       $lessonTimeInfo . ', ' . 
+                                       $lesson['Subject']['short_code'] .
+                                       ': '.$teachers;
+
                         $cell_classes[] = Candle::getLessonTypeHTMLClass($lesson['LessonType']);
-                        echo Candle::formatTD($cell_classes, $rowspan);
+                        echo Candle::formatTD($cell_classes, $rowspan, $lessonTitle);
                         include_partial('timetable/cell', array('lesson'=>$lesson, 'highlighted'=>$highlighted, 'editable'=>$editable));
                         echo '</td>';
                     }

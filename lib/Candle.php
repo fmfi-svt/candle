@@ -108,8 +108,14 @@ class Candle {
         return ' class="'.implode(' ', $classes).'" ';
     }
 
-    static public function formatTD($classes=null, $rowspan=1) {
-        return '<td'.Candle::formatClass($classes).Candle::formatRowspan($rowspan).'>';
+    static public function formatTD($classes=null, $rowspan=1, $title=null) {
+        $tagTitle = '';
+        if ($title !== null) {
+            $tagTitle = ' title="'.$title.'"';
+        }
+        return '<td' . Candle::formatClass($classes) .
+                       Candle::formatRowspan($rowspan) .
+                       $tagTitle . '>';
     }
     
     static public function floorTo($number, $precision) {
@@ -143,6 +149,19 @@ class Candle {
         $shortName = ($given_name?mb_substr($given_name, 0, 1).'. ':'').$teacher['family_name'];
         mb_internal_encoding($old_encoding);
         return $shortName;
+    }
+
+    static public function formatShortNameList($teacherList) {
+        $teachers = '';
+        $first = true;
+        foreach ($teacherList as $teacher) {
+            if (!$first) {
+                $teachers .= ', ';
+            }
+            $first = false;
+            $teachers .= self::formatShortName($teacher);
+        }
+        return $teachers;
     }
 
     static public function formatLongName($teacher) {
