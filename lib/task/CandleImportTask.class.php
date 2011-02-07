@@ -125,7 +125,7 @@ EOF;
           $this->logBlock($message, 'ERROR');
       }
       else {
-        throw new Exception($message, null, $exception);
+        throw new Exception($message, 0, $exception);
       }
   }
 
