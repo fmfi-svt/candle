@@ -413,7 +413,7 @@ EOF;
     $this->insertTeacher->execute(array(
         trim($this->elementData['meno']), trim($this->elementData['priezvisko']),
         trim($this->elementData['iniciala']), trim($this->elementData['oddelenie']),
-        trim($this->elementData['katedra']), $this->elementData['id']
+        trim($this->elementData['katedra']), $this->mangleExtId($this->elementData['id'])
     ));
   }
 
@@ -458,7 +458,7 @@ EOF;
     if (isset($this->elementData['ucitelia'])) {
         $ucitelia = explode(',', $this->elementData['ucitelia']);
         foreach ($ucitelia as $ucitelId) {
-            $this->insertLessonTeacher->execute(array($lessonId, $ucitelId));
+            $this->insertLessonTeacher->execute(array($lessonId, $this->mangleExtId($ucitelId)));
         }
     }
 
@@ -939,5 +939,9 @@ EOF;
         return 1;
     }
 
+  }
+
+  public function mangleExtId($id) {
+      return substr(sha1($id),0,30);
   }
 }
