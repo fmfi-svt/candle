@@ -47,6 +47,9 @@ class timetableActions extends sfActions {
             $this->published_slug = null;
         }
         Candle::setTimetableExportResponse($request, $this);
+        header('Expires: Mon, 1 Jan 1990 00:00:00 GMT');
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Pragma: no-cache');
     }
 
     public function executeNew(sfWebRequest $request) {

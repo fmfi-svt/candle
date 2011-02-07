@@ -73,9 +73,10 @@ var TimetableEditor = new Class({
         }
     },
     refreshTimetable: function() {
+        var cas = new Date().getTime();
         var html = new Request.HTML({
             url: window.location.href,
-            data: {'onlyTimetable':'1'},
+            data: {'onlyTimetable':'1', 'cas':cas},
             onSuccess: function(responseTree, responseElements,
                 responseHTML, responseJavaScript) {
                 this.refreshTimetableSucceeded(responseTree, responseElements,

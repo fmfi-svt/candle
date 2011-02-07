@@ -31,7 +31,7 @@ var timetablePrepare = function() {
         d.appendChild(chk)
         var lab = $(document.createElement('label'));
         lab.setAttribute('for', 'rozvrhListToggler');
-        lab.textContent = 'Zobrazova\u0165/tlačiť zoznam hodín';
+        lab.innerHTML = 'Zobrazova\u0165/tlačiť zoznam hodín';
         d.appendChild(lab);
 
         var chk2 = $(document.createElement('input'));
@@ -62,7 +62,7 @@ var timetablePrepare = function() {
         d.appendChild(chk2)
         var lab2 = $(document.createElement('label'));
         lab2.setAttribute('for', 'rozvrhListToggler2');
-        lab2.textContent = 'Tlačiť zoznam na ďaľšej strane';
+        lab2.innerHTML = 'Tlačiť zoznam na ďaľšej strane';
         d.appendChild(lab2);
         rozvrhList.parentNode.insertBefore(d, rozvrhList)
     }
