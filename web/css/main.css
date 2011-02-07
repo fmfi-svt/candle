@@ -799,3 +799,11 @@ h1.posunuty {
 #rozvrhList {
     margin-top: 1ex;
 }
+
+#rozvrhListTogglerContainer {
+    margin-top: 1ex;
+}
+
+.hidden {
+    display: none;
+}

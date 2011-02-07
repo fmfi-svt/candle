@@ -166,3 +166,15 @@ abbr {
 #rozvrhList {
     margin-top: 1ex;
 }
+
+.hidden {
+    display: none;
+}
+
+.onNextPage {
+    page-break-before: always;
+}
+
+#rozvrhListTogglerContainer {
+    display: none;
+}
