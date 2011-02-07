@@ -95,6 +95,9 @@ var TimetableEditor = new Class({
         this.timetableEditorElement = newTimetableEditor;
         this.timetableForm = this.timetableEditorElement.getElement('form');
         this.bindEditor();
+        if (timetablePrepare) {
+            timetablePrepare();
+        }
         //this.timetableEditorElement.set('html', responseHTML);
     },
     lessonSelectionCheckboxChanged: function(event) {

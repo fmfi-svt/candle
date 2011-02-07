@@ -1,4 +1,4 @@
-window.addEvent('domready', function() {
+var timetablePrepare = function() {
     var rozvrhList = $('rozvrhList');
     if (rozvrhList) {
         var d = $(document.createElement('div'));
@@ -43,4 +43,6 @@ window.addEvent('domready', function() {
         rozvrhList.parentNode.insertBefore(d, rozvrhList)
     }
 
-});
+}
+
+window.addEvent('domready', timetablePrepare);
