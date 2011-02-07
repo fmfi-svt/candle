@@ -10,12 +10,24 @@ var timetablePrepare = function() {
            var el = $('rozvrhList');
            if (chk.checked) {
                el.removeClass('hidden');
+               Cookie.write("candle_timetable_list_show", "show", {});
            }
            else {
                el.addClass('hidden');
+               Cookie.write("candle_timetable_list_show", "hide", {});
            }
         });
-        chk.checked = true;
+        var cookie1 = Cookie.read("candle_timetable_list_show");
+        if ($chk(cookie1)) {
+            var showList = (cookie1 == "show");
+            chk.checked = showList;
+            if (!showList) {
+                rozvrhList.addClass('hidden');
+            }
+        }
+        else {
+            chk.checked = true;
+        }
         d.appendChild(chk)
         var lab = $(document.createElement('label'));
         lab.setAttribute('for', 'rozvrhListToggler');
@@ -29,12 +41,24 @@ var timetablePrepare = function() {
            var el2 = $('rozvrhList');
            if (chk2.checked) {
                el2.addClass('onNextPage');
+               Cookie.write("candle_timetable_list_nextPage", "enabled", {});
            }
            else {
                el2.removeClass('onNextPage');
+               Cookie.write("candle_timetable_list_nextPage", "disabled", {});
            }
         });
-        chk2.checked = false;
+        var cookie2 = Cookie.read("candle_timetable_list_nextPage");
+        if ($chk(cookie1)) {
+            var showList2 = (cookie2 == "enabled");
+            chk2.checked = showList2;
+            if (showList2) {
+                rozvrhList.addClass('onNextPage');
+            }
+        }
+        else {
+            chk2.checked = false;
+        }
         d.appendChild(chk2)
         var lab2 = $(document.createElement('label'));
         lab2.setAttribute('for', 'rozvrhListToggler2');
