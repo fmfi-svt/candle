@@ -144,3 +144,25 @@ abbr {
 #timetable_full_url {
     display: none;
 }
+
+#obsah_in table.vysledky_podrobneho_hladania {
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#obsah_in table.vysledky_podrobneho_hladania th {
+    padding: 0.5em;
+    font-weight: bold;
+    border: 1px solid black;
+}
+
+#obsah_in table.vysledky_podrobneho_hladania td {
+    padding: 0.3em;
+    font-weight: normal;
+    border: 1px solid black;
+}
+
+#rozvrhList {
+    margin-top: 1ex;
+}

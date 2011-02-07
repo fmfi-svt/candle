@@ -795,3 +795,7 @@ h1.posunuty {
 .timetableVysvetlivkyLink {
     float: right;
 }
+
+#rozvrhList {
+    margin-top: 1ex;
+}

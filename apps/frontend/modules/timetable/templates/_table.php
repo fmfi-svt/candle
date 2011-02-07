@@ -122,3 +122,4 @@ else {
         }
     ?>
 </table>
+<?php include_partial('timetable/list', array('timetable'=>$timetable, 'layout'=>$layout)); ?>
