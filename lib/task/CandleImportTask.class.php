@@ -516,7 +516,7 @@ EOF;
       $sql = "CREATE TEMPORARY TABLE tmp_insert_teacher ";
       $sql .= "(given_name varchar(50), family_name varchar(50) not null,";
       $sql .= "iniciala varchar(50), oddelenie varchar(50), katedra varchar(50),";
-      $sql .= "external_id varchar(50) binary not null)";
+      $sql .= "external_id varchar(50) binary not null collate utf8_bin)";
       $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_room ";
@@ -525,7 +525,7 @@ EOF;
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_subject ";
       $sql .= "(name varchar(100), code varchar(50), short_code varchar(20), ";
-      $sql .= "credit_value integer not null, rozsah varchar(30), external_id varchar(30) binary not null)";
+      $sql .= "credit_value integer not null, rozsah varchar(30), external_id varchar(30) binary not null collate utf8_bin)";
       $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson ";
@@ -535,7 +535,7 @@ EOF;
       $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_teacher ";
-      $sql .= "(lesson_external_id integer not null, teacher_external_id varchar(50) binary not null)";
+      $sql .= "(lesson_external_id integer not null, teacher_external_id varchar(50) binary not null collate utf8_bin)";
       $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_student_group ";
