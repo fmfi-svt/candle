@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010,2011 Martin Sucha
 
     This file is part of Candle.
 
@@ -209,6 +209,28 @@ class Candle {
         $secondSlash = strpos($longCode, '/', $firstSlash+1);
         if ($secondSlash === false) return false;
         return substr($longCode, $firstSlash+1, $secondSlash-$firstSlash-1);
+    }
+
+    /**
+     * Returns true, iff the given subject code is short
+     * @param string $code
+     * @return bool whether code is short
+     */
+    static public function isSubjectShortCode($code) {
+        return preg_match('@^\d-[A-Z]{3}-\d{3}(?:-\d)?$@', $code);
+    }
+
+    /**
+     * PriF/1-UBI-004-1/7064/00 -> 1-UBI-004-1
+     * 1-UBI-004-1 -> 1-UBI-004-1
+     * @param string $code
+     * @return string short code
+     */
+    static public function subjectShortCode($code) {
+        if (self::isSubjectShortCode($code)) {
+            return $code;
+        }
+        return self::subjectShortCodeFromLongCode($code);
     }
 
     /**

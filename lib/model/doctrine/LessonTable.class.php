@@ -94,13 +94,21 @@ class LessonTable extends Doctrine_Table
 
 
     function getIDsBySubjectCodes($codes) {
-        if (count($codes) == 0) return array();
+        $shortCodes = array();
+        foreach ($codes as $code) {
+          $shortCode = Candle::subjectShortCode($code);
+          if ($shortCode !== false) {
+              $shortCodes[] = $shortCode;
+          }
+        }
+
+        if (count($shortCodes) == 0) return array();
 
         $q = Doctrine_Query::create()
                 ->select('l.id')
                 ->from('Lesson l')
                 ->innerJoin('l.Subject s')
-                ->andWhereIn('s.short_code', $codes);
+                ->andWhereIn('s.short_code', $shortCodes);
 
         return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
     }

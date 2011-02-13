@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010,2011 Martin Sucha
 
     This file is part of Candle.
 
@@ -26,7 +26,7 @@
  */
 
 
-$t = new lime_test(68);
+$t = new lime_test(76);
 
 $t->is(Candle::formatTime(0),'0:00');
 $t->is(Candle::formatTime(5),'0:05');
@@ -75,6 +75,16 @@ $t->is(Candle::subjectShortCodeFromLongCode('bla bla'), false);
 $t->is(Candle::subjectShorterCode('1-INF-100'), '1-INF-100');
 $t->is(Candle::subjectShorterCode('1-INF-100-1'), '1-INF-100');
 $t->is(Candle::subjectShorterCode('bla bla'), false);
+
+$t->is(Candle::isSubjectShortCode('1-INF-100'), true);
+$t->is(Candle::isSubjectShortCode('1-INF-100-1'), true);
+$t->is(Candle::isSubjectShortCode('PriF/1-UBI-004-1/7064/00'), false);
+$t->is(Candle::isSubjectShortCode('volaco'), false);
+
+$t->is(Candle::subjectShortCode('1-INF-100'), '1-INF-100');
+$t->is(Candle::subjectShortCode('1-INF-100-1'), '1-INF-100-1');
+$t->is(Candle::subjectShortCode('PriF/1-UBI-004-1/7064/00'), '1-UBI-004-1');
+$t->is(Candle::subjectShortCode('volaco'), false);
 
 $t->ok(Candle::startsWith('String',''));
 $t->ok(Candle::startsWith('String','Str'));

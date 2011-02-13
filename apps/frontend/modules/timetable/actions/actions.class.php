@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010,2011 Martin Sucha
 
     This file is part of Candle.
 
@@ -380,11 +380,17 @@ class timetableActions extends sfActions {
         $text = str_replace(" ", "", $text);
         $codes = explode(",",$text);
         $lessons = Doctrine::getTable('Lesson')->getIDsBySubjectCodes($codes);
-        foreach ($lessons as $lesson) {
-            $this->timetable->addLessonById($lesson['id']);
+        if (count($lessons) != 0) {
+            foreach ($lessons as $lesson) {
+                $this->timetable->addLessonById($lesson['id']);
+            }
+            $this->getUser()->setFlash('notice', 'Dáta naimportované');
+            $this->redirect('@timetable_show?id='.$this->timetable_id);
         }
-        $this->getUser()->setFlash('notice', 'Dáta naimportované');
-        $this->redirect('@timetable_show?id='.$this->timetable_id);
+        else {
+            $this->getUser()->setFlash('error', 'Nenašli sa žiadne hodiny');
+            $this->redirect('@timetable_import?id='.$this->timetable_id);
+        }
     }
 
 }
