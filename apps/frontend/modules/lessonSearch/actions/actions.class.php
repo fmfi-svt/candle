@@ -63,6 +63,10 @@ class lessonSearchActions extends sfActions {
 
             Candle::setResponseFormat($request->getRequestFormat(), $this);
         }
+        else {
+            $thisUrl = array('sf_route'=>'lessonSearch_search');
+            $this->thisUrl = $thisUrl;
+        }
 
     }
 
@@ -70,6 +74,9 @@ class lessonSearchActions extends sfActions {
         $this->form = new LessonIntervalSearchForm();
         $this->lessonIntervals = null;
         $this->setTemplate('search');
+        $thisUrl = array('sf_route'=>'lessonSearch_search');
+
+        $this->thisUrl = $thisUrl;
     }
 
 }
