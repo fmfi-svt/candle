@@ -110,7 +110,7 @@ class timetableActions extends sfActions {
     private function getAffectedLessons(sfWebRequest $request, EditableTimetable $timetable) {
         $affectedLessons = null;
         $selectionSource = $request->getParameter('selection_source');
-        if ($selectionSource == 'selection') {
+        if ($selectionSource == 'selection' || $selectionSource == 'selection_inv') {
             $affectedLessons = array();
             $lessonSelection = $request->getParameter('lesson_selection',array());
             foreach ($lessonSelection as $lessonId) {
@@ -119,7 +119,7 @@ class timetableActions extends sfActions {
                 }
             }
         }
-        else if ($selectionSource == 'highlight') {
+        else if ($selectionSource == 'highlight' || $selectionSource == 'highlight_inv') {
             $affectedLessons = $timetable->getHighlightedLessonIds();
         }
         else if ($selectionSource == 'all') {
@@ -127,6 +127,19 @@ class timetableActions extends sfActions {
         }
         else {
             throw new Exception("Unknown value of selection_source");
+        }
+        // Ak mame nejaky inverzny vyber, tak vybrate hodiny invertujme
+        if ($selectionSource == 'selection_inv' || $selectionSource == 'highlight_inv') {
+            $negativeLessons = $affectedLessons;
+            $affectedLessons = array();
+            foreach ($timetable->getLessonIds() as $lessonId) {
+                // V nasledujucom riadku musi byt === false, pretoze
+                // array_search vracia prislusny key, t.j. pre kluc 0
+                // by obycajne porovnanie preslo aj ked nema
+                if (array_search($lessonId, $negativeLessons) === false) {
+                    $affectedLessons[] = $lessonId;
+                }
+            }
         }
         return $affectedLessons;
     }

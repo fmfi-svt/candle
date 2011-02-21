@@ -114,35 +114,40 @@ var TimetableEditor = new Class({
     },
     selectionSourceChanged: function(event) {
         var select = $(event.target);
-        if (select.value == 'highlight') {
-            $('timetable_editor_selection_action_highlight').disabled = "disabled";
+        function setEnabled(button, value) {
+            button.disabled = value ? undefined : "disabled";
         }
-        else {
-            $('timetable_editor_selection_action_highlight').disabled = undefined;
-        }
+        var highlight_btn = $('timetable_editor_selection_action_highlight');
+        var unhighlight_btn = $('timetable_editor_selection_action_unhighlight');
+        setEnabled(highlight_btn, select.value != 'highlight');
+        setEnabled(unhighlight_btn, select.value != 'highlight_inv');
     },
     getAffectedLessonIds: function() {
-        var lessonIds = Array();
         var selectionSource = $('timetable_editor_selection_source');
-        if (selectionSource.value == 'selection') {
-            $('timetable_editor').getElements('input[type=checkbox][name="lesson_selection[]"][checked]')
+        function collectBySelector(selector) {
+            var lessonIds = Array();
+            $('timetable_editor').getElements(selector)
                     .each(function(checkbox) {
                 lessonIds.push(checkbox.value);
             });
+            return lessonIds;
+        }
+        if (selectionSource.value == 'selection') {
+            return collectBySelector('input[type=checkbox][name="lesson_selection[]"][checked]');
+        }
+        else if (selectionSource.value == 'selection_inv') {
+            return collectBySelector('input[type=checkbox][name="lesson_selection[]"]:not([checked])');
         }
         else if (selectionSource.value == 'highlight') {
-            $('timetable_editor').getElements('.highlighted input[type=checkbox][name="lesson_selection[]"]')
-                    .each(function(checkbox) {
-                lessonIds.push(checkbox.value);
-            });
+            return collectBySelector('.hodina.highlighted input[type=checkbox][name="lesson_selection[]"]');
+        }
+        else if (selectionSource.value == 'highlight_inv') {
+            return collectBySelector('.hodina:not(.highlighted) input[type=checkbox][name="lesson_selection[]"]');
         }
         else if (selectionSource.value == 'all') {
-            $('timetable_editor').getElements('input[type=checkbox][name="lesson_selection[]"]')
-                    .each(function(checkbox) {
-                lessonIds.push(checkbox.value);
-            });
+            return collectBySelector('input[type=checkbox][name="lesson_selection[]"]');
         }
-        return lessonIds;
+        throw "Invalid selectionSource value";
     },
     timetableFormSubmit: function(event) {
         event.preventDefault();

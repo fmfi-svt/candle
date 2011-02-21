@@ -31,7 +31,9 @@ if ($addSlots) {
 
 <select name="selection_source" size="1" id="timetable_editor_selection_source">
     <option value="selection" id="selection_source_selection">Označené</option>
+    <option value="selection_inv" id="selection_source_selection_inv">Neoznačené</option>
     <option value="highlight" id="selection_source_highlight">Zvýraznené</option>
+    <option value="highlight_inv" id="selection_source_highligh_inv">Nezvýraznené</option>
     <option value="all" id="selection_source_all">Všetky</option>
 </select>
 
