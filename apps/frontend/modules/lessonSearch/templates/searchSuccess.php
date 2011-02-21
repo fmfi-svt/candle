@@ -89,7 +89,22 @@ end_slot();
     echo Candle::formatTime($lesson['end']);
     echo '</td>';
     echo '<td>';
-    echo link_to($lesson['Subject']['name'], array_merge($rawThisUrl, array('showLessons'=>$lesson['Subject']['name'])));
+    // TODO(anty): refactor this as it is duplicated
+    $shortCode = $lesson['Subject']['short_code'];
+    $subjectInfoLink = Candle::makeSubjectInfoLink($shortCode);
+    $subjectName = $lesson['Subject']['name'];
+    if ($subjectInfoLink) {
+        $subjectName = link_to($subjectName, $subjectInfoLink, array('class'=>'subjectName'));
+    }
+    else {
+        $subjectName = '<span class="subjectName">'.$subjectName.'</span>';
+    }
+    echo $subjectName;
+    echo ' (';
+    echo link_to("Zobraziť v paneli", array_merge($rawThisUrl,
+            array('showLessons'=>$lesson['Subject']['name'])),
+            array('title'=>"Zobraziť v paneli: " . $lesson['Subject']['name']));
+    echo ')';
     echo '</td>';
     echo '<td>';
     $first = true;
