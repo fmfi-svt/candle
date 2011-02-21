@@ -140,10 +140,10 @@ class LessonTable extends Doctrine_Table
             }
             $firstInterval = false;
 
-            $intervalWhere .= 'l.day = ? AND l.start <= ? AND l.end >= ?';
+            $intervalWhere .= 'l.day = ? AND l.start >= ? AND l.end <= ?';
             $params[] = $interval[0]; //day
-            $params[] = $interval[2]; // end
             $params[] = $interval[1]; // start
+            $params[] = $interval[2]; // end
         }
 
         $intervalWhere .= '))';
