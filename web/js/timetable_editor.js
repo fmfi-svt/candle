@@ -202,6 +202,9 @@ var TimetableEditor = new Class({
     },
     change: function() {
         this.fireEvent('change');
+        var cas = new Date().getTime();
+        Cookie.write("timetableEditor_changeToken", cas,
+            {path: candleFrontendRelativeUrl, domain: candleFrontendDomain });
     },
     serverPostLessonIds: function(lesson_ids, fieldName, refreshTimetable) {
         var dataToSend = "";
@@ -363,6 +366,12 @@ window.addEvent('domready', function() {
                   editorPanel.lessonUpdateState(checkbox);
               }
           });
+          // Po stlaceni tlacitka back sa musi rozvrh znovu nacitat
+          if (Cookie.read("timetableEditor_changeToken") != candleTimetableEditor_changeToken) {
+              //alert(Cookie.read("timetableEditor_changeToken") + " != " + candleTimetableEditor_changeToken);
+              editor.refreshTimetable();
+          }
+          
       }
   }
 

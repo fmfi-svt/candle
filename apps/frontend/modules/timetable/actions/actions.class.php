@@ -50,6 +50,11 @@ class timetableActions extends sfActions {
         header('Expires: Mon, 1 Jan 1990 00:00:00 GMT');
         header('Cache-Control: no-cache, must-revalidate');
         header('Pragma: no-cache');
+        $changeToken = sha1(time()."__".mt_rand());
+        $this->getResponse()->setCookie('timetableEditor_changeToken',
+                $changeToken, null, $this->getController()->genUrl('@homepage'),
+                $request->getHost());
+        $this->changeToken = $changeToken;
     }
 
     public function executeNew(sfWebRequest $request) {

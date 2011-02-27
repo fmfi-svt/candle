@@ -11,6 +11,7 @@
         var candleFrontendRelativeUrl = "<?php echo url_for('@homepage');?>";
         var candleFrontendAbsoluteUrl = "<?php echo url_for('@homepage', true);?>";
         var candleFrontendDomain = "<?php echo $sf_request->getHost();?>";
+        <?php include_slot('additionalRawJavascript') ?>
     </script>
     <?php include_stylesheets() ?>
 

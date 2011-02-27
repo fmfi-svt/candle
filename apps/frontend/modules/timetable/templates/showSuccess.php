@@ -12,6 +12,10 @@ if ($addSlots) {
     include_component('timetable', 'editMenu', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id, 'published_slug'=>$published_slug));
     end_slot();
 
+    slot('additionalRawJavascript');
+    echo 'var candleTimetableEditor_changeToken = \'' . $changeToken . '\';';
+    end_slot();
+
     if($published_slug) {
         $publishedInternalUrl = array('sf_route'=>'timetable_show_published', 'slug'=>$published_slug);
         echo '<div id="timetable_full_url">';
