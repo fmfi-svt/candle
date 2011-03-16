@@ -789,3 +789,15 @@ h1.posunuty {
 .hidden {
     display: none;
 }
+
+#panel_loading {
+    height: 1em;
+}
+
+#lessons_box_loading {
+    display: none;
+}
+
+#lessons_box_loading.active {
+    display: block;
+}

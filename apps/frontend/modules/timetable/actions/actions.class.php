@@ -82,6 +82,9 @@ class timetableActions extends sfActions {
     private function fetchTimetable(sfWebRequest $request) {
         $this->manager = $this->getUser()->getTimetableManager();
         $this->timetable_id = $request->getParameter('id');
+        if ($this->timetable_id != null) {
+            $this->timetable_id = intval($this->timetable_id);
+        }
         $this->timetable = $this->manager->getTimetable($this->timetable_id);
         $this->forward404Unless($this->timetable);
         $this->addSlots = true;

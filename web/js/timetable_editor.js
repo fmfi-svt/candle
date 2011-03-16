@@ -328,6 +328,37 @@ var TimetableEditorPanel = new Class({
     }
 });
 
+function createEditorPanel(editor) {
+    var panel_change_lessons_form = $('panel_change_lessons');
+
+    if (!$chk(panel_change_lessons_form)) return;
+
+    var editorPanel = new TimetableEditorPanel(panel_change_lessons_form);
+    editorPanel.addEvent('lessonChange', function(lessonId, selected) {
+        if (selected) {
+            editor.addLesson(lessonId);
+        }
+        else {
+            editor.removeLesson(lessonId);
+        }
+    });
+    editorPanel.addEvent('subjectChange', function(subjectId, selected) {
+        if (selected) {
+            editor.addSubject(subjectId);
+        }
+        else {
+            editor.removeSubject(subjectId);
+        }
+    });
+    editor.addEvent('lessonRemoved', function(lessonId) {
+        var checkbox = editorPanel.getLessonCheckbox(lessonId);
+        if (checkbox) {
+            checkbox.checked = false;
+            editorPanel.lessonUpdateState(checkbox);
+        }
+    });
+}
+
 window.addEvent('domready', function() {
 
   var timetable_editor_element = $('timetable_editor');
@@ -339,40 +370,14 @@ window.addEvent('domready', function() {
          tabManager.setState('upravený');
       });
 
-      var panel_change_lessons_form = $('panel_change_lessons');
-
-      if ($chk(panel_change_lessons_form)) {
-          var editorPanel = new TimetableEditorPanel(panel_change_lessons_form);
-          editorPanel.addEvent('lessonChange', function(lessonId, selected) {
-              if (selected) {
-                  editor.addLesson(lessonId);
-              }
-              else {
-                  editor.removeLesson(lessonId);
-              }
-          });
-          editorPanel.addEvent('subjectChange', function(subjectId, selected) {
-              if (selected) {
-                  editor.addSubject(subjectId);
-              }
-              else {
-                  editor.removeSubject(subjectId);
-              }
-          });
-          editor.addEvent('lessonRemoved', function(lessonId) {
-              var checkbox = editorPanel.getLessonCheckbox(lessonId);
-              if (checkbox) {
-                  checkbox.checked = false;
-                  editorPanel.lessonUpdateState(checkbox);
-              }
-          });
-          // Po stlaceni tlacitka back sa musi rozvrh znovu nacitat
-          if (Cookie.read("timetableEditor_changeToken") != candleTimetableEditor_changeToken) {
-              //alert(Cookie.read("timetableEditor_changeToken") + " != " + candleTimetableEditor_changeToken);
-              editor.refreshTimetable();
-          }
+      createEditorPanel(editor);
           
+      // Po stlaceni tlacitka back sa musi rozvrh znovu nacitat
+      if (Cookie.read("timetableEditor_changeToken") != candleTimetableEditor_changeToken) {
+          //alert(Cookie.read("timetableEditor_changeToken") + " != " + candleTimetableEditor_changeToken);
+          editor.refreshTimetable();
       }
+      document.timetableEditor = editor;
   }
 
 });

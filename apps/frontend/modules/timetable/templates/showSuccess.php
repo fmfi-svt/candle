@@ -14,6 +14,7 @@ if ($addSlots) {
 
     slot('additionalRawJavascript');
     echo 'var candleTimetableEditor_changeToken = \'' . $changeToken . '\';';
+    echo 'document.candleTimetableEditor_timetableId = ' . $timetable_id . ';';
     end_slot();
 
     if($published_slug) {

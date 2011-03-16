@@ -1,8 +1,17 @@
+<div id="panel_loading">
+    <div id="lessons_box_loading">
+        <img alt="" src="<?php echo image_path('loading-gray.gif') ?>" />
+        Načítavam...
+    </div>
+</div>
+
 <div class="panel_cast" id="panel_cast_hodiny">
     <h2><a href="#panel_cast_hodiny">Predmety a hodiny</a></h2>
     <div class="panel_cast_obsah">
         <?php include_stylesheets_for_form($lessonForm) ?>
         <?php include_javascripts_for_form($lessonForm) ?>
+
+        
 
         <form method="post" action=""><div class="panel_search">
             <?php echo $lessonForm['showLessons']->renderLabel();
@@ -10,21 +19,14 @@
             <?php echo $lessonForm['showLessons']->renderError() ?>
         </div></form>
         (názov/kód predmetu, učiteľ, miestnosť)
-        <?php if ($subjects): ?>
-            <div class="pristupnost">Výsledky hľadania:</div>
-            <?php include_partial('panel/list_lessons', array(
-                        'form' => $lessonForm,
-                        'subjects' => $subjects,
-                        'timetable' => $timetable,
-                        'timetable_id' => $timetable_id
-                    )); ?>
-        <?php else: ?>
-            <?php if ($timetable): ?>
-                <p>Upravovať rozvrh začnite vyhľadaním a začiarknutím predmetu alebo hodiny, ktorú chcete pridať</p>
-            <?php else: ?>
-                <p>Pomocou formuláru vyššie vyhľadajte predmety alebo hodiny</p>
-            <?php endif; ?>
-        <?php endif; ?>
+        <div id="list_lessons_box">
+        <?php include_partial('panel/list_lessons_box', array(
+                'form' => $lessonForm,
+                'subjects' => $subjects,
+                'timetable' => $timetable,
+                'timetable_id' => $timetable_id
+            )); ?>
+        </div>
     </div>
 </div>
 <div class="panel_cast" id="panel_cast_ucitelia">
