@@ -217,7 +217,13 @@ class Candle {
      * @return bool whether code is short
      */
     static public function isSubjectShortCode($code) {
-        return preg_match('@^\d-[A-Z]{3}-\d{3}(?:-\d)?$@', $code);
+        $regexp = '@^\d-[A-Z]{3}-\d{3}(?:-\d)?$@';
+        $result = preg_match($regexp, $code);
+        if ($result === false) {
+            throw new Exception('Error while matching a regexp ' . $regexp .
+                ' in Candle.php->isSubjectShortCode for input ' . $code);
+        }
+        return $result === 1;
     }
 
     /**
