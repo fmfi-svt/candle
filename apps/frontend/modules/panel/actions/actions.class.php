@@ -3,6 +3,7 @@
 /**
 
     Copyright 2011 Martin Sucha
+    Copyright 2011 Tomi Belan
 
     This file is part of Candle.
 
@@ -59,6 +60,87 @@ class panelActions extends sfActions {
         }
         else {
             $this->timetable = null;
+        }
+
+        $this->setLayout(false);
+
+    }
+
+    public function executeListTeachers(sfWebRequest $request) {
+
+        $this->teacherForm = new TeacherSearchForm();
+        $queryString = $request->getParameter('showTeachers');
+        $this->teacherForm->bind(
+            array('showTeachers' => $queryString),
+            array()
+        );
+
+        if ($this->teacherForm->isValid()) {
+            $this->getUser()->setAttribute('panel_teacher_query', $queryString);
+            if (empty($queryString)) {
+                $this->teachers = null;
+            }
+            else {
+                $this->teachers = Doctrine::getTable('Teacher')->searchTeachersByName($queryString);
+                // note: no automatic redirect to teacher on single result
+            }
+        }
+        else {
+            $this->teachers = null;
+        }
+
+        $this->setLayout(false);
+
+    }
+
+    public function executeListRooms(sfWebRequest $request) {
+
+        $this->roomForm = new RoomSearchForm();
+        $queryString = $request->getParameter('showRooms');
+        $this->roomForm->bind(
+            array('showRooms' => $queryString),
+            array()
+        );
+
+        if ($this->roomForm->isValid()) {
+            $this->getUser()->setAttribute('panel_room_query', $queryString);
+            if (empty($queryString)) {
+                $this->rooms = null;
+            }
+            else {
+                $this->rooms = Doctrine::getTable('Room')->searchRoomsByName($queryString);
+                // note: no automatic redirect to room on single result
+            }
+        }
+        else {
+            $this->rooms = null;
+        }
+
+        $this->setLayout(false);
+
+    }
+
+    public function executeListStudentGroups(sfWebRequest $request) {
+
+        $this->studentGroupForm = new StudentGroupSearchForm();
+        $queryString = $request->getParameter('showStudentGroups');
+        $this->studentGroupForm->bind(
+            array('showStudentGroups' => $queryString),
+            array()
+        );
+
+        if ($this->studentGroupForm->isValid()) {
+            $this->getUser()->setAttribute('panel_studentGroup_query', $queryString);
+            if (empty($queryString)) {
+                $this->studentGroups = null;
+            }
+            else {
+                $this->studentGroups = Doctrine::getTable('StudentGroup')->searchStudentGroupsByName($queryString);
+                // note: no automatic redirect to group on single result
+            }
+        }
+        else {
+            $this->studentGroups = null;
         }
 
         $this->setLayout(false);

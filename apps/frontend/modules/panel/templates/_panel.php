@@ -1,8 +1,7 @@
-<div id="panel_loading">
-    <div id="lessons_box_loading">
-        <img alt="" src="<?php echo image_path('loading-gray.gif') ?>" />
-        Načítavam...
-    </div>
+
+<div id="panel_throbber">
+    <img alt="" src="<?php echo image_path('loading-gray.gif') ?>" />
+    Načítavam...
 </div>
 
 <div class="panel_cast" id="panel_cast_hodiny">
@@ -43,12 +42,11 @@
 
         (meno a/alebo priezvisko učiteľa)
 
-        <?php if ($teachers): ?>
-            <div class="pristupnost">Výsledky hľadania:</div>
-            <?php include_partial('panel/list_teachers', array(
-                        'teachers' => $teachers,
-                    )); ?>
-        <?php endif; ?>
+        <div id="list_teachers_box">
+        <?php include_partial('panel/list_teachers_box', array(
+                'teachers' => $teachers
+            )); ?>
+        </div>
     </div>
 </div>
 <div class="panel_cast" id="panel_cast_miestnosti">
@@ -65,12 +63,11 @@
 
         (názov miestnosti)
 
-        <?php if ($rooms): ?>
-            <div class="pristupnost">Výsledky hľadania:</div>
-            <?php include_partial('panel/list_rooms', array(
-                        'rooms' => $rooms,
-                    )); ?>
-        <?php endif; ?>
+        <div id="list_rooms_box">
+        <?php include_partial('panel/list_rooms_box', array(
+                'rooms' => $rooms
+            )); ?>
+        </div>
     </div>
 </div>
 <div class="panel_cast" id="panel_cast_kruzky">
@@ -87,12 +84,11 @@
 
         (názov krúžku)
 
-        <?php if ($studentGroups): ?>
-            <div class="pristupnost">Výsledky hľadania:</div>
-            <?php include_partial('panel/list_studentGroups', array(
-                        'studentGroups' => $studentGroups,
-                    )); ?>
-        <?php endif; ?>
+        <div id="list_studentGroups_box">
+        <?php include_partial('panel/list_studentGroups_box', array(
+                'studentGroups' => $studentGroups
+            )); ?>
+        </div>
     </div>
 </div>
 

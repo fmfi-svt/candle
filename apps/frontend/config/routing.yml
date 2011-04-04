@@ -283,3 +283,15 @@ lessonSearch_search_parameters:
 panel_list_lessons:
     url: /panel/list-lessons
     param: { module: panel, action: listLessons }
+
+panel_list_teachers:
+    url: /panel/list-teachers
+    param: { module: panel, action: listTeachers }
+
+panel_list_rooms:
+    url: /panel/list-rooms
+    param: { module: panel, action: listRooms }
+
+panel_list_studentGroups:
+    url: /panel/list-studentGroups
+    param: { module: panel, action: listStudentGroups }

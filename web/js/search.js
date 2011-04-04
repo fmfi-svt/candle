@@ -1,42 +1,71 @@
-window.addEvent('domready', function() {
-    var loading = $('lessons_box_loading');
+
+(function () {
+
+var pendingRequests = 0;
+
+function addSearch(url, input, target, error, useEditor) {
+    var throbber = $('panel_throbber');
+    var oldValue;
     var searchRequest = new Request.HTML({
-        url: candleFrontendAbsoluteUrl+"/panel/list-lessons",
+        url: candleFrontendAbsoluteUrl+url,
         link: 'cancel',
         onSuccess: function(responseTree, responseElements,
             responseHTML, responseJavaScript) {
-            if ($chk(loading)) {
-                loading.removeClass('active');
+            pendingRequests--;
+            if (pendingRequests == 0 && $chk(throbber)) {
+                throbber.removeClass('active');
             }
-            $('list_lessons_box').innerHTML = responseHTML;
-            if ($chk(document.timetableEditor)) {
+            $(target).innerHTML = responseHTML;
+            if (useEditor && $chk(document.timetableEditor)) {
                 createEditorPanel(document.timetableEditor);
             }
 
         },
-        onFailure: function() {
-            if ($chk(loading)) {
-                loading.removeClass('active');
+        onCancel: function() {
+            pendingRequests--;
+            if (pendingRequests == 0 && $chk(throbber)) {
+                throbber.removeClass('active');
             }
-            $('list_lessons_box').innerHTML = 'Nepodarilo sa načítať ' +
-                'zoznam predmetov.';
+        },
+        onFailure: function() {
+            pendingRequests--;
+            if (pendingRequests == 0 && $chk(throbber)) {
+                throbber.removeClass('active');
+            }
+            $(target).innerHTML = error;
         }
     });
 
+    $(input).addEvent('keyup', function() {
+        if ($(input).value == oldValue) return;
+        oldValue = $(input).value;
 
-    $('showLessons').addEvent('keyup', function() {
         var cas = new Date().getTime();
-        if ($chk(loading)) {
-            loading.addClass('active');
+        if (pendingRequests == 0 && $chk(throbber)) {
+            throbber.addClass('active');
         }
+        pendingRequests++;
 
-        var data = {
-            'cas':cas,
-            'showLessons':$('showLessons').value};
+        var data = { 'cas': cas };
+        data[input] = $(input).value;
 
-        if ($chk(document.candleTimetableEditor_timetableId)) {
+        if (useEditor && $chk(document.candleTimetableEditor_timetableId)) {
             data.timetable_id = document.candleTimetableEditor_timetableId;
         }
         searchRequest.get(data);
-  });
+    });
+}
+
+window.addEvent('domready', function() {
+    addSearch('/panel/list-lessons', 'showLessons', 'list_lessons_box',
+        'Nepodarilo sa načítať zoznam predmetov.', true);
+    addSearch('/panel/list-teachers', 'showTeachers', 'list_teachers_box',
+        'Nepodarilo sa načítať zoznam učiteľov.');
+    addSearch('/panel/list-rooms', 'showRooms', 'list_rooms_box',
+        'Nepodarilo sa načítať zoznam miestností.');
+    addSearch('/panel/list-studentGroups', 'showStudentGroups', 'list_studentGroups_box',
+        'Nepodarilo sa načítať zoznam krúžkov.');
 });
+
+})();
+

@@ -790,14 +790,10 @@ h1.posunuty {
     display: none;
 }
 
-#panel_loading {
-    height: 1em;
+#panel_throbber {
+    visibility: hidden;
 }
 
-#lessons_box_loading {
-    display: none;
-}
-
-#lessons_box_loading.active {
-    display: block;
+#panel_throbber.active {
+    visibility: visible;
 }
