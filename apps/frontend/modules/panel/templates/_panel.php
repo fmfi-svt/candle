@@ -1,8 +1,5 @@
 
-<div id="panel_throbber">
-    <img alt="" src="<?php echo image_path('loading-gray.gif') ?>" />
-    Načítavam...
-</div>
+<div id="panel_throbber">Načítavam...</div>
 
 <div class="panel_cast" id="panel_cast_hodiny">
     <h2><a href="#panel_cast_hodiny">Predmety a hodiny</a></h2>

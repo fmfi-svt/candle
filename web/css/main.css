@@ -792,6 +792,8 @@ h1.posunuty {
 
 #panel_throbber {
     visibility: hidden;
+    padding-left: 20px;
+    background: transparent url("../images/loading-gray.gif") left center no-repeat;
 }
 
 #panel_throbber.active {
