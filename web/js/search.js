@@ -4,6 +4,8 @@
 var pendingRequests = 0;
 
 function addSearch(url, input, target, error, useEditor) {
+    if (!$(input)) return;
+
     var throbber = $('panel_throbber');
     var oldValue;
     var searchRequest = new Request.HTML({
