@@ -2,8 +2,6 @@
 html, body {
     margin: 0;
     padding: 0;
-    color: white;   
-    background: #4e546a url("../images/bg-body.png") left top repeat-y;
     font-size: 10pt;
     font-family: sans-serif;
     min-width: 700px;
@@ -20,8 +18,6 @@ form {
 
 #vrch {
     height: 90px;
-    color: white;
-    background: #1a1a1a;
     position: relative;
 }
 
@@ -44,13 +40,9 @@ form {
 }
 
 #vrch_riadok1 ul li+li, #vrch_riadok1_vpravo ul li {
-    border-left: 1px solid #999;
+    border-left: 1px solid;
     margin-left: 0.5em;
     padding-left: 0.5em;
-}
-
-#vrch_riadok1 a {
-    color: white;
 }
 
 #vrch_riadok1 .selected {
@@ -59,7 +51,6 @@ form {
 
 #vrch_riadok1 .username {
     font-weight: bold;
-    color: #999;
 }
 
 #vrch_riadok1_vlavo {
@@ -107,7 +98,6 @@ form {
 
 #vrch_riadok2 a {
     text-decoration: none;
-    color: white;
 }
 
 #rozvrh_taby {
@@ -124,10 +114,6 @@ form {
     font-weight: bold;
 }
 
-#rozvrh_taby a.selected, #rozvrh_taby a:hover {
-    background: #343846;
-}
-
 #rozvrh_taby a.rozvrh_taby_novy{
     font-style: italic;
 }
@@ -139,7 +125,6 @@ form {
 }
 
 #rozvrh_akcie {
-    background: #343846;
     text-align: right;
 }
 
@@ -150,8 +135,6 @@ form {
 #rozvrh_akcie li+li {
     margin-left: 0.3em;
 }
-
-
 
 #vrch_logo {
     margin: 0;
@@ -167,18 +150,12 @@ form {
     display: block;
     line-height: 64px;
     padding-left: 85px;
-    background: #1A1A1A url("../images/logo3.png") bottom left no-repeat;
     font-weight: normal;
-    color: white;
     text-decoration: none;
 }
 
 #vrch_logo a:hover {
     text-decoration: underline;
-}
-
-.rozvrh_stav {
-    color: yellow;
 }
 
 #hlavny {
@@ -187,8 +164,6 @@ form {
 
 #panel {
     width: 290px;
-    color: white;
-    background: #808080;
     position: absolute;
     left: 0;
     top: 90px;
@@ -204,26 +179,14 @@ form {
 
 .panel_cast h2, .panel_cast_no_collapse h2 {
     font-size: 100%;
-    background: #333;
-    color: white;
     background-position: right center;
     background-repeat: no-repeat;
     margin: 0.5em 0;
     padding: 0;
 }
 
-.jsactive .panel_cast h2 {
-    background-image: url("../images/bg-collapse-group.png");
-}
-
-.panel_cast.collapsed h2 {
-    background-image: url("../images/bg-expand-group.png");
-    
-}
-
 .panel_cast h2 a, .panel_cast_no_collapse h2 {
     display: block;
-    color: white;
     text-decoration: none;
     padding: 0.3em;
 }
@@ -245,7 +208,6 @@ form {
 #panel_schovat {
     width: 32px;
     height: 30px;
-    background: #808080 url("../images/bg-schovavac-panelu.png") top left no-repeat;
     position: absolute;
     top: 90px;
     left: 290px;
@@ -257,7 +219,6 @@ form {
 
 .panel_hidden #panel_schovat {
     left: 0;
-    background-image: url("../images/bg-zobrazovac-panelu.png");
 }
 
 #panel_schovat a {
@@ -283,10 +244,6 @@ form {
     padding-left: 1.5em;
 }
 
-#panel_cast_nastroje a {
-    color: white;
-}
-
 ul.vysledky_hladania {
     padding: 0;
     margin: 0;
@@ -297,8 +254,6 @@ ul.vysledky_hladania {
 }
 
 ul.vysledky_hladania li {
-    color: black;
-    background: white;
     display: block;
     margin: 0;
     padding: 3px;
@@ -310,8 +265,6 @@ ul.vysledky_hladania li+li {
 
 .predmet_header {
     display: block;
-    background: #333;
-    color: white;
     padding: 3px;
     position: relative;
 }
@@ -348,14 +301,6 @@ ul.vysledky_hladania li+li {
     width: 40%;
 }
 
-.predmet_info table td.odkazy a {
-    color: white;
-}
-
-.predmet_info table td.odkazy a:visited {
-    color: #bbb;
-}
-
 .predmet_check {
     position: absolute;
     z-index: 10;
@@ -366,8 +311,6 @@ ul.vysledky_hladania li+li {
 .predmet table.vysledky {
     border-collapse: collapse;
     width: 100%;
-    background: white;
-    color: black;
 }
 
 .predmet table.vysledky th, .predmet_info table th, .pristupnost, .panel_search label {
@@ -381,7 +324,7 @@ ul.vysledky_hladania li+li {
 }
 
 .predmet table.vysledky tr+tr {
-    border-top: 1px solid #999;
+    border-top: 1px solid;
 }
 
 .predmet table.vysledky td {
@@ -401,23 +344,10 @@ ul.vysledky_hladania li+li {
     padding-left: 0;
 }
 
-#obsah_vrch {
-    background: transparent url("../images/bg-obsah-top.png") top repeat-x;
-}
-
-#obsah_vrch_lavy {
-    background: transparent url("../images/bg-obsah-top-left.png") top left no-repeat;
-}
-
-
 #obsah_in {
     padding-top: 15px;
     padding-left: 15px;
     padding-right: 1em;
-}
-
-#obsah_in a {
-    color: yellow;
 }
 
 #timetable_editor_command_bar {
@@ -431,21 +361,17 @@ ul.vysledky_hladania li+li {
 }
 
 #rozvrh tr.startTimeHeader {
-    border-top: 2px solid #4E546A;
+    border-top: 2px solid;
 }
 
 #rozvrh th {
-    background: #D3D5DD;
-    color: black;
     padding: 0.5em;
     font-weight: normal;
     width: 20%;
-    border: 2px solid #4E546A;
+    border: 2px solid;
 }
 
 #rozvrh td {
-    background-color: #666B7E;
-    color: white;
     height: 3em;
     vertical-align: top;
     /* Hm, spodny border sa renderoval vo FF aj do nasledujucej bunky,
@@ -456,11 +382,11 @@ ul.vysledky_hladania li+li {
 }
 
 #rozvrh td.startOfDayColumn {
-    border-left: 2px solid #4E546A;
+    border-left: 2px solid;
 }
 
 #rozvrh td.endOfDayColumn {
-    border-right: 2px solid #4E546A;
+    border-right: 2px solid;
 }
 
 #rozvrh td.cas {
@@ -478,27 +404,12 @@ ul.vysledky_hladania li+li {
 }
 
 #rozvrh td.hodina {
-    background: #D3D5DD;
-    color: black;
     text-align: center;
     padding: 2px;
-    border: 2px solid #4E546A;
-}
-
-#rozvrh td.hodina.highlighted {
-    background: #f0ec96;
-}
-
-#rozvrh td.hodina.selected {
-    background: #f5f7ff;
-}
-
-#rozvrh td.hodina.highlighted.selected {
-    background: #fff9c2;
+    border: 2px solid;
 }
 
 #rozvrh th.zaciatok {
-    background: transparent;
     width: auto;
 }
 
@@ -511,14 +422,6 @@ ul.vysledky_hladania li+li {
     position: absolute;
     top: 0;
     left: 0;
-}
-
-#rozvrh td.hodina .miestnost a {
-    color: black;
-}
-
-#rozvrh td.hodina a.subjectName {
-    color: black;
 }
 
 #rozvrh td.hodina .typ {
@@ -588,83 +491,15 @@ ul.vysledky_hladania li+li {
     height: 22px;
 }
 
-.lesson-type-C .lesson-type-image {
-    background: transparent url("../images/ikona-typ-c.png") center center no-repeat;
-}
-
-#rozvrh td.hodina.lesson-type-C .typ {
-    background-color: #800000;
-    color: white;
-}
-
-.lesson-type-K .lesson-type-image {
-    background: transparent url("../images/ikona-typ-k.png") center center no-repeat;
-}
-
-#rozvrh td.hodina.lesson-type-K .typ  {
-    background-color: #aa8800;
-    color: white;
-}
-
-.lesson-type-L .lesson-type-image {
-    background: transparent url("../images/ikona-typ-l.png") center center no-repeat;
-}
-
-#rozvrh td.hodina.lesson-type-L .typ  {
-    background-color: #338000;
-    color: white;
-}
-
-.lesson-type-N .lesson-type-image {
-    background: transparent url("../images/ikona-typ-n.png") center center no-repeat;
-}
-
-#rozvrh td.hodina.lesson-type-N .typ  {
-    background-color: #666666;
-    color: white;
-}
-
-.lesson-type-P .lesson-type-image {
-    background: transparent url("../images/ikona-typ-p.png") center center no-repeat;
-}
-
-#rozvrh td.hodina.lesson-type-P .typ  {
-    background-color: #3771c8;
-    color: white;
-}
-
-.lesson-type-S .lesson-type-image {
-    background: transparent url("../images/ikona-typ-s.png") center center no-repeat;
-}
-
-#rozvrh td.hodina.lesson-type-S .typ  {
-    background-color: #800066;
-    color: white;
-}
-
-.lesson-type-V .lesson-type-image {
-    background: transparent url("../images/ikona-typ-v.png") center center no-repeat;
-}
-
-#rozvrh td.hodina.lesson-type-V .typ  {
-    background-color: #008066;
-    color: white;
-}
-
-
 .flash_notice {
     margin: 0 30px;
     padding: 0.4em;
-    background: #7f7;
-    color: black;
     margin-bottom: 0.8em;
 }
 
 .flash_error {
     margin: 0 30px;
     padding: 0.4em;
-    background: #d55;
-    color: white;
     font-weight: bold;
     margin-bottom: 0.8em;
 }
@@ -713,7 +548,7 @@ h1.posunuty {
     padding: 0.2em 0.4em;
     font-family: monospace;
     font-weight: bold;
-    border: 1px dotted white;
+    border: 1px dotted;
     display: inline-block;
 }
 
@@ -726,38 +561,19 @@ h1.posunuty {
 }
 
 #obsah_in table.vysledky_podrobneho_hladania th {
-    background: #D3D5DD;
-    color: black;
     padding: 0.5em;
     font-weight: normal;
 }
 
 #obsah_in table.vysledky_podrobneho_hladania td {
-    color: white;
-    background: #666B7E;
     padding: 0.3em;
 }
 
-#obsah_in table.vysledky_podrobneho_hladania tbody tr:hover td {
-    background: #D3D5DD;
-    color: black;
-}
-
-#obsah_in table.vysledky_podrobneho_hladania tbody tr:hover td a {
-    color: blue;
-}
-
 #obsah_in div.footer {
-    color: #D3D5DD;
     clear: both;
 }
 
-#obsah_in div.footer a {
-    color: white;
-}
-
 #obsah_in div.footer .last_update {
-    /*color: white;*/
     font-weight: bold;
 }
 
@@ -793,7 +609,6 @@ h1.posunuty {
 #panel_throbber {
     visibility: hidden;
     padding-left: 20px;
-    background: transparent url("../images/loading-gray.gif") left center no-repeat;
 }
 
 #panel_throbber.active {
