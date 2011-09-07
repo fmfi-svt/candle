@@ -560,12 +560,22 @@ h1.posunuty {
     width: 100%;
 }
 
-#obsah_in table.vysledky_podrobneho_hladania th {
+#obsah_in table.aktualne {
+    width: 50%;
+}
+
+#obsah_in table.aktualne.stlpec0 {
+    float: left;
+}
+
+#obsah_in table.vysledky_podrobneho_hladania th,
+#obsah_in table.aktualne th {
     padding: 0.5em;
     font-weight: normal;
 }
 
-#obsah_in table.vysledky_podrobneho_hladania td {
+#obsah_in table.vysledky_podrobneho_hladania td
+#obsah_in table.aktualne td {
     padding: 0.3em;
 }
 

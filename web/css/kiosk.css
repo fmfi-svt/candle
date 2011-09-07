@@ -1,0 +1,27 @@
+/* Jednoduche zobrazenie na kiosku */
+
+#vrch {
+    height: 40px;
+} 
+
+#vrch_logo {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    left: auto;
+    bottom: auto;
+}
+ 
+#vrch_logo a {
+    padding-left: 0;
+    padding-right: 45px;
+    background: #1A1A1A url("../images/logo-small.png") bottom right no-repeat;
+    color: white;
+    line-height: 32px;
+}
+
+#kiosk_vrch {
+    padding-left: 15px;
+    padding-top: 5px;
+    line-height: 35px;
+}

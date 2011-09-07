@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010, 2011 Martin Sucha
 
     This file is part of Candle.
 
@@ -117,7 +117,7 @@ class LessonTable extends Doctrine_Table
      * Find lessons in time intervals
      * @param array $inIntervals array of array(day, start, end)
      */
-    public function findIntervals(array $inIntervals) {
+    public function findIntervals(array $inIntervals, $broadMatch = false, $orderBySubjectName = false) {
 
         // Fix a bug with bad SQL syntax on empty intervals
         if (count($inIntervals) == 0) return array();
@@ -128,7 +128,13 @@ class LessonTable extends Doctrine_Table
                 ->innerJoin('l.Room r')
                 ->leftJoin('l.Subject s')
                 ->leftJoin('l.Teacher t')
-                ->orderBy('l.day, l.start, l.end, r.name');
+                ->leftJoin('l.LessonType lt');
+        if ($orderBySubjectName) {
+            $q->orderBy('s.name, l.day, l.start, l.end, r.name');
+        }
+        else {
+            $q->orderBy('l.day, l.start, l.end, r.name');
+        }
 
         $params = array();
         $intervalWhere = '(('; //DQL
@@ -140,10 +146,18 @@ class LessonTable extends Doctrine_Table
             }
             $firstInterval = false;
 
-            $intervalWhere .= 'l.day = ? AND l.start >= ? AND l.end <= ?';
             $params[] = $interval[0]; //day
-            $params[] = $interval[1]; // start
-            $params[] = $interval[2]; // end
+            
+            if ($broadMatch) {
+                $intervalWhere .= 'l.day = ? AND l.start <= ? AND l.end >= ?';
+                $params[] = $interval[2]; // end
+                $params[] = $interval[1]; // start
+            }
+            else {
+                $intervalWhere .= 'l.day = ? AND l.start >= ? AND l.end <= ?';
+                $params[] = $interval[1]; // start
+                $params[] = $interval[2]; // end
+            }
         }
 
         $intervalWhere .= '))';

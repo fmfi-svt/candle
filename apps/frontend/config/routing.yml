@@ -279,6 +279,10 @@ lessonSearch_search:
 lessonSearch_search_parameters:
     url: /hodiny-v-intervaloch/parametre-vyhladavania
     param: { module: lessonSearch, action: params }
+    
+lessonSearch_current:
+    url: /aktualne
+    param: { module: lessonSearch, action: current }
 
 panel_list_lessons:
     url: /panel/list-lessons

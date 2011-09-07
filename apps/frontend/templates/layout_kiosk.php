@@ -18,13 +18,18 @@
     <!--[if lte IE 7]>
     <?php echo stylesheet_tag('main_ie7'); ?>
     <![endif]-->
+    
+    <?php echo stylesheet_tag('kiosk'); ?>
 
     <?php include_javascripts() ?>
     <?php include_component('layout', 'analytics') ?>
 </head>
 <body class="<?php if(!$panelText) echo 'panel_hidden'?>">
 <div id="vrch">
-<div id="vrch_logo"><?php echo link_to('Rozvrh', '@homepage') ?></div>
+<div id="vrch_logo"><?php echo link_to('Candle', '@homepage') ?></div>
+<div id="kiosk_vrch">
+    <?php include_slot('kiosk_vrch') ?>
+</div>
 </div>
 <div id="hlavny">
     <div id="obsah_wrap">
@@ -49,15 +54,8 @@
 
                         <hr />
 
-                        <?php include_component('layout', 'lastUpdate', array('mode' => 'normal')); ?>
-                        <br />
-                        Aplikácia Candle Copyright 2010,2011 Martin Sucha. <span class="disclaimer2">Zdrojové kódy sa nachádzajú na
-                        <a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">stránke projektu</a>.
-                        Táto aplikácia je študentský projekt a nie je oficiálne podporovaná
-                        pracovníkmi CIT, všetky prípadné otázky smerujte na diskusnú skupinu
-                        <a href="http://groups.google.com/group/candle-users">candle-users</a>,
-                        časté odpovede nájdete v sekcii <a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki/FAQ">FAQ</a>.
-                        Používaním služby súhlasíte s <?php echo link_to('podmienkami používania', '@terms_of_use'); ?></span>
+                        <?php include_component('layout', 'lastUpdate', array('mode' => 'kiosk')); ?>
+                        Candle &copy; 2010,2011 Martin Sucha. <?php echo link_to('Podmienky používania', '@terms_of_use'); ?>
                     </div>
                 </div>
             </div>
@@ -72,25 +70,5 @@
 <div id="panel_schovat" class="hidden"><a href="#" id="panel_toggle"><span class="pristupnost">Schovať/Zobraziť panel</span></a>
 </div>
 <?php endif; ?>
-<div id="vrch2">
-<div id="vrch_riadok2">
-    <?php include_slot('top') ?>
-</div>
-</div>
-<div id="vrch_riadok1">
-    <div id="vrch_riadok1_vpravo">
-        <?php include_component('user','menu'); ?>
-    </div>
-    <div id="vrch_riadok1_vlavo">
-        <h2 class="pristupnost">Linky</h2>
-        <ul><!--
-            --><li><?php echo link_to('Rozvrh', '@homepage', array('class'=>'selected')) ?></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">Zoznam chýb</a></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki">Dokumentácia</a></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki/FAQ">FAQ</a></li><!--
-            --><li><a href="http://groups.google.com/group/candle-users">Mailing list</a></li><!--
-        --></ul>
-    </div>    
-</div>
 </body>
 </html>

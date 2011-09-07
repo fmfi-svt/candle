@@ -245,22 +245,26 @@ ul.vysledky_hladania li {
     border-color: white;
 }
 
-#obsah_in table.vysledky_podrobneho_hladania th {
+#obsah_in table.vysledky_podrobneho_hladania th,
+#obsah_in table.aktualne th {
     background: #D3D5DD;
     color: black;
 }
 
-#obsah_in table.vysledky_podrobneho_hladania td {
+#obsah_in table.vysledky_podrobneho_hladania td,
+#obsah_in table.aktualne td {
     color: white;
     background: #666B7E;
 }
 
-#obsah_in table.vysledky_podrobneho_hladania tbody tr:hover td {
+#obsah_in table.vysledky_podrobneho_hladania tbody tr:hover td,
+#obsah_in table.aktualne tbody tr:hover td {
     background: #D3D5DD;
     color: black;
 }
 
-#obsah_in table.vysledky_podrobneho_hladania tbody tr:hover td a {
+#obsah_in table.vysledky_podrobneho_hladania tbody tr:hover td a,
+#obsah_in table.aktualne tbody tr:hover td a {
     color: blue;
 }
 

@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010, 2011 Martin Sucha
 
     This file is part of Candle.
 
@@ -77,6 +77,39 @@ class lessonSearchActions extends sfActions {
         $thisUrl = array('sf_route'=>'lessonSearch_search');
 
         $this->thisUrl = $thisUrl;
+    }
+    
+    public function executeCurrent(sfWebRequest $request) {
+        $this->queryTime = time() + 15 * 60;
+        $timeInfo = getdate($this->queryTime);
+        /*
+         * wday = 0 means sunday,
+         * we want day = 0 to mean monday
+         */
+        $day = ($timeInfo['wday'] + 6) % 7;
+        $time = $timeInfo['hours'] * 60 + $timeInfo['minutes'];
+        $lessons = Doctrine::getTable('Lesson')
+                    ->findIntervals(array(array($day, $time, $time)),
+                            /* broadMatch = */ true,
+                            /* orderBySubjectName = */ true);
+        $lastLesson = null;
+        $newLessons = array();
+        foreach ($lessons as $lesson) {
+            if ($lastLesson !== null) {
+                if ($lesson['Room']['name'] !== $lastLesson['Room']['name'] ||
+                    $lesson['Subject']['name'] !== $lastLesson['Subject']['name'] ||
+                    $lesson['start'] !== $lastLesson['start'] ||
+                    $lesson['end'] !== $lastLesson['end']) {
+                    $newLessons[] = $lesson;
+                }
+            }
+            else {
+                $newLessons[] = $lesson;
+            }
+            $lastLesson = $lesson;
+        }
+        $this->lessonIntervals = $newLessons;
+        $this->setLayout('layout_kiosk');
     }
 
 }
