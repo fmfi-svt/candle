@@ -27,13 +27,16 @@
 
 
 class Candle {
-    static public function formatTime($timeVal) {
-        $h = intval($timeVal/60);
-        $m = ''.$timeVal%60;
-        if (strlen($m)<2) {
-            $m = '0'.$m;
+    static public function formatTime($timeVal, $zeroHours = false) {
+        $h = '' . intval($timeVal / 60);
+        if ($zeroHours && (strlen($h) < 2)) {
+            $h = '0' . $h;
         }
-        return $h.':'.$m;
+        $m = '' . $timeVal % 60;
+        if (strlen($m) < 2) {
+            $m = '0' . $m;
+        }
+        return $h . ':' . $m;
     }
 
     static public function formatTimeAmount($timeVal) {

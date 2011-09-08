@@ -480,6 +480,7 @@ ul.vysledky_hladania li+li {
     padding: 0;
     margin: 0;
     border: none;
+    vertical-align: middle;
 }
 
 .lesson-type-image {

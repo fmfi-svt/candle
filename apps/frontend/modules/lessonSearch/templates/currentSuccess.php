@@ -23,7 +23,7 @@ for ($j = 0; $j < count($cols) - 1; $j++):
 ?>
 <table class="aktualne <?php echo 'stlpec' . $j ?>">
     <thead>
-        <tr><th>Do</th><th>Miestnosť</th><th>Hodina</th></tr>
+        <tr><th>Čas</th><th>Miestnosť</th><th>Hodina</th></tr>
     </thead>
     <tbody>
 <?php
@@ -31,7 +31,9 @@ for ($i = $cols[$j]; $i < $cols[$j + 1]; $i++) {
     $lesson = $lessonIntervals[$i];
     echo '<tr>';
     echo '<td>';
-    echo Candle::formatTime($lesson['end']);
+    echo Candle::formatTime($lesson['start'], true);
+    echo '-';
+    echo Candle::formatTime($lesson['end'], true);
     echo '</td>';
     echo '<td>';
     echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'id'=>$lesson['Room']['id']));
@@ -51,6 +53,8 @@ for ($i = $cols[$j]; $i < $cols[$j + 1]; $i++) {
     echo $subjectName;
     $first = true;
     foreach ($lesson['Teacher'] as $teacher) {
+        $teacherName = Candle::formatShortName($teacher);
+        if ($teacherName == '') continue;
         if ($first) {
             echo ' - <i>';
         }
@@ -58,7 +62,7 @@ for ($i = $cols[$j]; $i < $cols[$j + 1]; $i++) {
             echo ', ';
         }
         $first = false;
-        echo link_to(Candle::formatShortName($teacher), array('sf_route'=>'timetable_teacher_show', 'id'=>$teacher['id']));
+        echo link_to($teacherName, array('sf_route'=>'timetable_teacher_show', 'id'=>$teacher['id']));
     }
     if (!$first) {
         echo '</i>';
