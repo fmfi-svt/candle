@@ -32,7 +32,7 @@ for ($i = $cols[$j]; $i < $cols[$j + 1]; $i++) {
     echo '<tr>';
     echo '<td>';
     echo Candle::formatTime($lesson['start'], true);
-    echo '-';
+    echo '&#x2011;';
     echo Candle::formatTime($lesson['end'], true);
     echo '</td>';
     echo '<td>';
