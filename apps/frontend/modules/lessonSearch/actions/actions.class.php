@@ -88,10 +88,17 @@ class lessonSearchActions extends sfActions {
          */
         $day = ($timeInfo['wday'] + 6) % 7;
         $time = $timeInfo['hours'] * 60 + $timeInfo['minutes'];
-        $lessons = Doctrine::getTable('Lesson')
+        $sem_start = sfConfig::get('app_semester_start');
+        $sem_end = sfConfig::get('app_semester_end');
+        if ($this->queryTime >= $sem_start && $this->queryTime <= $sem_end+86400) {
+            $lessons = Doctrine::getTable('Lesson')
                     ->findIntervals(array(array($day, $time, $time)),
                             /* broadMatch = */ true,
                             /* orderBySubjectName = */ true);
+        }
+        else {
+            $lessons = array();
+        }
         $lastLesson = null;
         $newLessons = array();
         foreach ($lessons as $lesson) {
