@@ -2,8 +2,8 @@
 # http://www.symfony-project.org/reference/1_4/en/11-App
 
 all:
-    semester_start: 2011-02-14
-    semester_end: 2011-05-13
+    semester_start: 2011-09-19
+    semester_end: 2011-12-16
     calendar_timezone: Europe/Bratislava
     analytics_account: UA-21193959-1
     sf_guard_plugin:
