@@ -37,24 +37,31 @@ function addSearch(url, input, target, error, useEditor) {
             $(target).innerHTML = error;
         }
     });
+    
+    var searchTimer = null;
 
     $(input).addEvent('keyup', function() {
         if ($(input).value == oldValue) return;
         oldValue = $(input).value;
-
-        var cas = new Date().getTime();
-        if (pendingRequests == 0 && $chk(throbber)) {
-            throbber.addClass('active');
+        
+        if (searchTimer != null) {
+            clearTimeout(searchTimer);
         }
-        pendingRequests++;
+        searchTimer = setTimeout(function() {
+            var cas = new Date().getTime();
+            if (pendingRequests == 0 && $chk(throbber)) {
+                throbber.addClass('active');
+            }
+            pendingRequests++;
 
-        var data = { 'cas': cas };
-        data[input] = $(input).value;
+            var data = { 'cas': cas };
+            data[input] = $(input).value;
 
-        if (useEditor && $chk(document.candleTimetableEditor_timetableId)) {
-            data.timetable_id = document.candleTimetableEditor_timetableId;
-        }
-        searchRequest.get(data);
+            if (useEditor && $chk(document.candleTimetableEditor_timetableId)) {
+                data.timetable_id = document.candleTimetableEditor_timetableId;
+            }
+            searchRequest.get(data);
+        }, 500);
     });
 }
 
