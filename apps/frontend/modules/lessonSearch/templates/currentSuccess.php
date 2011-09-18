@@ -1,6 +1,6 @@
 <?php
 
-slot('title', 'Aktuálna výučba');
+slot('title', 'Aktuálne prebiehajúca výučba');
 
 slot('top');
 include_component('timetable','top');
