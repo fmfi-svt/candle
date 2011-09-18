@@ -363,6 +363,8 @@ class timetableActions extends sfActions {
     public function executeHomepage(sfWebRequest $request) {
         $timetableId = $this->getUser()->getTimetableManager()->getFirstTimetableId();
         $request->setParameter('id', $timetableId);
+        $this->response->addMeta('description',
+                'Interaktívna tvorba vlastného rozvrhu hodín, vyhľadávanie, tlač a export rozvrhov.');
         $this->forward('timetable', 'show');
     }
 
