@@ -22,7 +22,6 @@
     <?php echo stylesheet_tag('kiosk'); ?>
 
     <?php include_javascripts() ?>
-    <?php include_component('layout', 'analytics') ?>
 </head>
 <body class="<?php if(!$panelText) echo 'panel_hidden'?>">
 <div id="vrch">
