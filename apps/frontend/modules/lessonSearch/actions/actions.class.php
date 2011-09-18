@@ -80,7 +80,10 @@ class lessonSearchActions extends sfActions {
     }
     
     public function executeCurrent(sfWebRequest $request) {
-        $this->queryTime = time() + 15 * 60;
+        $refreshResolution = 5 * 60; // 5 min
+        $now = time();
+        $timeSlot = $now - ($now % $refreshResolution);
+        $this->queryTime = $timeSlot + 15 * 60;
         $timeInfo = getdate($this->queryTime);
         /*
          * wday = 0 means sunday,
@@ -117,6 +120,8 @@ class lessonSearchActions extends sfActions {
         }
         $this->lessonIntervals = $newLessons;
         $this->setLayout('layout_kiosk');
+        
+        $this->response->addHttpMeta('refresh', max(60, ($timeSlot + $refreshResolution) - $now));
     }
 
 }
