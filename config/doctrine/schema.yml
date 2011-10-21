@@ -1,5 +1,5 @@
 #
-#   Copyright 2010 Martin Sucha
+#   Copyright 2010, 2011 Martin Sucha
 #
 #   This file is part of Candle.
 #
@@ -173,3 +173,4 @@ DataUpdate:
     columns:
         datetime: {type: datetime, notnull: true }
         description: {type: string(255), notnull: true }
+        version: {type: datetime, notnull: false }

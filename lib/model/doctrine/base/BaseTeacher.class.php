@@ -34,7 +34,7 @@
  * @package    candle
  * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 6820 2009-11-30 17:27:49Z jwage $
+ * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseTeacher extends sfDoctrineRecord
 {
@@ -43,28 +43,28 @@ abstract class BaseTeacher extends sfDoctrineRecord
         $this->setTableName('teacher');
         $this->hasColumn('given_name', 'string', 50, array(
              'type' => 'string',
-             'length' => '50',
+             'length' => 50,
              ));
         $this->hasColumn('family_name', 'string', 50, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '50',
+             'length' => 50,
              ));
         $this->hasColumn('iniciala', 'string', 50, array(
              'type' => 'string',
-             'length' => '50',
+             'length' => 50,
              ));
         $this->hasColumn('oddelenie', 'string', 50, array(
              'type' => 'string',
-             'length' => '50',
+             'length' => 50,
              ));
         $this->hasColumn('katedra', 'string', 50, array(
              'type' => 'string',
-             'length' => '50',
+             'length' => 50,
              ));
         $this->hasColumn('external_id', 'string', 30, array(
              'type' => 'string',
-             'length' => '30',
+             'length' => 30,
              ));
     }
 

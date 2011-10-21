@@ -28,7 +28,7 @@
  * @package    candle
  * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 6820 2009-11-30 17:27:49Z jwage $
+ * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseUserTimetable extends sfDoctrineRecord
 {
@@ -38,7 +38,7 @@ abstract class BaseUserTimetable extends sfDoctrineRecord
         $this->hasColumn('name', 'string', 50, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '50',
+             'length' => 50,
              ));
         $this->hasColumn('published', 'boolean', null, array(
              'type' => 'boolean',
@@ -46,12 +46,12 @@ abstract class BaseUserTimetable extends sfDoctrineRecord
              ));
         $this->hasColumn('slug', 'string', 30, array(
              'type' => 'string',
-             'length' => '30',
+             'length' => 30,
              ));
         $this->hasColumn('user_id', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
-             'length' => '4',
+             'length' => 4,
              ));
 
 

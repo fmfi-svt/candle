@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010, 2011 Martin Sucha
 
     This file is part of Candle.
 
@@ -142,6 +142,10 @@ EOF;
 
   protected function parseWarning($parser, $description) {
       $message = 'Warning: '.$this->createParseErrorMessage($parser, $description);
+      $this->warning($message);
+  }
+  
+  protected function warning($message) {
       if (!$this->warningsAsErrors) {
           $this->logBlock($message, 'INFO');
           $this->warningCount += 1;
@@ -171,7 +175,12 @@ EOF;
       $this->currentElementPath[] = $name;
       if ($this->state == self::STATE_ROOT) {
           if ($name == 'rozvrh') {
-              // skip
+              if (isset($attrs['verzia'])) {
+                  $this->version = DateTime::createFromFormat('YmdHis', $attrs['verzia'])->getTimestamp();;
+              }
+              else {
+                  $this->version = null;
+              }
           }
           else if ($name == 'typy') {
               $this->state = self::STATE_TYPY;
@@ -791,16 +800,44 @@ EOF;
       $sql .= ' WHERE l.external_id NOT IN (SELECT i.external_id FROM tmp_insert_lesson i)';
       $this->executeSQL($sql);
   }
+  
+  protected function checkVersion() {
+      $this->logSection('candle', 'Checking version information');
+      if ($this->version == null) {
+          $this->warning('Version info not present in xml file');
+          return;
+      }
+      
+      $sql = 'SELECT MAX(version) as max_version FROM data_update';
+      $prepared = $this->connection->prepare($sql);
+      $prepared->execute();
+      $data = $prepared->fetchAll();
+      
+      if (count($data) != 1) {
+          $this->warning('Failed retrieving max version, row# != 1');
+          return;
+      }
+      
+      $max_version = $data[0]['max_version'];
+      if ($max_version == null) {
+          // no previous version stored
+          return;
+      }
+      
+      if (date('Y-m-d H:i:s', $this->version) <= $max_version) {
+          $this->warning('You are probably trying to import version older than already stored in database');
+      }
+  }
 
   protected function insertDataUpdate() {
       $this->logSection('candle', 'Inserting information about data update');
 
       $sql = 'INSERT INTO data_update';
-      $sql .= ' (datetime, description)';
-      $sql .= ' VALUES (NOW(), ?)';
+      $sql .= ' (datetime, description, version)';
+      $sql .= ' VALUES (NOW(), ?, ?)';
 
       $prepared = $this->connection->prepare($sql);
-      $this->executePreparedSQL($prepared, array($this->updateDescription));
+      $this->executePreparedSQL($prepared, array($this->updateDescription, date('Y-m-d H:i:s', $this->version)));
 
   }
     
@@ -893,7 +930,8 @@ EOF;
             $this->logSection('candle', 'Calculating free room intervals');
             Doctrine::getTable('FreeRoomInterval')->calculate();
         }
-
+        
+        $this->checkVersion();
         $this->insertDataUpdate();
 
         $commit = true;

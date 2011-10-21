@@ -7,16 +7,19 @@
  * 
  * @property datetime $datetime
  * @property string $description
+ * @property datetime $version
  * 
  * @method datetime   getDatetime()    Returns the current record's "datetime" value
  * @method string     getDescription() Returns the current record's "description" value
+ * @method datetime   getVersion()     Returns the current record's "version" value
  * @method DataUpdate setDatetime()    Sets the current record's "datetime" value
  * @method DataUpdate setDescription() Sets the current record's "description" value
+ * @method DataUpdate setVersion()     Sets the current record's "version" value
  * 
  * @package    candle
  * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 6820 2009-11-30 17:27:49Z jwage $
+ * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseDataUpdate extends sfDoctrineRecord
 {
@@ -30,7 +33,11 @@ abstract class BaseDataUpdate extends sfDoctrineRecord
         $this->hasColumn('description', 'string', 255, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '255',
+             'length' => 255,
+             ));
+        $this->hasColumn('version', 'datetime', null, array(
+             'type' => 'datetime',
+             'notnull' => false,
              ));
     }
 

@@ -31,7 +31,7 @@
  * @package    candle
  * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 6820 2009-11-30 17:27:49Z jwage $
+ * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseSubject extends sfDoctrineRecord
 {
@@ -41,17 +41,17 @@ abstract class BaseSubject extends sfDoctrineRecord
         $this->hasColumn('name', 'string', 100, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '100',
+             'length' => 100,
              ));
         $this->hasColumn('code', 'string', 50, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '50',
+             'length' => 50,
              ));
         $this->hasColumn('short_code', 'string', 20, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '20',
+             'length' => 20,
              ));
         $this->hasColumn('credit_value', 'integer', null, array(
              'type' => 'integer',
@@ -60,11 +60,11 @@ abstract class BaseSubject extends sfDoctrineRecord
         $this->hasColumn('rozsah', 'string', 30, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => '30',
+             'length' => 30,
              ));
         $this->hasColumn('external_id', 'string', 30, array(
              'type' => 'string',
-             'length' => '30',
+             'length' => 30,
              ));
 
 

@@ -1,4 +1,4 @@
-CREATE TABLE data_update (id BIGINT AUTO_INCREMENT, datetime datetime NOT NULL, description VARCHAR(255) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE data_update (id BIGINT AUTO_INCREMENT, datetime datetime NOT NULL, description VARCHAR(255) NOT NULL, version datetime, PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE free_room_interval (id BIGINT AUTO_INCREMENT, day BIGINT NOT NULL, start BIGINT NOT NULL, end BIGINT NOT NULL, room_id BIGINT NOT NULL, INDEX room_id_idx (room_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE lesson (id BIGINT AUTO_INCREMENT, day BIGINT NOT NULL, start BIGINT NOT NULL, end BIGINT NOT NULL, lesson_type_id BIGINT NOT NULL, room_id BIGINT NOT NULL, subject_id BIGINT NOT NULL, external_id BIGINT, UNIQUE INDEX external_id_index_idx (external_id), INDEX lesson_type_id_idx (lesson_type_id), INDEX room_id_idx (room_id), INDEX subject_id_idx (subject_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE lesson_type (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, code VARCHAR(1) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
