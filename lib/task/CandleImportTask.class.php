@@ -176,7 +176,16 @@ EOF;
       if ($this->state == self::STATE_ROOT) {
           if ($name == 'rozvrh') {
               if (isset($attrs['verzia'])) {
-                  $this->version = DateTime::createFromFormat('YmdHis', $attrs['verzia'])->getTimestamp();;
+                  // Toto je az od PHP 5.3
+                  //$this->version = DateTime::createFromFormat('YmdHis', $attrs['verzia'])->getTimestamp();
+                  $v = $attrs['verzia'];
+                  $ty = intval(substr($v, 0, 4));
+                  $tm = intval(substr($v, 4, 2));
+                  $td = intval(substr($v, 6, 2));
+                  $th = intval(substr($v, 8, 2));
+                  $ti = intval(substr($v, 10, 2));
+                  $ts = intval(substr($v, 12, 2));
+                  $this->version = mktime($th, $ti, $ts, $tm, $td, $ty);
               }
               else {
                   $this->version = null;
