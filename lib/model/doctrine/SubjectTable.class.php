@@ -54,7 +54,7 @@ class SubjectTable extends Doctrine_Table
         }
         
         $q->orWhere('EXISTS (SELECT sl.id FROM Lesson sl LEFT JOIN sl.Room sr WHERE sr.name LIKE ? AND sl.subject_id=s.id)', $matchQueryString)
-            ->orderBy('s.name')
+            ->orderBy('s.name, l.day, l.start')
             ->limit($limit);
         return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
     }
