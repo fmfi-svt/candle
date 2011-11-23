@@ -1,4 +1,13 @@
 var timetablePrepare = function() {
+    var addPrintBefore = $('menuPrintBefore');
+    if (addPrintBefore) {
+        var li = $(document.createElement('li'));
+        var a = $(document.createElement('a'));
+        li.appendChild(a);
+        a.setAttribute('href', 'javascript:window.print();');
+        a.textContent = 'Tlačiť';
+        $(addPrintBefore.parentNode).insertBefore(li, addPrintBefore);
+    }
     var rozvrhList = $('rozvrhList');
     if (rozvrhList) {
         var d = $(document.createElement('div'));

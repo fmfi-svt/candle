@@ -4,15 +4,18 @@ Element.implement({
         if (!Browser.Engine.webkit) return;
         this.replaceWith(this);
     },
-    replaceWith: function(other) {
-        var parentNode = this.parentNode;
-        var nextSibling = this.nextSibling;
+    replaceWith: function(newElement) {
+        var parentNode = $(this.parentNode);
+        parentNode.insertAfter(newElement, this);
         parentNode.removeChild(this);
+    },
+    insertAfter: function(newElement, referenceElement) {
+        var nextSibling = referenceElement.nextSibling;
         if (nextSibling) {
-            parentNode.insertBefore(other, nextSibling);
+            this.insertBefore(newElement, nextSibling);
         }
         else {
-            parentNode.appendChild(other);
+            this.appendChild(newElement);
         }
     }
 });
