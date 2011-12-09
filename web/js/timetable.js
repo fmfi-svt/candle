@@ -1,13 +1,18 @@
-var timetablePrepare = function() {
+var printButtonPrepare = function() {
     var addPrintBefore = $('menuPrintBefore');
-    if (addPrintBefore) {
+    var printButton = $('timetablePrintButton');
+    if (!printButton && addPrintBefore) {
         var li = $(document.createElement('li'));
         var a = $(document.createElement('a'));
         li.appendChild(a);
         a.setAttribute('href', 'javascript:window.print();');
+        a.setAttribute('id', 'timetablePrintButton');
         a.textContent = 'Tlačiť';
         $(addPrintBefore.parentNode).insertBefore(li, addPrintBefore);
     }
+}
+
+var timetablePrepare = function() {
     var rozvrhList = $('rozvrhList');
     if (rozvrhList) {
         var d = $(document.createElement('div'));
@@ -79,3 +84,4 @@ var timetablePrepare = function() {
 }
 
 window.addEvent('domready', timetablePrepare);
+window.addEvent('domready', printButtonPrepare);
