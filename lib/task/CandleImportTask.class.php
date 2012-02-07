@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010, 2011 Martin Sucha
+    Copyright 2010, 2011, 2012 Martin Sucha
 
     This file is part of Candle.
 
@@ -32,7 +32,7 @@ class CandleImportTask extends sfBaseTask
   protected static $ucitelFields = array('priezvisko', 'meno', 'iniciala', 'katedra', 'oddelenie');
   protected static $miestnostFields = array('nazov', 'kapacita', 'typ');
   protected static $predmetFields = array('nazov', 'kod', 'kratkykod', 'kredity', 'rozsah');
-  protected static $hodinaFields = array('den', 'zaciatok', 'koniec', 'miestnost', 'trvanie', 'predmet', 'ucitelia', 'kruzky', 'typ', 'zviazanehodiny', 'oldid', 'zviazaneoldid');
+  protected static $hodinaFields = array('den', 'zaciatok', 'koniec', 'miestnost', 'trvanie', 'predmet', 'ucitelia', 'kruzky', 'typ', 'zviazanehodiny', 'oldid', 'zviazaneoldid', 'poznamka');
 
   const STATE_ROOT = 0;
   const STATE_TYPY = 1;
@@ -175,21 +175,27 @@ EOF;
       $this->currentElementPath[] = $name;
       if ($this->state == self::STATE_ROOT) {
           if ($name == 'rozvrh') {
-              if (isset($attrs['verzia'])) {
-                  // Toto je az od PHP 5.3
-                  //$this->version = DateTime::createFromFormat('YmdHis', $attrs['verzia'])->getTimestamp();
-                  $v = $attrs['verzia'];
-                  $ty = intval(substr($v, 0, 4));
-                  $tm = intval(substr($v, 4, 2));
-                  $td = intval(substr($v, 6, 2));
-                  $th = intval(substr($v, 8, 2));
-                  $ti = intval(substr($v, 10, 2));
-                  $ts = intval(substr($v, 12, 2));
-                  $this->version = mktime($th, $ti, $ts, $tm, $td, $ty);
+              if (!isset($attrs['verzia'])) {
+                  $this->parseError($parser, 'Element "rozvrh" missing attribute "verzia"');
               }
-              else {
-                  $this->version = null;
+              if (!isset($attrs['skolrok'])) {
+                  $this->parseError($parser, 'Element "rozvrh" missing attribute "skolrok"');
               }
+              if (!isset($attrs['semester'])) {
+                  $this->parseError($parser, 'Element "rozvrh" missing attribute "semester"');
+              }
+              // Toto je az od PHP 5.3
+              //$this->version = DateTime::createFromFormat('YmdHis', $attrs['verzia'])->getTimestamp();
+              $v = $attrs['verzia'];
+              $ty = intval(substr($v, 0, 4));
+              $tm = intval(substr($v, 4, 2));
+              $td = intval(substr($v, 6, 2));
+              $th = intval(substr($v, 8, 2));
+              $ti = intval(substr($v, 10, 2));
+              $ts = intval(substr($v, 12, 2));
+              $this->version = mktime($th, $ti, $ts, $tm, $td, $ty);
+              $this->semester = $attrs['semester'];
+              $this->skolrok = $attrs['skolrok'];
           }
           else if ($name == 'typy') {
               $this->state = self::STATE_TYPY;
@@ -305,7 +311,7 @@ EOF;
               }
               $this->elementData = array();
               $this->elementData['id']=$attrs['id'];
-              $this->dataFields = self::$predmetFields;
+              $this->dataFields = self::$hodinaFields;
           }
           else if ($this->dataFields != null) {
               $this->setActiveField($parser, $name);
@@ -465,12 +471,18 @@ EOF;
   protected function handleHodina($parser) {
     //print_r($this->elementData);
     $lessonId = (int) $this->elementData['oldid'];
+    if (isset($this->elementData['poznamka'])) {
+        $note = $this->elementData['poznamka'];
+    }
+    else {
+        $note = null;
+    }
 
     $this->insertLesson->execute(array(
         Candle::dayFromCode($this->elementData['den']), (int) $this->elementData['zaciatok'],
         (int) $this->elementData['koniec'], $this->elementData['typ'],
         $this->elementData['miestnost'], $this->elementData['predmet'],
-        $lessonId
+        $lessonId, $note
     ));
 
     if (isset($this->elementData['ucitelia'])) {
@@ -549,7 +561,8 @@ EOF;
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson ";
       $sql .= "(day integer not null, start integer not null, end integer not null, ";
       $sql .= "lesson_type varchar(1) not null, room varchar(30) not null, ";
-      $sql .= "subject varchar(30) not null, external_id integer not null)";
+      $sql .= "subject varchar(30) not null, external_id integer not null, ";
+      $sql .= "note varchar(240))";
       $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_teacher ";
@@ -587,7 +600,7 @@ EOF;
       $this->insertSubject = $this->connection->prepare($sql);
 
       $sql = 'INSERT INTO tmp_insert_lesson (day, start, end, lesson_type, ';
-      $sql .= 'room, subject, external_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      $sql .= 'room, subject, external_id, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
       $this->insertLesson = $this->connection->prepare($sql);
 
       $sql = 'INSERT INTO tmp_insert_lesson_teacher (lesson_external_id, ';
@@ -733,14 +746,16 @@ EOF;
       $sql = 'UPDATE lesson l, tmp_insert_lesson i, lesson_type lt, room r, subject s';
       $sql .= ' SET l.day=i.day, ';
       $sql .= ' l.start=i.start, l.end=i.end, ';
-      $sql .= ' l.lesson_type_id=lt.id, l.room_id=r.id, l.subject_id=s.id ';
+      $sql .= ' l.lesson_type_id=lt.id, l.room_id=r.id, l.subject_id=s.id, ';
+      $sql .= ' l.note=i.note ';
       $sql .= ' WHERE lt.code = i.lesson_type AND r.name = i.room ';
       $sql .= ' AND s.external_id=i.subject AND l.external_id=i.external_id';
       $this->executeSQL($sql);
 
       $sql = 'INSERT INTO lesson (day, start, end, lesson_type_id, room_id, ';
-      $sql .= ' subject_id, external_id) ';
-      $sql .= 'SELECT i.day, i.start, i.end, lt.id, r.id, s.id, i.external_id ';
+      $sql .= ' subject_id, external_id, note) ';
+      $sql .= 'SELECT i.day, i.start, i.end, lt.id, r.id, s.id, i.external_id, ';
+      $sql .= ' i.note ';
       $sql .= ' FROM tmp_insert_lesson i, lesson_type lt, room r, subject s';
       $sql .= ' WHERE lt.code = i.lesson_type AND r.name = i.room ';
       $sql .= ' AND s.external_id=i.subject ';
@@ -812,10 +827,8 @@ EOF;
   
   protected function checkVersion() {
       $this->logSection('candle', 'Checking version information');
-      if ($this->version == null) {
-          $this->warning('Version info not present in xml file');
-          return;
-      }
+      
+      // TODO: Kontrolovat, ci je semester a skol.rok rovnaky!!!
       
       $sql = 'SELECT MAX(version) as max_version FROM data_update';
       $prepared = $this->connection->prepare($sql);
@@ -842,11 +855,23 @@ EOF;
       $this->logSection('candle', 'Inserting information about data update');
 
       $sql = 'INSERT INTO data_update';
-      $sql .= ' (datetime, description, version)';
-      $sql .= ' VALUES (NOW(), ?, ?)';
+      $sql .= ' (datetime, description, version, semester, school_year_low)';
+      $sql .= ' VALUES (NOW(), ?, ?, ?, ?)';
+      
+      $pos = strpos($this->skolrok, '/');
+      if ($pos === false) {
+          $skolrok = intval($this->skolrok);
+      }
+      else {
+          $skolrok = intval(substr($this->skolrok, 0, $pos));
+      }
 
       $prepared = $this->connection->prepare($sql);
-      $this->executePreparedSQL($prepared, array($this->updateDescription, date('Y-m-d H:i:s', $this->version)));
+      $data = array($this->updateDescription,
+          date('Y-m-d H:i:s', $this->version),
+          $this->semester,
+          $skolrok);
+      $this->executePreparedSQL($prepared, $data);
 
   }
     
