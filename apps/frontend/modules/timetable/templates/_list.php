@@ -8,6 +8,7 @@
         <th>Kód</th>
         <th>Predmet</th>
         <th>Vyučujúci</th>
+        <th>Poznámka</th>
     </tr>
 <?php foreach ($layout->getLessons() as $lesson): 
         $shortCode = $lesson['Subject']['short_code'];
@@ -28,6 +29,7 @@
                   endif;
         ?></td>
         <td><?php echo Candle::formatShortNameList($lesson['Teacher']) ?></td>
+        <td><?php echo ($lesson['note'] === null) ? '' : $lesson['note']; ?></td>
     </tr>
 <?php endforeach; ?>
 </table>

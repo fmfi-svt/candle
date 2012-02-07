@@ -116,6 +116,10 @@ body {
     text-decoration: none;
 }
 
+#rozvrh td.hodina .poznamka {
+    font-style: italic;
+}
+
 abbr {
     text-decoration: none;
     border-bottom: none;

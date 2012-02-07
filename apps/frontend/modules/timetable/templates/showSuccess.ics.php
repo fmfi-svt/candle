@@ -53,6 +53,10 @@ foreach ($layout->getLessons() as $lesson) {
     $vevent->setProperty( 'categories', $lesson['LessonType']['name']);
     $vevent->setProperty( 'uid', 'lesson('.$lesson['id'].')'.$uid_suffix);
     $description = $lesson['LessonType']['name']."\r\n\r\n";
+    if ($lesson['note'] !== null) {
+        $description .= 'Poznámka: ' . $lesson['note'];
+        $description .= "\r\n\r\n";
+    }
     $description .= 'Vyučujúci:'."\r\n";
     foreach ($lesson['Teacher'] as $teacher) {
         $description .= ' - '.Candle::formatShortName($teacher);

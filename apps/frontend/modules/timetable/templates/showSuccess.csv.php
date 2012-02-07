@@ -1,4 +1,4 @@
-"Deň","Začiatok","Koniec","Trvanie","Miestnosť","Forma","Názov predmetu","Vyučujúci"
+"Deň","Začiatok","Koniec","Trvanie","Miestnosť","Forma","Názov predmetu","Vyučujúci","Poznámka"
 <?php
 
 foreach ($layout->getLessons() as $lesson) {
@@ -24,5 +24,7 @@ foreach ($layout->getLessons() as $lesson) {
     echo ',';
     $teachers = Candle::formatShortNameList($lesson['Teacher']);
     echo CSV::esc($teachers);
+    echo ',';
+    echo CSV::esc(($lesson['note'] === null)?'':$lesson['note']);
     echo "\r\n"; // vid rfc uvedene vyssie
 }

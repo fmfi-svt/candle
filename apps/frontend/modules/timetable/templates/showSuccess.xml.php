@@ -10,6 +10,9 @@
         <?php foreach ($lesson['Teacher'] as $teacher): ?>
         <teacher><?php echo Candle::formatShortName($teacher)?></teacher>
         <?php endforeach; ?>
+        <?php if ($lesson['note'] !== null): ?>
+        <note><?php echo $lesson['note']; ?></note>
+        <?php endif; ?>
     </lesson>
 <?php endforeach; ?>
 </timetable>

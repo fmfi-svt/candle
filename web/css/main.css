@@ -451,6 +451,10 @@ ul.vysledky_hladania li+li {
     bottom: 2px;
 }
 
+#rozvrh td.hodina .poznamka {
+    font-style: italic;
+}
+
 .jsactive .jshide {
     display: none;
 }

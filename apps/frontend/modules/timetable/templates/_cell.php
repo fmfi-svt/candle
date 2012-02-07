@@ -19,6 +19,10 @@ else {
     <div class="pristupnost">[zvýraznená hodina]</div>
     <?php endif; ?>
 
+    <?php if ($lesson['note'] !== null): ?>
+        <div class="poznamka"><?php echo $lesson['note']; ?></div>
+    <?php endif; ?>
+    
     <?php if ($editable): ?>
         <?php $cb_id = 'timetable_lesson_selection_cb_'.$lesson['id'] ?>
         <input type="checkbox" id="<?php echo $cb_id; ?>" name="lesson_selection[]" value="<?php echo $lesson['id']?>"

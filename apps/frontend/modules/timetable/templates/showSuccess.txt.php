@@ -21,6 +21,11 @@ foreach ($layout->getLessons() as $lesson) {
     echo ' ';
     echo $lesson['Subject']['name'];
     echo ' ';
+    if ($lesson['note'] !== null) {
+        echo '(';
+        echo $lesson['note'];
+        echo ') ';
+    }
     $first = true;
     foreach ($lesson['Teacher'] as $teacher) {
         if (!$first) {
