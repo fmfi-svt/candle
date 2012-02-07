@@ -8,13 +8,19 @@
  * @property datetime $datetime
  * @property string $description
  * @property datetime $version
+ * @property string $semester
+ * @property integer $school_year_low
  * 
- * @method datetime   getDatetime()    Returns the current record's "datetime" value
- * @method string     getDescription() Returns the current record's "description" value
- * @method datetime   getVersion()     Returns the current record's "version" value
- * @method DataUpdate setDatetime()    Sets the current record's "datetime" value
- * @method DataUpdate setDescription() Sets the current record's "description" value
- * @method DataUpdate setVersion()     Sets the current record's "version" value
+ * @method datetime   getDatetime()        Returns the current record's "datetime" value
+ * @method string     getDescription()     Returns the current record's "description" value
+ * @method datetime   getVersion()         Returns the current record's "version" value
+ * @method string     getSemester()        Returns the current record's "semester" value
+ * @method integer    getSchoolYearLow()   Returns the current record's "school_year_low" value
+ * @method DataUpdate setDatetime()        Sets the current record's "datetime" value
+ * @method DataUpdate setDescription()     Sets the current record's "description" value
+ * @method DataUpdate setVersion()         Sets the current record's "version" value
+ * @method DataUpdate setSemester()        Sets the current record's "semester" value
+ * @method DataUpdate setSchoolYearLow()   Sets the current record's "school_year_low" value
  * 
  * @package    candle
  * @subpackage model
@@ -37,7 +43,16 @@ abstract class BaseDataUpdate extends sfDoctrineRecord
              ));
         $this->hasColumn('version', 'datetime', null, array(
              'type' => 'datetime',
-             'notnull' => false,
+             'notnull' => true,
+             ));
+        $this->hasColumn('semester', 'string', 20, array(
+             'type' => 'string',
+             'notnull' => true,
+             'length' => 20,
+             ));
+        $this->hasColumn('school_year_low', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => true,
              ));
     }
 

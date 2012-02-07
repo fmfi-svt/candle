@@ -12,6 +12,7 @@
  * @property integer $room_id
  * @property integer $subject_id
  * @property integer $external_id
+ * @property string $note
  * @property LessonType $LessonType
  * @property Room $Room
  * @property Subject $Subject
@@ -30,6 +31,7 @@
  * @method integer             getRoomId()               Returns the current record's "room_id" value
  * @method integer             getSubjectId()            Returns the current record's "subject_id" value
  * @method integer             getExternalId()           Returns the current record's "external_id" value
+ * @method string              getNote()                 Returns the current record's "note" value
  * @method LessonType          getLessonType()           Returns the current record's "LessonType" value
  * @method Room                getRoom()                 Returns the current record's "Room" value
  * @method Subject             getSubject()              Returns the current record's "Subject" value
@@ -47,6 +49,7 @@
  * @method Lesson              setRoomId()               Sets the current record's "room_id" value
  * @method Lesson              setSubjectId()            Sets the current record's "subject_id" value
  * @method Lesson              setExternalId()           Sets the current record's "external_id" value
+ * @method Lesson              setNote()                 Sets the current record's "note" value
  * @method Lesson              setLessonType()           Sets the current record's "LessonType" value
  * @method Lesson              setRoom()                 Sets the current record's "Room" value
  * @method Lesson              setSubject()              Sets the current record's "Subject" value
@@ -94,6 +97,11 @@ abstract class BaseLesson extends sfDoctrineRecord
              ));
         $this->hasColumn('external_id', 'integer', null, array(
              'type' => 'integer',
+             ));
+        $this->hasColumn('note', 'string', 240, array(
+             'type' => 'string',
+             'notnull' => false,
+             'length' => 240,
              ));
 
 
