@@ -1,5 +1,5 @@
 <?php 
-echo '"Deň","Od","Do","Predmet","Učiteľ","Miestnosť"';
+echo '"Deň","Od","Do","Predmet","Učiteľ","Miestnosť","Poznámka"';
 echo "\r\n";
 
 if ($lessonIntervals) {
@@ -23,6 +23,8 @@ if ($lessonIntervals) {
         echo CSV::esc($teachers);
         echo ',';
         echo CSV::esc($lesson['Room']['name']);
+        echo ',';
+        echo CSV::esc($lesson['note']);
         echo "\r\n";
         
     }
