@@ -51,7 +51,7 @@
 
                         <?php include_component('layout', 'lastUpdate', array('mode' => 'normal')); ?>
                         <br />
-                        Aplikácia Candle Copyright 2010,2011 Martin Sucha. <span class="disclaimer2">Zdrojové kódy sa nachádzajú na
+                        Aplikácia Candle Copyright 2010,2011,2012 Martin Sucha. <span class="disclaimer2">Zdrojové kódy sa nachádzajú na
                         <a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">stránke projektu</a>.
                         Táto aplikácia je študentský projekt a nie je oficiálne podporovaná
                         pracovníkmi CIT, všetky prípadné otázky smerujte na diskusnú skupinu

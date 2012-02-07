@@ -54,7 +54,7 @@
                         <hr />
 
                         <?php include_component('layout', 'lastUpdate', array('mode' => 'kiosk')); ?>
-                        Candle &copy; 2010,2011 Martin Sucha. <?php echo link_to('Podmienky používania', '@terms_of_use'); ?>
+                        Candle &copy; 2010,2011,2012 Martin Sucha. <?php echo link_to('Podmienky používania', '@terms_of_use'); ?>
                     </div>
                 </div>
             </div>
