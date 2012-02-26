@@ -26,7 +26,7 @@
  */
 
 
-$t = new lime_test(76);
+$t = new lime_test(78);
 
 $t->is(Candle::formatTime(0),'0:00');
 $t->is(Candle::formatTime(5),'0:05');
@@ -119,3 +119,6 @@ $t->is(Candle::lower('VidlY'),'vidly');
 $t->is(Candle::lower('ČAJNÍK'),'čajník');
 
 $t->is(Candle::parseDate('2010-01-02'), mktime(0,0,0,1,2,2010));
+
+$t->is(Candle::formatLessonShortCode('1-INF-350'),'1-INF');
+$t->is(Candle::formatLessonShortCode('2-UXX-112'),'2-UXX');

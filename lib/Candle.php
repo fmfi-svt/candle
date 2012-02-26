@@ -309,4 +309,9 @@ class Candle {
         }
         return null;
     }
+    
+    static public function formatLessonShortCode($code) {
+        
+        return rtrim($code, "0123456789-");
+    }
 }

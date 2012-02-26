@@ -73,8 +73,8 @@ end_slot();
 ?>
 <table class="vysledky_podrobneho_hladania">
     <thead>
-        <tr><th colspan="3">Čas</th><th colspan="4">Hodina</th></tr>
-        <tr><th>Deň</th><th>Od</th><th>Do</th><th>Predmet</th><th>Učiteľ</th><th>Miestnosť</th><th>Poznámka</th></tr>
+        <tr><th colspan="3">Čas</th><th colspan="5">Hodina</th></tr>
+        <tr><th>Deň</th><th>Od</th><th>Do</th><th>Kod</th><th>Predmet</th><th>Učiteľ</th><th>Miestnosť</th><th>Poznámka</th></tr>
     </thead>
     <tbody>
 <?php foreach ($lessonIntervals as $lesson) {
@@ -87,6 +87,10 @@ end_slot();
     echo '</td>';
     echo '<td>';
     echo Candle::formatTime($lesson['end']);
+    echo '</td>';
+    echo '<td>';
+    $shortenedShortCode = Candle::formatLessonShortCode($lesson['Subject']['short_code']);
+    echo $shortenedShortCode;
     echo '</td>';
     echo '<td>';
     // TODO(anty): refactor this as it is duplicated
