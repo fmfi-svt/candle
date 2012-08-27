@@ -54,6 +54,7 @@ Teacher:
         oddelenie: { type: string(50) }
         katedra: { type: string(50) }
         external_id: { type: string(30) }
+        login: { type: string(50) }
 
 StudentGroup:
     columns:

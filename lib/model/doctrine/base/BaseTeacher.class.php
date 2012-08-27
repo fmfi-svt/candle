@@ -11,6 +11,7 @@
  * @property string $oddelenie
  * @property string $katedra
  * @property string $external_id
+ * @property string $login
  * @property Doctrine_Collection $Lesson
  * @property Doctrine_Collection $TeacherLessons
  * 
@@ -20,6 +21,7 @@
  * @method string              getOddelenie()      Returns the current record's "oddelenie" value
  * @method string              getKatedra()        Returns the current record's "katedra" value
  * @method string              getExternalId()     Returns the current record's "external_id" value
+ * @method string              getLogin()          Returns the current record's "login" value
  * @method Doctrine_Collection getLesson()         Returns the current record's "Lesson" collection
  * @method Doctrine_Collection getTeacherLessons() Returns the current record's "TeacherLessons" collection
  * @method Teacher             setGivenName()      Sets the current record's "given_name" value
@@ -28,6 +30,7 @@
  * @method Teacher             setOddelenie()      Sets the current record's "oddelenie" value
  * @method Teacher             setKatedra()        Sets the current record's "katedra" value
  * @method Teacher             setExternalId()     Sets the current record's "external_id" value
+ * @method Teacher             setLogin()          Sets the current record's "login" value
  * @method Teacher             setLesson()         Sets the current record's "Lesson" collection
  * @method Teacher             setTeacherLessons() Sets the current record's "TeacherLessons" collection
  * 
@@ -65,6 +68,10 @@ abstract class BaseTeacher extends sfDoctrineRecord
         $this->hasColumn('external_id', 'string', 30, array(
              'type' => 'string',
              'length' => 30,
+             ));
+        $this->hasColumn('login', 'string', 50, array(
+             'type' => 'string',
+             'length' => 50,
              ));
     }
 
