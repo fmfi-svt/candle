@@ -73,6 +73,12 @@ abstract class BaseTeacher extends sfDoctrineRecord
              'type' => 'string',
              'length' => 50,
              ));
+
+
+        $this->index('login_index', array(
+             'fields' => 'login',
+             'type' => 'unique',
+             ));
     }
 
     public function setUp()

@@ -55,6 +55,12 @@ Teacher:
         katedra: { type: string(50) }
         external_id: { type: string(30) }
         login: { type: string(50) }
+    indexes:
+        login_index:
+          fields:
+            login
+          type:
+            unique
 
 StudentGroup:
     columns:
