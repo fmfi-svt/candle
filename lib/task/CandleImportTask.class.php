@@ -29,7 +29,7 @@
 class CandleImportTask extends sfBaseTask
 {
 
-  protected static $ucitelFields = array('priezvisko', 'meno', 'iniciala', 'katedra', 'oddelenie');
+  protected static $ucitelFields = array('priezvisko', 'meno', 'iniciala', 'katedra', 'oddelenie', 'login');
   protected static $miestnostFields = array('nazov', 'kapacita', 'typ');
   protected static $predmetFields = array('nazov', 'kod', 'kratkykod', 'kredity', 'rozsah');
   protected static $hodinaFields = array('den', 'zaciatok', 'koniec', 'miestnost', 'trvanie', 'predmet', 'ucitelia', 'kruzky', 'typ', 'zviazanehodiny', 'oldid', 'zviazaneoldid', 'poznamka');
@@ -434,10 +434,17 @@ EOF;
 
   protected function handleUcitel($parser) {
     //print_r($this->elementData);
+    if (isset($this->elementData['login'])) {
+        $login = trim($this->elementData['login']);
+    }
+    else {
+        $login = null;
+    }
     $this->insertTeacher->execute(array(
         trim($this->elementData['meno']), trim($this->elementData['priezvisko']),
         trim($this->elementData['iniciala']), trim($this->elementData['oddelenie']),
-        trim($this->elementData['katedra']), $this->mangleExtId($this->elementData['id'])
+        trim($this->elementData['katedra']), $this->mangleExtId($this->elementData['id']),
+        $login
     ));
   }
 
@@ -546,7 +553,8 @@ EOF;
       $sql = "CREATE TEMPORARY TABLE tmp_insert_teacher ";
       $sql .= "(given_name varchar(50), family_name varchar(50) not null,";
       $sql .= "iniciala varchar(50), oddelenie varchar(50), katedra varchar(50),";
-      $sql .= "external_id varchar(50) binary not null collate utf8_bin)";
+      $sql .= "external_id varchar(50) binary not null collate utf8_bin, ";
+      $sql .= "login varchar(50))";
       $res = $this->executeSQL($sql);
 
       $sql = "CREATE TEMPORARY TABLE tmp_insert_room ";
@@ -588,7 +596,7 @@ EOF;
       $this->insertRoomType = $this->connection->prepare($sql);
 
       $sql = 'INSERT INTO tmp_insert_teacher (given_name, family_name, iniciala, ';
-      $sql .= 'oddelenie, katedra, external_id) VALUES (?, ?, ?, ?, ?, ?)';
+      $sql .= 'oddelenie, katedra, external_id, login) VALUES (?, ?, ?, ?, ?, ?, ?)';
       $this->insertTeacher = $this->connection->prepare($sql);
 
       $sql = 'INSERT INTO tmp_insert_room (name, room_type, capacity';
@@ -692,14 +700,15 @@ EOF;
       $sql .= ' t.family_name = i.family_name, ';
       $sql .= ' t.iniciala = i.iniciala, ';
       $sql .= ' t.oddelenie = i.oddelenie, ';
-      $sql .= ' t.katedra = i.katedra';
+      $sql .= ' t.katedra = i.katedra, ';
+      $sql .= ' t.login = i.login';
       $sql .= ' WHERE t.external_id = i.external_id';
       $this->executeSQL($sql);
 
       $sql = 'INSERT INTO teacher (given_name, family_name, ';
-      $sql .= ' iniciala, oddelenie, katedra, external_id) ';
+      $sql .= ' iniciala, oddelenie, katedra, external_id, login) ';
       $sql .= ' SELECT given_name, family_name, iniciala, oddelenie, ';
-      $sql .= ' katedra, external_id';
+      $sql .= ' katedra, external_id, login';
       $sql .= ' FROM tmp_insert_teacher i';
       $sql .= ' WHERE i.external_id NOT IN (SELECT external_id FROM teacher)';
       $this->executeSQL($sql);
