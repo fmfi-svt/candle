@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010,2012 Martin Sucha
 
     This file is part of Candle.
 
@@ -27,64 +27,48 @@
 
 class userActions extends sfActions {
 
-    public function executeRegister(sfWebRequest $request) {
-        $this->form = new RegistrationForm();
-    }
-
-    public function executeRegisterDo(sfWebRequest $request) {
-        $this->setTemplate('register');
-        $form = new RegistrationForm();
-        $this->form = $form;
-        $form->bind($request->getParameter($form->getName()));
-        if ($form->isValid()) {
-            if ($form->getValue('password')!=$form->getValue('password_repeat')) {
-                $this->getUser()->setFlash('error', 'Nové heslo sa nezhoduje s overením');
-                return;
-            }
-            $user = new sfGuardUser();
-            $user->setUsername($form->getValue('username'));
-            $user->setPassword($form->getValue('password'));
-            $user->setIsActive(true);
-            try {
-                $user->save();
-            }
-            catch (Doctrine_Connection_Exception $e) {
-                if ($e->getPortableCode() == -5) {
-                    $this->getUser()->setFlash('error', 'Takéto používateľské meno už existuje');
-                    return;
-                }
-                throw $e;
-            }
-            $this->getUser()->signIn($user);
+    public function executeSignin(sfWebRequest $request)
+    {
+        $user = $this->getUser();
+        if ($user->isAuthenticated()) {
             return $this->redirect('@homepage');
         }
-    }
-
-    public function executeProfile(sfWebRequest $request) {
-        $this->form = new ChangePasswordForm();
-    }
-
-    public function executeChangePassword(sfWebRequest $request) {
-        $this->setTemplate('profile');
-        $form = new ChangePasswordForm();
-        $this->form = $form;
-        $form->bind($request->getParameter($form->getName()));
-        if ($form->isValid()) {
-            $user = $this->getUser()->getGuardUser();
-            if ($user == null) throw new Exception('neprihlaseny');
-            if (!$this->getUser()->checkPassword($form->getValue('old_password'))) {
-                $this->getUser()->setFlash('error', 'Zlé staré heslo');
-                return;
-            }
-            if ($form->getValue('password')!=$form->getValue('password_repeat')) {
-                $this->getUser()->setFlash('error', 'Nové heslo sa nezhoduje s overením');
-                return;
-            }
-            $user->setPassword($form->getValue('password'));
-            $user->save();
-            $this->getUser()->setFlash('notice','Heslo úspešne zmenené');
-            return $this->redirect('@homepage');
+        
+        $server = $request->getPathInfoArray();
+        
+        if (!isset($server['REMOTE_USER'])) {
+            return 'Failure';
         }
-    }
+        
+        $login = $server['REMOTE_USER'];
+        if (strlen($login) == 0) {
+            return 'Failure';
+        }
+        
+        $dbUser = Doctrine::getTable('User')->findOneByLogin($login);
+        if ($dbUser == null) {
+            $dbUser = new User();
+            $dbUser->setLogin($login);
+            $dbUser->save();
+        }
 
+        $user->signIn($dbUser);
+        return $this->redirect('@homepage');
+    }
+    
+    public function executeSignout(sfWebRequest $request)
+    {
+        $this->getUser()->signOut();
+        return $this->redirect('@homepage');
+    }
+    
+    public function executeSecure(sfWebRequest $request)
+    {
+        $this->getResponse()->setStatusCode(403);
+    }
+    
+    public function executeProfile(sfWebRequest $request)
+    {
+        
+    }
 }

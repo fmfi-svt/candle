@@ -155,6 +155,11 @@ Subject:
           type:
             unique
 
+User:
+    columns:
+        id: { type: integer(4), primary: true, autoincrement: true }
+        login: { type: varchar(50), notnull: true, unique: true }
+
 UserTimetable:
     columns:
         name: { type: string(50), notnull: true }
@@ -162,7 +167,7 @@ UserTimetable:
         slug: { type: string(30) }
         user_id : { type: integer(4), notnull: true }
     relations:
-        sfGuardUser: { onDelete: CASCADE, local: user_id, foreign: id }
+        User: { onDelete: CASCADE, local: user_id, foreign: id }
     indexes:
         slug_unique_index:
           fields: [slug]

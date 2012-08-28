@@ -25,9 +25,11 @@
  *
  */
 
-class myUser extends sfGuardSecurityUser
+class myUser extends sfBasicSecurityUser
 {
-
+    /** @var User $user */
+    private $user;
+    
     /**
      * Create or return timetable manager
      * @return EditableTimetableManager user's timetable manager
@@ -54,13 +56,15 @@ class myUser extends sfGuardSecurityUser
     /**
     * Signs in the user on the application.
     *
-    * @param sfGuardUser $user The sfGuardUser id
-    * @param boolean $remember Whether or not to remember the user
+    * @param User $user The database User
     * @param Doctrine_Connection $con A Doctrine_Connection object
     */
-    public function signIn($user, $remember = false, $con = null) {
-        parent::signIn($user, $remember, $con);
-
+    public function signIn($user) {
+        
+        $this->setAttribute('user_id', $user->getId(), 'CandleUser');
+        $this->setAuthenticated(true);
+        $this->clearCredentials();
+        
         // Kedze nechcem, aby neulozene rozvrhy zo session ovplyvnovali tie
         // co uz ma uzivatel ulozene, vsetky doterajsie premenujem ak existuje
         // nejaky ulozeny s danym menom
@@ -92,10 +96,36 @@ class myUser extends sfGuardSecurityUser
 
         $this->setTimetableManager($newTimetableManager);
     }
+    
+    /**
+     * 
+     * @return User
+     * @throws Exception 
+     */
+    public function getDBUser() {
+        $id = $this->getAttribute('user_id', null, 'CandleUser');
+        if ($id === null) {
+            return null;
+        }
+        
+        if ($this->user === null) {
+            $this->user = Doctrine::getTable('User')->find($id);
+            if ($this->user === null) {
+                $this->signOut();
+                throw new Exception("Pouzivatel uz neexistuje v DB");
+            }
+        }
+        
+        return $this->user;
+    }
 
     public function signOut() {
-        parent::signOut();
-
+        $this->setAuthenticated(false);
+        $this->clearCredentials();
+        
+        $this->getAttributeHolder()->removeNamespace('CandleUser');
+        $this->user = null;
+        
         $this->clearSession();
     }
 

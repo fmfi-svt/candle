@@ -34,13 +34,12 @@ all:
     # Enable the database manager
     use_database:           true
     
-    # Nastav sfDoctrineGuard
-    enabled_modules:    [default, sfGuardAuth]
+    enabled_modules:    [default]
   .actions:
-    login_module: sfGuardAuth
+    login_module: user
     login_action: signin
     
-    secure_module: sfGuardAuth
+    secure_module: user
     secure_action: secure
     
     error_404_module: candle404

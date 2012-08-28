@@ -6,25 +6,13 @@ homepage:
   url:   /
   param: { module: timetable, action: homepage }
 
-sf_guard_signin:
+signin:
     url: /prihlasit
-    param: { module: sfGuardAuth, action: signin }
+    param: { module: user, action: signin }
 
-sf_guard_signout:
+signout:
     url: /odhlasit
-    param: { module: sfGuardAuth, action: signout }
-
-register:
-    url: /registrovat
-    class: sfRequestRoute
-    param: { module: user, action: register }
-    requirements: {sf_method: get}
-
-register_post:
-    url: /registrovat
-    class: sfRequestRoute
-    param: { module: user, action: registerDo }
-    requirements: {sf_method: post}
+    param: { module: user, action: signout }
 
 profile:
     url: /profil

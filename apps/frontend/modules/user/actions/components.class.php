@@ -27,9 +27,9 @@
 
 class userComponents extends sfComponents {
     public function executeMenu(sfWebRequest $request) {
-        $guardUser = $this->getUser()->getGuardUser();
+        $guardUser = $this->getUser()->getDBUser();
         if ($guardUser) {
-            $this->username = $guardUser->getUsername();
+            $this->username = $guardUser->getLogin();
         }
         else {
             $this->username = null;

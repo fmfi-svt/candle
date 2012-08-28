@@ -276,7 +276,7 @@ class timetableActions extends sfActions {
 
     public function executeSave(sfWebRequest $request) {
         $this->fetchTimetable($request);
-        $user = $this->getUser()->getGuardUser();
+        $user = $this->getUser()->getDBUser();
         if (!$user) {
             $this->redirect('@sf_guard_signin');
             return;
@@ -288,7 +288,7 @@ class timetableActions extends sfActions {
 
     public function executePublishExecute(sfWebRequest $request) {
         $this->fetchTimetable($request);
-        $user = $this->getUser()->getGuardUser();
+        $user = $this->getUser()->getDBUser();
         $this->publishCheckLogin();
 
         $this->form = new EditableTimetablePublishForm();
@@ -329,7 +329,7 @@ class timetableActions extends sfActions {
 
     public function executeUnpublishExecute(sfWebRequest $request) {
         $this->fetchTimetable($request);
-        $user = $this->getUser()->getGuardUser();
+        $user = $this->getUser()->getDBUser();
         $this->publishCheckLogin();
         $userTimetable = Doctrine::getTable('UserTimetable')->find($this->timetable->getUserTimetableId());
         $userTimetable['published'] = false;
@@ -384,7 +384,7 @@ class timetableActions extends sfActions {
     }
 
     private function publishCheckLogin() {
-        $user = $this->getUser()->getGuardUser();
+        $user = $this->getUser()->getDBUser();
         if (!$user) {
             $this->getUser()->setFlash('error', 'Pre publikovanie rozvrhu musíte byť prihlásený/á');
             $this->redirect('@sf_guard_signin');

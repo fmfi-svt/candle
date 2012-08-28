@@ -9,20 +9,20 @@
  * @property boolean $published
  * @property string $slug
  * @property integer $user_id
- * @property sfGuardUser $sfGuardUser
+ * @property User $User
  * @property Doctrine_Collection $UserTimetableLessons
  * 
  * @method string              getName()                 Returns the current record's "name" value
  * @method boolean             getPublished()            Returns the current record's "published" value
  * @method string              getSlug()                 Returns the current record's "slug" value
  * @method integer             getUserId()               Returns the current record's "user_id" value
- * @method sfGuardUser         getSfGuardUser()          Returns the current record's "sfGuardUser" value
+ * @method User                getUser()                 Returns the current record's "User" value
  * @method Doctrine_Collection getUserTimetableLessons() Returns the current record's "UserTimetableLessons" collection
  * @method UserTimetable       setName()                 Sets the current record's "name" value
  * @method UserTimetable       setPublished()            Sets the current record's "published" value
  * @method UserTimetable       setSlug()                 Sets the current record's "slug" value
  * @method UserTimetable       setUserId()               Sets the current record's "user_id" value
- * @method UserTimetable       setSfGuardUser()          Sets the current record's "sfGuardUser" value
+ * @method UserTimetable       setUser()                 Sets the current record's "User" value
  * @method UserTimetable       setUserTimetableLessons() Sets the current record's "UserTimetableLessons" collection
  * 
  * @package    candle
@@ -67,7 +67,7 @@ abstract class BaseUserTimetable extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        $this->hasOne('sfGuardUser', array(
+        $this->hasOne('User', array(
              'local' => 'user_id',
              'foreign' => 'id',
              'onDelete' => 'CASCADE'));
