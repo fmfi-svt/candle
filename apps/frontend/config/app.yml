@@ -6,3 +6,4 @@ all:
     semester_end: 2012-05-18
     calendar_timezone: Europe/Bratislava
     analytics_account: UA-21193959-1
+    cosign_logout_url: https://login.uniba.sk/logout.cgi

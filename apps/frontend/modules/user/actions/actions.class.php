@@ -59,7 +59,15 @@ class userActions extends sfActions {
     public function executeSignout(sfWebRequest $request)
     {
         $this->getUser()->signOut();
-        return $this->redirect('@homepage');
+
+        $cosignLogoutUrl = sfConfig::get('app_cosign_logout_url');
+        $homepage = $this->generateUrl('homepage', array(), true);
+
+        if ($cosignLogoutUrl === null || strlen($cosignLogoutUrl) == 0) {
+            return $this->redirect($homepage);
+        }
+
+        return $this->redirect($cosignLogoutUrl . '?' . $homepage);
     }
     
     public function executeSecure(sfWebRequest $request)
