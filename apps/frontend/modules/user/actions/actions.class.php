@@ -60,6 +60,12 @@ class userActions extends sfActions {
     {
         $this->getUser()->signOut();
 
+        $server = $request->getPathInfoArray();
+        if (isset($server['COSIGN_SERVICE'])) {
+            $cookieName = $server['COSIGN_SERVICE'];
+            $this->response->setCookie($cookieName, null, 1, '/', null, true);
+        }
+
         $cosignLogoutUrl = sfConfig::get('app_cosign_logout_url');
         $homepage = $this->generateUrl('homepage', array(), true);
 
