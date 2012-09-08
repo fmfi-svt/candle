@@ -5,19 +5,17 @@ if ($username) {
     echo $username;
 }
 else {
-    echo 'neprihlásený návštevník';
+    echo 'anonymný návštevník';
 }
 
 ?></span><!--
 --><ul><li><?php
 
-if ($username) {
-    echo link_to('Odhlásiť', '@signout', array('rel' => 'nofollow'));
-}
-else {
+if (!$username) {
     echo link_to('Prihlásiť', '@signin', array('rel' => 'nofollow'));
     ?></li><li><?php
-    echo link_to('Zrušiť session', '@signout', array('rel' => 'nofollow'));
 }
+
+echo link_to('Odhlásiť', '@signout', array('rel' => 'nofollow'));
 
 ?></li></ul>
