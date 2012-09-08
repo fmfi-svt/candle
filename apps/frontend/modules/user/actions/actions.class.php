@@ -81,8 +81,4 @@ class userActions extends sfActions {
         $this->getResponse()->setStatusCode(403);
     }
     
-    public function executeProfile(sfWebRequest $request)
-    {
-        
-    }
 }

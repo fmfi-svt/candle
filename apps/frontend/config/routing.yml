@@ -14,18 +14,6 @@ signout:
     url: /odhlasit
     param: { module: user, action: signout }
 
-profile:
-    url: /profil
-    class: sfRequestRoute
-    param: { module: user, action: profile }
-    requirements: {sf_method: get}
-
-change_password:
-    url: /zmenit-heslo
-    class: sfRequestRoute
-    param: { module: user, action: changePassword }
-    requirements: {sf_method: post}
-
 terms_of_use:
     url: /podmienky-pouzivania
     class: sfRequestRoute

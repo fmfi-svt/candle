@@ -12,8 +12,6 @@ else {
 --><ul><li><?php
 
 if ($username) {
-    echo link_to('Profil', '@profile', array('rel' => 'nofollow'));
-    ?></li><li><?php
     echo link_to('Odhlásiť', '@signout', array('rel' => 'nofollow'));
 }
 else {
