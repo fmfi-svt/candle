@@ -2,8 +2,8 @@
 # http://www.symfony-project.org/reference/1_4/en/11-App
 
 all:
-    semester_start: 2012-02-13
-    semester_end: 2012-05-18
+    semester_start: 2012-09-17
+    semester_end: 2012-12-14
     calendar_timezone: Europe/Bratislava
     analytics_account: UA-21193959-1
     cosign_logout_url: https://login.uniba.sk/logout.cgi
