@@ -304,8 +304,8 @@ class Candle {
 
     static public function makeSubjectInfoLink($shortCode) {
         $matches = array();
-        if (preg_match('/^(\d-INF-\d{3})(?:-\d+){0,2}$/',$shortCode, $matches)) {
-            return 'http://new.dcs.fmph.uniba.sk/index.php/'.urlencode($matches[1]);
+        if (preg_match('/^(\d+-[^-]+-\d+)(?:-\d+){0,2}$/',$shortCode, $matches)) {
+            return 'https://fajr.fmph.uniba.sk/predmety/informacny-list?code='.urlencode($matches[1]);
         }
         return null;
     }
