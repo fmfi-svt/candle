@@ -69,6 +69,10 @@
                 'rooms' => $rooms
             )); ?>
         </div>
+        
+        <div class="other_links">
+            <?php echo link_to('Rozvrhy všetkých miestností', array('sf_route' => 'room_list')); ?>
+        </div>
     </div>
 </div>
 <div class="panel_cast" id="panel_cast_kruzky">
@@ -89,6 +93,10 @@
         <?php include_partial('panel/list_studentGroups_box', array(
                 'studentGroups' => $studentGroups
             )); ?>
+        </div>
+        
+        <div class="other_links">
+            <?php echo link_to('Rozvrhy všetkých krúžkov', array('sf_route' => 'studentGroup_list')); ?>
         </div>
     </div>
 </div>
