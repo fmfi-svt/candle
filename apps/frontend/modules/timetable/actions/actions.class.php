@@ -278,7 +278,7 @@ class timetableActions extends sfActions {
         $this->fetchTimetable($request);
         $user = $this->getUser()->getDBUser();
         if (!$user) {
-            $this->redirect('@sf_guard_signin');
+            $this->redirect('@signin');
             return;
         }
         $this->timetable->save($user->getId());
@@ -387,7 +387,7 @@ class timetableActions extends sfActions {
         $user = $this->getUser()->getDBUser();
         if (!$user) {
             $this->getUser()->setFlash('error', 'Pre publikovanie rozvrhu musíte byť prihlásený/á');
-            $this->redirect('@sf_guard_signin');
+            $this->redirect('@signin');
             return;
         }
     }
