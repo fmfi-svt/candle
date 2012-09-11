@@ -50,6 +50,10 @@ hodiny v rozvrhu
 
 </div> <!-- timetable_editor_command_bar -->
 
+<div id="timetable_editor_info">
+    Súčet kreditov predmetov v rozvrhu: <?php echo $timetable->sumCredits(); ?>
+</div>
+
 <?php include_partial('timetable/table', array('timetable'=>$timetable, 'layout'=>$layout, 'editable'=>true)); ?>
 </div>
 <?php echo '</form>' ?>

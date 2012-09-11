@@ -166,5 +166,24 @@ class LessonTable extends Doctrine_Table
 
         return $q->execute(null, Doctrine::HYDRATE_ARRAY);
     }
+    
+    public function sumCredits(array $lesson_ids) {
+        if (count($lesson_ids) == 0) return 0;
+        
+        $q = Doctrine_Query::create();
+        
+        $questionMarks = '';
+        for ($i = 0; $i < count($lesson_ids); $i++) {
+            if ($i > 0) $questionMarks .= ', ';
+            $questionMarks .= '?';
+        }
+        
+        $q->select('sum(s.credit_value) as credits')
+                ->from('Subject s')
+                ->where('s.id IN (SELECT l.subject_id FROM Lesson l WHERE l.id IN ('.$questionMarks.'))', $lesson_ids);
+        
+        $result = $q->execute();
+        return $result[0]['credits'];
+    }
 
 }

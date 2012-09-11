@@ -219,6 +219,10 @@ class EditableTimetable {
         }
         return false;
     }
+    
+    public function sumCredits() {
+        return Doctrine::getTable('Lesson')->sumCredits(array_keys($this->lessons));
+    }
 
     public function __clone() {
         $this->userTimetableId = null;
