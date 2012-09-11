@@ -62,7 +62,7 @@ for ($i = $cols[$j]; $i < $cols[$j + 1]; $i++) {
             echo ', ';
         }
         $first = false;
-        echo link_to($teacherName, array('sf_route'=>'timetable_teacher_show', 'id'=>$teacher['id']));
+        echo link_to($teacherName, array('sf_route'=>'timetable_teacher_show', 'sf_subject'=>$teacher));
     }
     if (!$first) {
         echo '</i>';

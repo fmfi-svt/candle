@@ -115,7 +115,7 @@ end_slot();
     foreach ($lesson['Teacher'] as $teacher) {
         if (!$first) echo ', ';
         $first = false;
-        echo link_to(Candle::formatLongName($teacher), array('sf_route'=>'timetable_teacher_show', 'id'=>$teacher['id']));
+        echo link_to(Candle::formatLongName($teacher), array('sf_route'=>'timetable_teacher_show', 'sf_subject'=>$teacher));
     }
     echo '</td>';
     echo '<td>';

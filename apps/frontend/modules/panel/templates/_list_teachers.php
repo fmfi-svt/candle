@@ -2,7 +2,7 @@
 
 <?php foreach ($teachers as $teacher):?>
 
-    <li><?php echo link_to(Candle::formatLongName($teacher), '@timetable_teacher_show?id='.$teacher['id']); ?></li>
+    <li><?php echo link_to(Candle::formatLongName($teacher), array('sf_route'=>'timetable_teacher_show', 'sf_subject'=>$teacher)); ?></li>
 
 <?php endforeach; ?>
 

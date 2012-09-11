@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010,2012 Martin Sucha
 
     This file is part of Candle.
 
@@ -38,7 +38,15 @@ class TeacherTable extends Doctrine_Table
                 ->orderBy('t.family_name')
                 ->limit($limit);
 
-        return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
+        return $q->execute();
+    }
+
+    public function findByLoginOrId($parameters) {
+        $loginOrId = $parameters['login_or_id'];
+        if (preg_match('/^\d+$/', $loginOrId)) {
+            return $this->find($loginOrId);
+        }
+        return $this->findByLogin($loginOrId);
     }
 
 }

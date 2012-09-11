@@ -160,9 +160,9 @@ timetable_rename_do:
     requirements: { sf_method: post }
 
 timetable_teacher_show:
-    url: /ucitel/:id.:sf_format
+    url: /ucitel/:login_or_id.:sf_format
     class: sfDoctrineRoute
-    options: { model: Teacher, type: object }
+    options: { model: Teacher, type: object, method: findByLoginOrId }
     param: { module: timetableTeacher, action: show, sf_format: html }
     requirements:
         sf_format: (?:html|txt|csv|ics|xml|list)
