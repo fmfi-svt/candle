@@ -163,15 +163,15 @@ timetable_teacher_show:
         sf_method: [get, post]
 
 timetable_teacher_export:
-    url: /ucitel/:id/rozvrh/exportovat
+    url: /ucitel/:login_or_id/rozvrh/exportovat
     class: sfDoctrineRoute
-    options: { model: Teacher, type: object }
+    options: { model: Teacher, type: object, method: findByLoginOrId }
     param: { module: timetableTeacher, action: export }
 
 timetable_teacher_duplicate:
-    url: /ucitel/:id/rozvrh/duplikovat
+    url: /ucitel/:login_or_id/rozvrh/duplikovat
     class: sfDoctrineRoute
-    options: { model: Teacher, type: object }
+    options: { model: Teacher, type: object, method: findByLoginOrId }
     param: { module: timetableTeacher, action: duplicate }
 
 room_show:
