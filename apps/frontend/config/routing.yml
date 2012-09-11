@@ -178,6 +178,10 @@ timetable_teacher_duplicate:
     options: { model: Teacher, type: object, method: findByLoginOrId }
     param: { module: timetableTeacher, action: duplicate }
 
+room_list:
+    url: /miestnosti
+    param: { module: room, action: list }
+
 room_show:
     url: /miestnost/:id.:sf_format
     class: sfDoctrineRoute

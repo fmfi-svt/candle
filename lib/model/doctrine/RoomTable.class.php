@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010,2012 Martin Sucha
 
     This file is part of Candle.
 
@@ -37,6 +37,13 @@ class RoomTable extends Doctrine_Table
                 ->limit($limit);
 
         return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
+    }
+    
+    public function findAllSortedByName() {
+        $q = Doctrine_Query::create()
+                ->from('Room r')
+                ->orderBy('r.name COLLATE utf8_slovak_ci ASC');
+        return $q->execute();
     }
 
 }

@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010,2011 Martin Sucha
+    Copyright 2010,2011,2012 Martin Sucha
 
     This file is part of Candle.
 
@@ -357,6 +357,29 @@ class Candle {
                 $groupData = &$result[$group];
             }
             $groupData[] = $value;
+        }
+        
+        return $result;
+    }
+    
+    static public function groupSortedByDashes($values, $key) {
+        $result = array();
+        $lastGroup = null;
+        foreach ($values as $value) {
+            $group = strstr($value[$key], '-', true);
+            if ($group === false) $group = 'Ostatné';
+            if ($lastGroup !== $group) {
+                $lastGroup = $group;
+                $result[$group] = array();
+                $groupData = &$result[$group];
+            }
+            $groupData[] = $value;
+        }
+        
+        if (isset($result['Ostatné'])) {
+            $tmp = $result['Ostatné'];
+            unset($result['Ostatné']);
+            $result['Ostatné'] = $tmp;
         }
         
         return $result;

@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010,2012 Martin Sucha
 
     This file is part of Candle.
 
@@ -58,6 +58,10 @@ class roomActions extends sfActions {
 
     public function executeExport(sfWebRequest $request) {
         $this->fetchRoomTimetable();
+    }
+    
+    public function executeList(sfWebRequest $request) {
+        $this->groups = Candle::groupSortedByDashes(Doctrine::getTable('Room')->findAllSortedByName(), 'name');
     }
 
 
