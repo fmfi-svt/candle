@@ -75,13 +75,10 @@ timetable_duplicate:
         sf_method: post
 
 timetable_duplicate_published:
-    url: /rozvrh/:slug.:sf_format/duplikovat
+    url: /rozvrh/:slug/duplikovat
     class: sfDoctrineRoute
     options: { model: UserTimetable, type: object }
-    param: { module: timetablePublished, action: duplicate, sf_format: html }
-    requirements:
-        #slug: \[a-z-\]+
-        sf_format: (?:html|txt|csv|ics|xml|list)
+    param: { module: timetablePublished, action: duplicate }
 
 timetable_save:
     url: /moj/rozvrh/:id/ulozit
@@ -116,13 +113,10 @@ timetable_export:
     param: { module: timetable, action: export }
 
 timetable_export_published:
-    url: /rozvrh/:slug.:sf_format/exportovat
+    url: /rozvrh/:slug/exportovat
     class: sfDoctrineRoute
     options: { model: UserTimetable, type: object }
-    param: { module: timetablePublished, action: export, sf_format: html }
-    requirements:
-        #slug: \[a-z-\]+
-        sf_format: (?:html|txt|csv|ics|xml|list)
+    param: { module: timetablePublished, action: export }
 
 timetable_publish_do:
     class: sfRequestRoute
@@ -169,20 +163,16 @@ timetable_teacher_show:
         sf_method: [get, post]
 
 timetable_teacher_export:
-    url: /ucitel/:id.:sf_format/rozvrh/exportovat
+    url: /ucitel/:id/rozvrh/exportovat
     class: sfDoctrineRoute
     options: { model: Teacher, type: object }
-    param: { module: timetableTeacher, action: export, sf_format: html }
-    requirements:
-        sf_format: (?:html|txt|csv|ics|xml|list)
+    param: { module: timetableTeacher, action: export }
 
 timetable_teacher_duplicate:
-    url: /ucitel/:id.:sf_format/rozvrh/duplikovat
+    url: /ucitel/:id/rozvrh/duplikovat
     class: sfDoctrineRoute
     options: { model: Teacher, type: object }
-    param: { module: timetableTeacher, action: duplicate, sf_format: html }
-    requirements:
-        sf_format: (?:html|txt|csv|ics|xml|list)
+    param: { module: timetableTeacher, action: duplicate }
 
 room_show:
     url: /miestnost/:id.:sf_format
@@ -194,22 +184,16 @@ room_show:
         sf_method: [get, post]
 
 room_timetable_export:
-    url: /miestnost/:id.:sf_format/rozvrh/exportovat
+    url: /miestnost/:id/rozvrh/exportovat
     class: sfDoctrineRoute
     options: { model: Room, type: object }
-    param: { module: room, action: export, sf_format: html }
-    requirements:
-        sf_format: (?:html|txt|csv|ics|xml|list)
-        sf_method: [get, post]
+    param: { module: room, action: export }
 
 room_timetable_duplicate:
-    url: /miestnost/:id.:sf_format/rozvrh/duplikovat
+    url: /miestnost/:id/rozvrh/duplikovat
     class: sfDoctrineRoute
     options: { model: Room, type: object }
-    param: { module: room, action: duplicate, sf_format: html }
-    requirements:
-        sf_format: (?:html|txt|csv|ics|xml|list)
-        sf_method: [get, post]
+    param: { module: room, action: duplicate }
 
 studentGroup_show:
     url: /kruzok/:id.:sf_format
@@ -221,22 +205,16 @@ studentGroup_show:
         sf_method: [get, post]
 
 studentGroup_timetable_export:
-    url: /kruzok/:id.:sf_format/rozvrh/exportovat
+    url: /kruzok/:id/rozvrh/exportovat
     class: sfDoctrineRoute
     options: { model: StudentGroup, type: object }
-    param: { module: studentGroup, action: export, sf_format: html }
-    requirements:
-        sf_format: (?:html|txt|csv|ics|xml|list)
-        sf_method: [get, post]
+    param: { module: studentGroup, action: export }
 
 studentGroup_timetable_duplicate:
-    url: /kruzok/:id.:sf_format/rozvrh/duplikovat
+    url: /kruzok/:id/rozvrh/duplikovat
     class: sfDoctrineRoute
     options: { model: StudentGroup, type: object }
-    param: { module: studentGroup, action: duplicate, sf_format: html }
-    requirements:
-        sf_format: (?:html|txt|csv|ics|xml|list)
-        sf_method: [get, post]
+    param: { module: studentGroup, action: duplicate }
 
 freeRoom_search:
     url: /volne-miestnosti/zoznam.:sf_format
