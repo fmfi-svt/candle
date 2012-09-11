@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010,2012 Martin Sucha
 
     This file is part of Candle.
 
@@ -60,5 +60,8 @@ class studentGroupActions extends sfActions {
         $this->fetchStudentGroupTimetable();
     }
 
+    public function executeList(sfWebRequest $request) {
+        $this->groups = Candle::groupSorted(Doctrine::getTable('StudentGroup')->findAllSortedByName(), 'name');
+    }
 
 }

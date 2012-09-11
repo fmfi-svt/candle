@@ -198,6 +198,10 @@ room_timetable_duplicate:
     class: sfDoctrineRoute
     options: { model: Room, type: object }
     param: { module: room, action: duplicate }
+    
+studentGroup_list:
+    url: /kruzky
+    param: { module: studentGroup, action: list }
 
 studentGroup_show:
     url: /kruzok/:id.:sf_format

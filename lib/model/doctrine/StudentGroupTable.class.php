@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010,2012 Martin Sucha
 
     This file is part of Candle.
 
@@ -38,6 +38,13 @@ class StudentGroupTable extends Doctrine_Table
                 ->limit($limit);
 
         return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
+    }
+    
+    public function findAllSortedByName() {
+        $q = Doctrine_Query::create()
+                ->from('StudentGroup s')
+                ->orderBy('s.name COLLATE utf8_slovak_ci ASC');
+        return $q->execute();
     }
 
 }
