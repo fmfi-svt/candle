@@ -170,6 +170,10 @@ class Candle {
     static public function formatLongName($teacher) {
         return ($teacher['given_name']?$teacher['given_name'].' ':'').$teacher['family_name'];
     }
+    
+    static public function formatReversedLongName($teacher) {
+        return $teacher['family_name'] . ($teacher['given_name']?', '.$teacher['given_name']:'');
+    }
 
     static public function setTimetableExportResponse(sfWebRequest $request, sfActions $actions) {
         self::setResponseFormat($request->getRequestFormat(), $actions);
@@ -313,5 +317,48 @@ class Candle {
     static public function formatSubjectCategory($code) {
         
         return rtrim($code, "0123456789-");
+    }
+    
+    static public function getSortingGroup($string) {
+        $oldLocale = setlocale(LC_CTYPE, "0");
+        $newLocale = 'en_US.UTF-8';
+
+        $status = setlocale(LC_CTYPE, $newLocale);
+        $group = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+        setlocale(LC_CTYPE, $oldLocale);
+
+        if ($status === FALSE) {
+            throw new Exception("Nepodarilo sa setlocale($newLocale).");
+        }
+        
+        $group = self::upper($group);
+        
+        if (mb_substr($group, 0, 2, 'UTF-8') == 'CH') {
+            $group = 'Ch';
+        }
+        else {
+            $group = mb_substr($group, 0, 1, 'UTF-8');
+            if ($group == '' || $group == '.') {
+                $group = 'Ostatné';
+            }
+        }
+        
+        return $group;
+    }
+    
+    static public function groupSorted($values, $key) {
+        $result = array();
+        $lastGroup = null;
+        foreach ($values as $value) {
+            $group = self::getSortingGroup($value[$key]);
+            if ($lastGroup !== $group) {
+                $lastGroup = $group;
+                $result[$group] = array();
+                $groupData = &$result[$group];
+            }
+            $groupData[] = $value;
+        }
+        
+        return $result;
     }
 }

@@ -48,5 +48,12 @@ class TeacherTable extends Doctrine_Table
         }
         return $this->findByLogin($loginOrId);
     }
+    
+    public function findAllSortedByName() {
+        $q = Doctrine_Query::create()
+                ->from('Teacher t')
+                ->orderBy('CASE WHEN LEFT(t.family_name, 1) IN (\'\', \'.\') THEN 1 else -1 END ASC, t.family_name COLLATE utf8_slovak_ci ASC, t.given_name COLLATE utf8_slovak_ci ASC');
+        return $q->execute();
+    }
 
 }

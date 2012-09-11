@@ -59,6 +59,10 @@ class timetableTeacherActions extends sfActions {
     public function executeExport(sfWebRequest $request) {
         $this->fetchTeacherTimetable();
     }
+    
+    public function executeList(sfWebRequest $request) {
+        $this->groups = Candle::groupSorted(Doctrine::getTable('Teacher')->findAllSortedByName(), 'family_name');
+    }
 
 
 }

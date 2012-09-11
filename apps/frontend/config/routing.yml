@@ -153,6 +153,10 @@ timetable_rename_do:
     param: { module: timetable, action: renameExecute }
     requirements: { sf_method: post }
 
+timetable_teacher_list:
+    url: /ucitelia
+    param: { module: timetableTeacher, action: list }
+
 timetable_teacher_show:
     url: /ucitel/:login_or_id.:sf_format
     class: sfDoctrineRoute

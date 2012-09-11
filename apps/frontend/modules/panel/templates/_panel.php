@@ -44,6 +44,10 @@
                 'teachers' => $teachers
             )); ?>
         </div>
+        
+        <div class="other_links">
+            <?php echo link_to('Rozvrhy všetkých učiteľov', array('sf_route' => 'timetable_teacher_list')); ?>
+        </div>
     </div>
 </div>
 <div class="panel_cast" id="panel_cast_miestnosti">

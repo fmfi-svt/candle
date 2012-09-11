@@ -47,6 +47,10 @@ html, body {
     background: #EAF4FF;
 }
 
+#panel .other_links a {
+    color: black;
+}
+
 .panel_cast h2, .panel_cast_no_collapse h2 {
     background-color: #9FCCFF;
     color: black;
