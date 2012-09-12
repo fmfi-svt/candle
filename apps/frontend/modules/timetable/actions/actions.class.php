@@ -321,7 +321,7 @@ class timetableActions extends sfActions {
                 return;
             }
 
-            $this->getUser()->setFlash('notice', 'Rozvrh úspešne publikovaný');
+            $this->getUser()->setFlash('notice', 'Rozvrh úspešne zverejnený');
             $this->redirect('@timetable_show?id='.$this->timetable_id);
         }
         $this->setTemplate('publish');
@@ -386,7 +386,7 @@ class timetableActions extends sfActions {
     private function publishCheckLogin() {
         $user = $this->getUser()->getDBUser();
         if (!$user) {
-            $this->getUser()->setFlash('error', 'Pre publikovanie rozvrhu musíte byť prihlásený/á');
+            $this->getUser()->setFlash('error', 'Pre zdieľanie rozvrhu musíte byť prihlásený/á');
             $this->redirect('@signin');
             return;
         }

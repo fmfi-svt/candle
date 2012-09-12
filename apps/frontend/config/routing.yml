@@ -120,25 +120,25 @@ timetable_export_published:
 
 timetable_publish_do:
     class: sfRequestRoute
-    url: /moj/rozvrh/:id/zverejnit
+    url: /moj/rozvrh/:id/zdielat
     param: { module: timetable, action: publishExecute }
     requirements: { sf_method: post }
 
 timetable_unpublish_do:
     class: sfRequestRoute
-    url: /moj/rozvrh/:id/nezverejnit
+    url: /moj/rozvrh/:id/nezdielat
     param: { module: timetable, action: unpublishExecute }
 
 
 timetable_publish:
     class: sfRequestRoute
-    url: /moj/rozvrh/:id/zverejnit
+    url: /moj/rozvrh/:id/zdielat
     param: { module: timetable, action: publish }
     requirements: { sf_method: get }
 
 timetable_unpublish:
     class: sfRequestRoute
-    url: /moj/rozvrh/:id/nezverejnit
+    url: /moj/rozvrh/:id/nezdielat
     param: { module: timetable, action: unpublish }
 
 timetable_rename:
