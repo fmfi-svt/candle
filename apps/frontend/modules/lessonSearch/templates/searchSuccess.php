@@ -119,7 +119,7 @@ end_slot();
     }
     echo '</td>';
     echo '<td>';
-    echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'id'=>$lesson['Room']['id']));
+    echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'sf_subject'=>$lesson['Room']));
     echo '</td>';
     echo '<td>';
     echo $lesson['note'];

@@ -36,7 +36,7 @@ for ($i = $cols[$j]; $i < $cols[$j + 1]; $i++) {
     echo Candle::formatTime($lesson['end'], true);
     echo '</td>';
     echo '<td>';
-    echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'id'=>$lesson['Room']['id']));
+    echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'sf_subject'=>$lesson['Room']));
     echo '</td>';
     echo '<td>';
     ?><abbr class="lesson-type <?php echo Candle::getLessonTypeHTMLClass($lesson['LessonType']); ?>" title="<?php echo $lesson['LessonType']['name']; ?>"><span class="lesson-type-in"><?php echo $lesson['LessonType']['code'] ?></span><span class="lesson-type-image"></span></abbr> <?php

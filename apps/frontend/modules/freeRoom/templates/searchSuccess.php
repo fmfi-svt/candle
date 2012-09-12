@@ -127,7 +127,7 @@ end_slot();
         echo Candle::formatTimeAmount($timeInterval->getLength());
         echo '</td>';
         echo '<td>';
-        echo link_to($interval['Room']['name'], array('sf_route'=>'room_show', 'id'=>$interval['Room']['id']));
+        echo link_to($interval['Room']['name'], array('sf_route'=>'room_show', 'sf_subject'=>$interval['Room']));
         echo '</td>';
         echo '<td>';
         echo $interval['Room']['capacity'];

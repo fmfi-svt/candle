@@ -2,7 +2,7 @@
 
 <?php foreach ($rooms as $room):?>
 
-    <li><?php echo link_to($room['name'], array('sf_route'=>'room_show', 'id'=>$room['id'])); ?></li>
+    <li><?php echo link_to($room['name'], array('sf_route'=>'room_show', 'sf_subject'=>$room)); ?></li>
 
 <?php endforeach; ?>
 

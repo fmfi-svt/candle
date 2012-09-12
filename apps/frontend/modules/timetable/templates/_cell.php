@@ -12,7 +12,7 @@ else {
 <div class="wrap"><!--
     --><div class="predmet_wrap"><div class="predmet"><?php echo $subjectName; ?></div></div><!--
     --><div class="hodina_info"><div class="miestnost"><?php
-                echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'id'=>$lesson['Room']['id'])); 
+                echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'sf_subject'=>$lesson['Room'])); 
     ?></div><!--
     --><div class="typ"><abbr title="<?php echo $lesson['LessonType']['name']; ?>"><?php echo Candle::upper($lesson['LessonType']['code']); ?></abbr></div></div>
     <?php if ($highlighted): ?>

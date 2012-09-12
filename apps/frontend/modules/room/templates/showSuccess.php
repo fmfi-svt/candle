@@ -8,7 +8,7 @@ end_slot();
 
 slot('top');
 include_component('timetable','top');
-include_partial('room/menu', array('room_id'=>$room_id));
+include_partial('room/menu', array('room'=>$room));
 end_slot();
 
 ?>
@@ -28,6 +28,6 @@ end_slot();
 </div>
 <div>
 <?php include_partial('timetable/footer',
-        array('url'=>array('sf_route'=>'room_show', 'id'=>$room_id)));
+        array('url'=>array('sf_route'=>'room_show', 'sf_subject'=>$room)));
 ?>
 </div>
