@@ -159,8 +159,8 @@ timetable_teacher_list:
 
 timetable_teacher_show:
     url: /ucitelia/:login_or_id.:sf_format
-    class: sfDoctrineRoute
-    options: { model: Teacher, type: object, method: findByLoginOrId }
+    class: ColumnOrIdRoute
+    options: { model: Teacher, type: object, column: login }
     param: { module: timetableTeacher, action: show, sf_format: html }
     requirements:
         sf_format: (?:html|txt|csv|ics|xml|list)
@@ -168,14 +168,14 @@ timetable_teacher_show:
 
 timetable_teacher_export:
     url: /ucitelia/:login_or_id/rozvrh/exportovat
-    class: sfDoctrineRoute
-    options: { model: Teacher, type: object, method: findByLoginOrId }
+    class: ColumnOrIdRoute
+    options: { model: Teacher, type: object, column: login }
     param: { module: timetableTeacher, action: export }
 
 timetable_teacher_duplicate:
     url: /ucitelia/:login_or_id/rozvrh/duplikovat
-    class: sfDoctrineRoute
-    options: { model: Teacher, type: object, method: findByLoginOrId }
+    class: ColumnOrIdRoute
+    options: { model: Teacher, type: object, column: login }
     param: { module: timetableTeacher, action: duplicate }
 
 room_list:

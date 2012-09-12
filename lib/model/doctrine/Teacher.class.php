@@ -34,11 +34,5 @@ class Teacher extends BaseTeacher
     function getShortName() {
         return Candle::formatShortName($this);
     }
-
-    function getLoginOrId() {
-        if ($this->getLogin() == null) {
-            return $this->getId();
-        }
-        return $this->getLogin();
-    }
+    
 }

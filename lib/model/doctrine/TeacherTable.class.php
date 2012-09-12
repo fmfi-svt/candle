@@ -41,14 +41,6 @@ class TeacherTable extends Doctrine_Table
         return $q->execute();
     }
 
-    public function findByLoginOrId($parameters) {
-        $loginOrId = $parameters['login_or_id'];
-        if (preg_match('/^\d+$/', $loginOrId)) {
-            return $this->find($loginOrId);
-        }
-        return $this->findByLogin($loginOrId);
-    }
-    
     public function findAllSortedByName() {
         $q = Doctrine_Query::create()
                 ->from('Teacher t')
