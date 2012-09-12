@@ -183,7 +183,7 @@ room_list:
     param: { module: room, action: list }
 
 room_show:
-    url: /miestnost/:id.:sf_format
+    url: /miestnosti/:id.:sf_format
     class: sfDoctrineRoute
     options: { model: Room, type: object }
     param: { module: room, action: show, sf_format: html }
@@ -192,13 +192,13 @@ room_show:
         sf_method: [get, post]
 
 room_timetable_export:
-    url: /miestnost/:id/rozvrh/exportovat
+    url: /miestnosti/:id/rozvrh/exportovat
     class: sfDoctrineRoute
     options: { model: Room, type: object }
     param: { module: room, action: export }
 
 room_timetable_duplicate:
-    url: /miestnost/:id/rozvrh/duplikovat
+    url: /miestnosti/:id/rozvrh/duplikovat
     class: sfDoctrineRoute
     options: { model: Room, type: object }
     param: { module: room, action: duplicate }
@@ -208,7 +208,7 @@ studentGroup_list:
     param: { module: studentGroup, action: list }
 
 studentGroup_show:
-    url: /kruzok/:id.:sf_format
+    url: /kruzky/:id.:sf_format
     class: sfDoctrineRoute
     options: { model: StudentGroup, type: object }
     param: { module: studentGroup, action: show, sf_format: html }
@@ -217,13 +217,13 @@ studentGroup_show:
         sf_method: [get, post]
 
 studentGroup_timetable_export:
-    url: /kruzok/:id/rozvrh/exportovat
+    url: /kruzky/:id/rozvrh/exportovat
     class: sfDoctrineRoute
     options: { model: StudentGroup, type: object }
     param: { module: studentGroup, action: export }
 
 studentGroup_timetable_duplicate:
-    url: /kruzok/:id/rozvrh/duplikovat
+    url: /kruzky/:id/rozvrh/duplikovat
     class: sfDoctrineRoute
     options: { model: StudentGroup, type: object }
     param: { module: studentGroup, action: duplicate }
