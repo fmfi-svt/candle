@@ -125,7 +125,7 @@ class panelComponents extends sfComponents {
                 // only one result, see #46
                 // perform the redirect only if we are changing the search text
                 if ($request->hasParameter('showStudentGroups') && count($this->studentGroups) == 1) {
-                    $this->getController()->redirect(array('sf_route'=>'studentGroup_show', 'id'=>$this->studentGroups[0]['id']), 0, 302);
+                    $this->getController()->redirect(array('sf_route'=>'studentGroup_show', 'sf_subject'=>$this->studentGroups[0]), 0, 302);
                 }
             }
         }

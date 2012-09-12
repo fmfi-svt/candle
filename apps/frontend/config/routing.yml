@@ -208,24 +208,24 @@ studentGroup_list:
     param: { module: studentGroup, action: list }
 
 studentGroup_show:
-    url: /kruzky/:id.:sf_format
-    class: sfDoctrineRoute
-    options: { model: StudentGroup, type: object }
+    url: /kruzky/:name_or_id.:sf_format
+    class: ColumnOrIdRoute
+    options: { model: StudentGroup, type: object, column: name }
     param: { module: studentGroup, action: show, sf_format: html }
     requirements:
         sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 studentGroup_timetable_export:
-    url: /kruzky/:id/rozvrh/exportovat
-    class: sfDoctrineRoute
-    options: { model: StudentGroup, type: object }
+    url: /kruzky/:name_or_id/rozvrh/exportovat
+    class: ColumnOrIdRoute
+    options: { model: StudentGroup, type: object, column: name }
     param: { module: studentGroup, action: export }
 
 studentGroup_timetable_duplicate:
-    url: /kruzky/:id/rozvrh/duplikovat
-    class: sfDoctrineRoute
-    options: { model: StudentGroup, type: object }
+    url: /kruzky/:name_or_id/rozvrh/duplikovat
+    class: ColumnOrIdRoute
+    options: { model: StudentGroup, type: object, column: name }
     param: { module: studentGroup, action: duplicate }
 
 freeRoom_search:

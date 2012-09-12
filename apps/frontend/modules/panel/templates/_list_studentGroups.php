@@ -2,7 +2,7 @@
 
 <?php foreach ($studentGroups as $studentGroup):?>
 
-    <li><?php echo link_to($studentGroup['name'], array('sf_route'=>'studentGroup_show', 'id'=>$studentGroup['id'])); ?></li>
+    <li><?php echo link_to($studentGroup['name'], array('sf_route'=>'studentGroup_show', 'sf_subject'=>$studentGroup)); ?></li>
 
 <?php endforeach; ?>
 

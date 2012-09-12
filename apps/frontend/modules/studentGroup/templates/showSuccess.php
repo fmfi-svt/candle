@@ -8,7 +8,7 @@ end_slot();
 
 slot('top');
 include_component('timetable','top');
-include_partial('studentGroup/menu', array('studentGroup_id'=>$studentGroup_id));
+include_partial('studentGroup/menu', array('studentGroup'=>$studentGroup));
 end_slot();
 
 ?>
@@ -22,5 +22,5 @@ end_slot();
         )); ?>
 </div>
 <?php include_partial('timetable/footer',
-        array('url'=>array('sf_route'=>'studentGroup_show', 'id'=>$studentGroup_id)));
+        array('url'=>array('sf_route'=>'studentGroup_show', 'sf_subject'=>$studentGroup)));
 ?>
