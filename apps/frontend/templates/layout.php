@@ -18,6 +18,8 @@
     <!--[if lte IE 7]>
     <?php echo stylesheet_tag('main_ie7'); ?>
     <![endif]-->
+    
+    <?php include_slot('additionalHeadTags') ?>
 
     <?php include_javascripts() ?>
     <?php include_component('layout', 'analytics') ?>

@@ -11,6 +11,11 @@ include_component('timetable','top');
 include_partial('timetableTeacher/menu', array('teacher'=>$teacher));
 end_slot();
 
+slot('additionalHeadTags');?>
+<link rel="canonical" href="<?php echo url_for(array('sf_route' => 'timetable_teacher_show', 'sf_subject' => $teacher)); ?>" />
+<?php
+end_slot();
+
 ?>
 <h1 class="posunuty"><?php echo Candle::formatLongName($teacher); ?></h1>
 
