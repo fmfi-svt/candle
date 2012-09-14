@@ -158,24 +158,24 @@ timetable_teacher_list:
     param: { module: timetableTeacher, action: list }
 
 timetable_teacher_show:
-    url: /ucitelia/:login_or_id.:sf_format
-    class: ColumnOrIdRoute
-    options: { model: Teacher, type: object, column: login }
+    url: /ucitelia/:slug.:sf_format
+    class: AutoSluggableRoute
+    options: { model: Teacher, type: object, columns: [given_name, family_name], matchColumns: [login] }
     param: { module: timetableTeacher, action: show, sf_format: html }
     requirements:
         sf_format: (?:html|txt|csv|ics|xml|list)
         sf_method: [get, post]
 
 timetable_teacher_export:
-    url: /ucitelia/:login_or_id/rozvrh/exportovat
-    class: ColumnOrIdRoute
-    options: { model: Teacher, type: object, column: login }
+    url: /ucitelia/:slug/rozvrh/exportovat
+    class: AutoSluggableRoute
+    options: { model: Teacher, type: object, columns: [given_name, family_name], matchColumns: [login] }
     param: { module: timetableTeacher, action: export }
 
 timetable_teacher_duplicate:
-    url: /ucitelia/:login_or_id/rozvrh/duplikovat
-    class: ColumnOrIdRoute
-    options: { model: Teacher, type: object, column: login }
+    url: /ucitelia/:slug/rozvrh/duplikovat
+    class: AutoSluggableRoute
+    options: { model: Teacher, type: object, columns: [given_name, family_name], matchColumns: [login] }
     param: { module: timetableTeacher, action: duplicate }
 
 room_list:
