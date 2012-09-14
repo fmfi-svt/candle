@@ -18,7 +18,7 @@ class ColumnOrIdRoute extends sfDoctrineRoute {
 
     protected function getObjectsForParameters($parameters) {
         $tableModel = Doctrine_Core::getTable($this->options['model']);
-        $columns = $this->options['column'];
+        $columns = $this->getColumns();
         $parameterName = $this->getParameterName();
         $parameter = $parameters[$parameterName];
         if (preg_match('/^\d+$/', $parameter)) {
