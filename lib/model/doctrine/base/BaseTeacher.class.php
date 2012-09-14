@@ -12,6 +12,7 @@
  * @property string $katedra
  * @property string $external_id
  * @property string $login
+ * @property string $slug
  * @property Doctrine_Collection $Lesson
  * @property Doctrine_Collection $TeacherLessons
  * 
@@ -22,6 +23,7 @@
  * @method string              getKatedra()        Returns the current record's "katedra" value
  * @method string              getExternalId()     Returns the current record's "external_id" value
  * @method string              getLogin()          Returns the current record's "login" value
+ * @method string              getSlug()           Returns the current record's "slug" value
  * @method Doctrine_Collection getLesson()         Returns the current record's "Lesson" collection
  * @method Doctrine_Collection getTeacherLessons() Returns the current record's "TeacherLessons" collection
  * @method Teacher             setGivenName()      Sets the current record's "given_name" value
@@ -31,6 +33,7 @@
  * @method Teacher             setKatedra()        Sets the current record's "katedra" value
  * @method Teacher             setExternalId()     Sets the current record's "external_id" value
  * @method Teacher             setLogin()          Sets the current record's "login" value
+ * @method Teacher             setSlug()           Sets the current record's "slug" value
  * @method Teacher             setLesson()         Sets the current record's "Lesson" collection
  * @method Teacher             setTeacherLessons() Sets the current record's "TeacherLessons" collection
  * 
@@ -73,10 +76,18 @@ abstract class BaseTeacher extends sfDoctrineRecord
              'type' => 'string',
              'length' => 50,
              ));
+        $this->hasColumn('slug', 'string', 100, array(
+             'type' => 'string',
+             'length' => 100,
+             ));
 
 
         $this->index('login_index', array(
              'fields' => 'login',
+             'type' => 'unique',
+             ));
+        $this->index('slug_index', array(
+             'fields' => 'slug',
              'type' => 'unique',
              ));
     }

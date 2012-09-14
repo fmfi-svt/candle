@@ -81,6 +81,7 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('message', null, sfCommandOption::PARAMETER_OPTIONAL, 'Description of the update', ''),
         new sfCommandOption('no-recalculate-free-rooms', null, sfCommandOption::PARAMETER_NONE, 'Don\'t recalculate free room intervals'),
         new sfCommandOption('memory', null, sfCommandOption::PARAMETER_OPTIONAL, 'Memory limit for this task, e.g. 128M', '128M'),
+        new sfCommandOption('no-generate-slugs', null, sfCommandOption::PARAMETER_NONE, 'Don\'t generate slugs'),
     ));
  
     $this->namespace = 'candle';
@@ -103,11 +104,10 @@ EOF;
           echo $sql;
           echo ";\n";
       }
-      return $this->connection->execute($sql);
+      return $this->connection->exec($sql);
   }
 
-  protected function executePreparedSQL(Doctrine_Connection_Statement $prepared, array $params) {
-      $prepared->getQuery();
+  protected function executePreparedSQL($prepared, array $params) {
       return $prepared->execute($params);
   }
 
@@ -888,7 +888,8 @@ EOF;
   {
 
     $databaseManager = new sfDatabaseManager($this->configuration);
-    $this->connection = Doctrine_Manager::connection();
+    $this->doctrineConnection = Doctrine_Manager::connection();
+    $this->connection = $this->doctrineConnection->getDbh();
     $environment = $this->configuration instanceof sfApplicationConfiguration ? $this->configuration->getEnvironment() : 'all';
     $this->elementData = null;
     $this->dataField = null;
@@ -933,7 +934,7 @@ EOF;
     $this->createTemporaryTables();
     $this->createPrimaryKeys();
 
-    $this->connection->beginTransaction();
+    $this->doctrineConnection->beginTransaction();
 
     try {
 
@@ -974,6 +975,13 @@ EOF;
             Doctrine::getTable('FreeRoomInterval')->calculate();
         }
         
+        if (!$options['no-generate-slugs']) {
+            $this->logSection('candle', 'Calculating slugs');
+
+            $slugifier = new TableSlugifier($this->connection);
+            $slugifier->slugifyTable('teacher', array('given_name', 'family_name'));
+        }
+        
         $this->checkVersion();
         $this->insertDataUpdate();
 
@@ -997,19 +1005,19 @@ EOF;
 
         if ($commit) {
             $this->logSection('candle', 'Committing transaction');
-            $this->connection->commit();
+            $this->doctrineConnection->commit();
         }
         else {
             $this->logSection('candle', 'Rolling back transaction');
-            $this->connection->rollback();
+            $this->doctrineConnection->rollback();
         }
 
         $this->logSection('Done.');
     }
     catch (Exception $e) {
         $this->logSection('candle', 'Exception occured, executing rollback');
-        $this->connection->rollback();
         $this->logBlock(array($e->getMessage(), $e->getTraceAsString()), 'ERROR');
+        $this->doctrineConnection->rollback();
     }
 
     $this->logSection(sprintf('%d error(s), %d warning(s)', $this->errorCount, $this->warningCount));

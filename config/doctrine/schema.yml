@@ -55,10 +55,16 @@ Teacher:
         katedra: { type: string(50) }
         external_id: { type: string(30) }
         login: { type: string(50) }
+        slug: { type: string(100) }
     indexes:
         login_index:
           fields:
             login
+          type:
+            unique
+        slug_index:
+          fields:
+            slug
           type:
             unique
 
