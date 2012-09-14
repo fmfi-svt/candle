@@ -353,7 +353,9 @@ class Candle {
             $group = self::getSortingGroup($value[$key]);
             if ($lastGroup !== $group) {
                 $lastGroup = $group;
-                $result[$group] = array();
+                if (!isset($result[$group])) {
+                    $result[$group] = array();
+                }
                 $groupData = &$result[$group];
             }
             $groupData[] = $value;
@@ -362,15 +364,23 @@ class Candle {
         return $result;
     }
     
-    static public function groupSortedByDashes($values, $key) {
+    static public function groupSortedByDashes($values, $key, array $otherPrefixes = array()) {
         $result = array();
         $lastGroup = null;
         foreach ($values as $value) {
             $group = strstr($value[$key], '-', true);
-            if ($group === false) $group = 'Ostatné';
+            if ($group === false) $group = $value[$key];
+            if ($group == '' || $group == ' ') continue;
+            foreach ($otherPrefixes as $prefix) {
+                if (substr($group, 0, strlen($prefix)) == $prefix) {
+                    $group = 'Ostatné';
+                }
+            }
             if ($lastGroup !== $group) {
                 $lastGroup = $group;
-                $result[$group] = array();
+                if (!isset($result[$group])) {
+                    $result[$group] = array();
+                }
                 $groupData = &$result[$group];
             }
             $groupData[] = $value;

@@ -61,7 +61,7 @@ class roomActions extends sfActions {
     }
     
     public function executeList(sfWebRequest $request) {
-        $this->groups = Candle::groupSortedByDashes(Doctrine::getTable('Room')->findAllSortedByName(), 'name');
+        $this->groups = Candle::groupSortedByDashes(Doctrine::getTable('Room')->findAllSortedByName(), 'name', array('xMieRez'));
     }
 
 
