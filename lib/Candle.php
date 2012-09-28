@@ -307,11 +307,7 @@ class Candle {
     }
 
     static public function makeSubjectInfoLink($shortCode) {
-        $matches = array();
-        if (preg_match('/^(\d+-[^-]+-\d+)(?:-\d+){0,2}$/',$shortCode, $matches)) {
-            return 'https://fajr.fmph.uniba.sk/predmety/informacny-list?code='.urlencode($matches[1]);
-        }
-        return null;
+        return 'https://fajr.fmph.uniba.sk/predmety/informacny-list?code='.urlencode($shortCode);
     }
     
     static public function formatSubjectCategory($code) {
