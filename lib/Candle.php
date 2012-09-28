@@ -307,6 +307,9 @@ class Candle {
     }
 
     static public function makeSubjectInfoLink($shortCode) {
+        if ($shortCode == null || trim($shortCode) == '') {
+            return null;
+        }
         return 'https://fajr.fmph.uniba.sk/predmety/informacny-list?code='.urlencode($shortCode);
     }
     
