@@ -7,7 +7,7 @@ CREATE TABLE room (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, room_typ
 CREATE TABLE room_type (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, code VARCHAR(1) NOT NULL, PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE student_group (id BIGINT AUTO_INCREMENT, name VARCHAR(30) NOT NULL, UNIQUE INDEX name_index_idx (name), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE student_group_lessons (student_group_id BIGINT, lesson_id BIGINT, PRIMARY KEY(student_group_id, lesson_id)) ENGINE = INNODB;
-CREATE TABLE subject (id BIGINT AUTO_INCREMENT, name VARCHAR(100) NOT NULL, code VARCHAR(50) NOT NULL, short_code VARCHAR(20) NOT NULL, credit_value BIGINT NOT NULL, rozsah VARCHAR(30) NOT NULL, external_id VARCHAR(30), UNIQUE INDEX external_id_index_idx (external_id), PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE subject (id BIGINT AUTO_INCREMENT, name VARCHAR(100) NOT NULL, code VARCHAR(50) NOT NULL, short_code VARCHAR(20) NOT NULL, credit_value BIGINT NOT NULL, rozsah VARCHAR(30), external_id VARCHAR(30), UNIQUE INDEX external_id_index_idx (external_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE teacher (id BIGINT AUTO_INCREMENT, given_name VARCHAR(50), family_name VARCHAR(50) NOT NULL, iniciala VARCHAR(50), oddelenie VARCHAR(50), katedra VARCHAR(50), external_id VARCHAR(30), login VARCHAR(50), slug VARCHAR(100), UNIQUE INDEX login_index_idx (login), UNIQUE INDEX slug_index_idx (slug), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE teacher_lessons (id BIGINT AUTO_INCREMENT, teacher_id BIGINT NOT NULL, lesson_id BIGINT NOT NULL, INDEX teacher_id_idx (teacher_id), INDEX lesson_id_idx (lesson_id), PRIMARY KEY(id)) ENGINE = INNODB;
 CREATE TABLE user (id INT AUTO_INCREMENT, login VARCHAR(50) NOT NULL UNIQUE, PRIMARY KEY(id)) ENGINE = INNODB;

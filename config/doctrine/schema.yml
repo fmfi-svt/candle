@@ -152,7 +152,7 @@ Subject:
         code: { type: string(50), notnull: true }
         short_code: { type: string(20), notnull: true }
         credit_value: { type: integer, notnull: true }
-        rozsah: { type: string(30), notnull: true }
+        rozsah: { type: string(30) }
         external_id: { type: string(30) }
     indexes:
         external_id_index:

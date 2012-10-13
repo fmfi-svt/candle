@@ -59,7 +59,6 @@ abstract class BaseSubject extends sfDoctrineRecord
              ));
         $this->hasColumn('rozsah', 'string', 30, array(
              'type' => 'string',
-             'notnull' => true,
              'length' => 30,
              ));
         $this->hasColumn('external_id', 'string', 30, array(
