@@ -13,7 +13,7 @@ end_slot();
 
 slot('header');
 ?>
-<h1 class="posunuty"><?php echo $studentGroup['name']; ?></h1>
+<h1>Rozvrh krúžku <?php echo $studentGroup['name']; ?></h1>
 <?php end_slot(); ?>
 
 <div>
