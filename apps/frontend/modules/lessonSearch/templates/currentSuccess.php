@@ -6,11 +6,15 @@ slot('top');
 include_component('timetable','top');
 end_slot();
 
-slot('kiosk_vrch');
+slot('header');
 ?>
-<h1 style="display: inline">Aktuálna výučba</h1>
+<h1>Aktuálna výučba prebiehajúca o <?php echo date('H:i', $queryTime); ?></h1>
+<?php
+end_slot();
+slot('header_kiosk');
+?>
+<h1>Aktuálna výučba</h1>
 prebiehajúca o <?php echo date('H:i', $queryTime); ?>
-<div style="clear: both"></div>
 <?php
 end_slot();
 

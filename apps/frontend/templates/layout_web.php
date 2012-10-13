@@ -33,6 +33,7 @@
         <div id="obsah_vrch">
             <div id="obsah_vrch_lavy">
                 <div id="obsah_in">
+                    <div id="panel_toggle_spacer"></div>
                     <?php if ($sf_user->hasFlash('notice')): ?>
                       <div class="flash_notice">
                         <?php echo $sf_user->getFlash('notice') ?>
@@ -45,6 +46,7 @@
                       </div>
                     <?php endif; ?>
 
+                    <?php include_slot("header") ?>
                     <?php echo $sf_content ?>
 
                     <div class="footer">

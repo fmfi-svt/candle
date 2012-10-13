@@ -27,7 +27,13 @@
 <div id="vrch">
 <div id="vrch_logo"><?php echo link_to('Candle', '@homepage') ?></div>
 <div id="kiosk_vrch">
-    <?php include_slot('kiosk_vrch') ?>
+    <?php if (has_slot('header_kiosk')):
+            include_slot('header_kiosk');
+          else:
+            include_slot('header');
+          endif;
+    ?>
+    <div style="clear: both"></div>
 </div>
 </div>
 <div id="hlavny">

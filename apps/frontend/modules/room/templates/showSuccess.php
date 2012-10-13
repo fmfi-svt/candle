@@ -11,8 +11,10 @@ include_component('timetable','top');
 include_partial('room/menu', array('room'=>$room));
 end_slot();
 
+slot('header');
 ?>
-<h1 class="posunuty"><?php echo $room['name']; ?></h1>
+<h1>Rozvrh miestnosti <?php echo $room['name']; ?></h1>
+<?php end_slot(); ?>
 
 <p>
     Typ miestnosti: <?php echo $room['RoomType']['name']; ?><br />

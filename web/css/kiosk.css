@@ -34,6 +34,10 @@ html, body {
     line-height: 35px;
 }
 
+#kiosk_vrch h1 {
+     display: inline;
+}
+
 #sidebar {
     width: 100px;
     background: #1A1A1A;

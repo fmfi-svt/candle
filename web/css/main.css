@@ -629,3 +629,13 @@ h1.posunuty {
 #panel_throbber.active {
     visibility: visible;
 }
+
+#panel_toggle_spacer {
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+
+.panel_hidden #panel_toggle_spacer {
+    display: none;
+}
