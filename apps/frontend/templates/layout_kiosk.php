@@ -22,6 +22,9 @@
     <?php echo stylesheet_tag('kiosk'); ?>
 
     <?php include_javascripts() ?>
+    <?php if (!has_slot('no_analytics')): ?>
+        <?php include_component('layout', 'analytics') ?>
+    <?php endif; ?>
 </head>
 <body class="kiosk">
 <div id="vrch">

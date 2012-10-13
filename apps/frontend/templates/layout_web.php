@@ -22,7 +22,9 @@
     <?php include_slot('additionalHeadTags') ?>
 
     <?php include_javascripts() ?>
-    <?php include_component('layout', 'analytics') ?>
+    <?php if (!has_slot('no_analytics')): ?>
+        <?php include_component('layout', 'analytics') ?>
+    <?php endif; ?>
 </head>
 <body class="<?php if(!$panelText) echo 'panel_hidden'?>">
 <div id="vrch">

@@ -1,5 +1,8 @@
 <?php
 
+// Tato stranka sa automaticky refreshuje, takze vypiname analytics
+slot('no_analytics', '');
+
 slot('title', 'Aktuálne prebiehajúca výučba');
 
 slot('top');
