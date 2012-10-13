@@ -119,7 +119,6 @@ class lessonSearchActions extends sfActions {
             $lastLesson = $lesson;
         }
         $this->lessonIntervals = $newLessons;
-        $this->setLayout('layout_kiosk');
         
         $this->response->addHttpMeta('refresh', max(60, ($timeSlot + $refreshResolution) - $now));
     }

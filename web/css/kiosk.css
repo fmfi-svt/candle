@@ -1,7 +1,16 @@
 /* Jednoduche zobrazenie na kiosku */
 
+html, body {
+    background-position: -190px;
+}
+
+.kiosk #obsah_wrap {
+    padding-left: 0;
+}
+
 #vrch {
     height: 40px;
+    margin-left: 100px;
 } 
 
 #vrch_logo {
@@ -16,7 +25,6 @@
     padding-left: 0;
     padding-right: 45px;
     background: #1A1A1A url("../images/logo-small.png") bottom right no-repeat;
-    color: white;
     line-height: 32px;
 }
 
@@ -24,4 +32,34 @@
     padding-left: 15px;
     padding-top: 5px;
     line-height: 35px;
+}
+
+#sidebar {
+    width: 100px;
+    background: #1A1A1A;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#sidebar .button {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #999;
+    display: table
+}
+
+#sidebar .button a {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#hlavny {
+    margin-left: 100px;
 }

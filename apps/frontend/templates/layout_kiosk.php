@@ -1,7 +1,7 @@
 <?php
     $panelText = get_slot('panel');
 ?><!DOCTYPE html>
-<html class="<?php if(!$panelText) echo 'panel_hidden'?>">
+<html class="kiosk">
 <head>
     <?php include_http_metas() ?>
     <?php include_metas() ?>
@@ -23,7 +23,7 @@
 
     <?php include_javascripts() ?>
 </head>
-<body class="<?php if(!$panelText) echo 'panel_hidden'?>">
+<body class="kiosk">
 <div id="vrch">
 <div id="vrch_logo"><?php echo link_to('Candle', '@homepage') ?></div>
 <div id="kiosk_vrch">
@@ -61,13 +61,11 @@
         </div>
     </div>
 </div>
-<?php if ($panelText): ?>
-    <div id="panel"><div id="panel_in">
-        <?php echo $panelText ?>
-    </div></div>
-    
-<div id="panel_schovat" class="hidden"><a href="#" id="panel_toggle"><span class="pristupnost">Schovať/Zobraziť panel</span></a>
-</div>
-<?php endif; ?>
+<ul id="sidebar">
+    <li class="button"><?php echo link_to('Aktuálna výučba', array('sf_route' => 'lessonSearch_current')) ?></li>
+    <li class="button"><?php echo link_to('Krúžky', array('sf_route' => 'studentGroup_list')) ?></li>
+    <li class="button"><?php echo link_to('Miestnosti', array('sf_route' => 'room_list')) ?></li>
+    <li class="button"><?php echo link_to('Učitelia', array('sf_route' => 'timetable_teacher_list')) ?></li>
+</ul>
 </body>
 </html>
