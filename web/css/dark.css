@@ -300,3 +300,17 @@ ul.vysledky_hladania li {
 html.kiosk, body.kiosk {
     background-image: url("../images/bg-body-kiosk.png");
 }
+
+ul.quickswitch li a {
+    background-color: #343846;
+    color: white;
+}
+
+ul.quickswitch li.active a {
+    color: black;
+    background-color: white;
+}
+
+#web_header ul.quickswitch li.active a {
+    color: black;
+}

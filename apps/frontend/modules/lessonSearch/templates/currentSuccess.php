@@ -11,13 +11,16 @@ end_slot();
 
 slot('header');
 ?>
-<h1>Aktuálna výučba prebiehajúca o <?php echo date('H:i', $queryTime); ?></h1>
-<?php
-end_slot();
-slot('header_kiosk');
-?>
 <h1>Aktuálna výučba</h1>
 prebiehajúca o <?php echo date('H:i', $queryTime); ?>
+<ul class="quickswitch">
+    <?php $options = array(0,15,30,60);
+        foreach ($options as $option) {
+            ?><li<?php echo ($option == $offsetMinutes)?' class="active"':'';
+            ?>><?php echo link_to('+'.$option, array('sf_route' => 'lessonSearch_current', 'offset' => $option)); ?></li><?php
+        }
+    ?>
+</ul>
 <?php
 end_slot();
 

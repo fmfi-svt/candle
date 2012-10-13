@@ -635,3 +635,31 @@ h1 {
 .panel_hidden #panel_toggle_spacer {
     display: none;
 }
+
+ul.quickswitch {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.quickswitch li {
+    display: inline-block;
+    margin: 0 0.5em;
+    padding: 0;
+}
+
+ul.quickswitch li a {
+    margin: 0;
+    padding: 0 1em;
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+#web_header h1 {
+    display: inline;
+}
+
+#web_header ul.quickswitch li a {
+    padding: 0.4ex 0.5em;
+}

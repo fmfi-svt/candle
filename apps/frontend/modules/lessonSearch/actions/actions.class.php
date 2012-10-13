@@ -80,10 +80,17 @@ class lessonSearchActions extends sfActions {
     }
     
     public function executeCurrent(sfWebRequest $request) {
+        $this->offsetMinutes = 15;
+        
+        $requestedOffset = $request->getParameter('offset');
+        if ($requestedOffset !== null && is_numeric($requestedOffset) &&
+                (intval($requestedOffset) % 5) == 0) {
+            $this->offsetMinutes = intval($requestedOffset);
+        }
         $refreshResolution = 5 * 60; // 5 min
         $now = time();
         $timeSlot = $now - ($now % $refreshResolution);
-        $this->queryTime = $timeSlot + 15 * 60;
+        $this->queryTime = $timeSlot + $this->offsetMinutes * 60;
         $timeInfo = getdate($this->queryTime);
         /*
          * wday = 0 means sunday,

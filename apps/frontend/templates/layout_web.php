@@ -48,7 +48,9 @@
                       </div>
                     <?php endif; ?>
 
+                    <div id="web_header">
                     <?php include_slot("header") ?>
+                    </div>
                     <?php echo $sf_content ?>
 
                     <div class="footer">
