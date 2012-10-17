@@ -17,7 +17,7 @@ prebiehajúca o <?php echo date('H:i', $queryTime); ?>
     <?php $options = array(0,15,30,60);
         foreach ($options as $option) {
             ?><li<?php echo ($option == $offsetMinutes)?' class="active"':'';
-            ?>><?php echo link_to('+'.$option, array('sf_route' => 'lessonSearch_current', 'offset' => $option)); ?></li><?php
+            ?>><?php echo link_to('+'.$option.'m', array('sf_route' => 'lessonSearch_current', 'offset' => $option)); ?></li><?php
         }
     ?>
 </ul>
