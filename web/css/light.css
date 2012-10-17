@@ -287,3 +287,34 @@ ul.vysledky_hladania li {
 #panel_throbber {
     background: transparent url("../images/light/loading-gray.gif") left center no-repeat;
 }
+
+/* Kiosk */
+#vrch_logo a {
+    color: black;
+}
+
+#sidebar .button a {
+    color: black;
+}
+
+html.kiosk, body.kiosk {
+    background-image: url("../images/light/bg-body-kiosk.png");
+}
+
+ul.quickswitch li a {
+    background-color: black;
+    color: white;
+}
+
+ul.quickswitch li.active a {
+    color: black;
+    background-color: #ccc;
+}
+
+#web_header ul.quickswitch li a {
+    color: white;
+}
+
+#web_header ul.quickswitch li.active a {
+    color: black;
+}

@@ -4,8 +4,10 @@ slot('top');
 include_component('timetable','top',array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
 end_slot();
 
+slot('header');
 ?>
 <h1>Zmazať rozvrh: <?php echo $timetable->getName(); ?></h1>
+<?php end_slot(); ?>
 <div><strong>Zmazanie rozvrhu je nevratná operácia!</strong><br />
     Naozaj si prajete zmazať rozvrh?<br />
     Ak áno, tak do políčka nižšie napíšte text "del" (bez úvodzoviek)

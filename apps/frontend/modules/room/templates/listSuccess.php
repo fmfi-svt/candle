@@ -2,8 +2,10 @@
 
 slot('title', 'Rozvrhy miestností');
 
+slot('header');
 ?>
 <h1>Rozvrhy miestností</h1>
+<?php end_slot(); ?>
 <p>
     <?php foreach ($groups as $group => $rooms): ?>
         <a href="#<?php echo $group?>"><?php echo $group ?></a>

@@ -16,8 +16,10 @@ slot('additionalHeadTags');?>
 <?php
 end_slot();
 
+slot('header');
 ?>
-<h1 class="posunuty"><?php echo Candle::formatLongName($teacher); ?></h1>
+<h1><?php echo Candle::formatLongName($teacher); ?></h1>
+<?php end_slot(); ?>
 
 <div>
 <?php include_partial('timetable/table',

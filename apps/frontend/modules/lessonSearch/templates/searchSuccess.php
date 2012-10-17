@@ -13,8 +13,10 @@ slot('top');
 include_component('timetable','top');
 end_slot();
 
+slot('header');
 ?>
-<h1 class="posunuty">Vyhľadávanie hodín podľa času</h1>
+<h1>Vyhľadávanie hodín podľa času</h1>
+<?php end_slot(); ?>
 
 <?php echo form_tag('@lessonSearch_search'); ?>
 <?php echo $form->renderGlobalErrors(); ?>

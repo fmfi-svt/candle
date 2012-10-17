@@ -2,8 +2,10 @@
 
 slot('title', 'Rozvrhy krúžkov');
 
+slot('header');
 ?>
 <h1>Rozvrhy krúžkov</h1>
+<?php end_slot(); ?>
 <p>
     <?php foreach ($groups as $group => $studentGroups): ?>
         <a href="#<?php echo $group?>"><?php echo $group ?></a>
