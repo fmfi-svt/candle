@@ -28,7 +28,7 @@ if (count($lessonIntervals) == 0):
     echo 'Momentálne neprebieha žiadna výučba.';
 else:
 
-$cols = array(0, intval(count($lessonIntervals) / 2), count($lessonIntervals));
+$cols = array(0, intval((count($lessonIntervals) + 1) / 2), count($lessonIntervals));
 for ($j = 0; $j < count($cols) - 1; $j++):
 ?>
 <table class="aktualne <?php echo 'stlpec' . $j ?>">
