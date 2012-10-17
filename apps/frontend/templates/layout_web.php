@@ -1,7 +1,7 @@
 <?php
     $panelText = get_slot('panel');
 ?><!DOCTYPE html>
-<html class="<?php if(!$panelText) echo 'panel_hidden'?>">
+<html class="<?php if(!$panelText) echo 'panel_hidden'; else echo 'panel_active'; ?>">
 <head>
     <?php include_http_metas() ?>
     <?php include_metas() ?>

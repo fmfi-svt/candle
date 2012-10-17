@@ -1,6 +1,4 @@
-<?php
-    $panelText = get_slot('panel');
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html class="kiosk">
 <head>
     <?php include_http_metas() ?>

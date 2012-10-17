@@ -627,14 +627,16 @@ h1 {
 }
 
 #panel_toggle_spacer {
+    display: none;
+}
+
+.panel_active #panel_toggle_spacer {
+    display: block;
     width: 30px;
     height: 30px;
     float: left;
 }
 
-.panel_hidden #panel_toggle_spacer {
-    display: none;
-}
 
 ul.quickswitch {
     display: inline-block;
