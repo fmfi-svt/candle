@@ -393,4 +393,28 @@ class Candle {
         
         return $result;
     }
+    
+    public static function setupRefreshTimeSlot(sfWebRequest $request, sfWebResponse $response, $ctx, $defaultOffset = 15) {
+        $ctx->offsetMinutes = $defaultOffset;
+        
+        $requestedOffset = $request->getParameter('offset');
+        if ($requestedOffset !== null && is_numeric($requestedOffset) &&
+                (intval($requestedOffset) % 5) == 0) {
+            $ctx->offsetMinutes = intval($requestedOffset);
+        }
+        $refreshResolution = 5 * 60; // 5 min
+        $now = time();
+        $timeSlot = $now - ($now % $refreshResolution);
+        $ctx->queryTime = $timeSlot + $ctx->offsetMinutes * 60;
+        $timeInfo = getdate($ctx->queryTime);
+        /*
+         * wday = 0 means sunday,
+         * we want day = 0 to mean monday
+         */
+        $day = ($timeInfo['wday'] + 6) % 7;
+        $time = $timeInfo['hours'] * 60 + $timeInfo['minutes'];
+        
+        $response->addHttpMeta('refresh', max(60, ($timeSlot + $refreshResolution) - $now));
+        return array($day, $time);
+    }
 }

@@ -95,7 +95,7 @@ class FreeRoomIntervalTable extends Doctrine_Table
      * @param array $inIntervals array of array(day, start, end)
      * @param int $minKapacitaMiestnosti minimum room capacity
      */
-    public function findIntervals($minLength, array $inIntervals, $minKapacitaMiestnosti=0, $externe=false, $seminarne=false) {
+    public function findIntervals($minLength, array $inIntervals, $minKapacitaMiestnosti=0, $externe=false, $seminarne=false, $prakticke=false) {
 
         // Fix a bug with bad SQL syntax on empty intervals
         if (count($inIntervals) == 0) return array();
@@ -128,6 +128,8 @@ class FreeRoomIntervalTable extends Doctrine_Table
         $q->andWhere($intervalWhere, $params);
 
         $q->andWhere('r.capacity >= ?', $minKapacitaMiestnosti);
+        
+        $q->andWhere('t.code != ?', '0');
 
         if (!$seminarne) {
             $q->andWhere('t.code != ?', 's');
@@ -135,6 +137,10 @@ class FreeRoomIntervalTable extends Doctrine_Table
 
         if (!$externe) {
             $q->andWhere('t.code != ?', 'e');
+        }
+        
+        if (!$prakticke) {
+            $q->andWhere('t.code != ?', 'l');
         }
 
         return $q->execute(null, Doctrine::HYDRATE_ARRAY);
