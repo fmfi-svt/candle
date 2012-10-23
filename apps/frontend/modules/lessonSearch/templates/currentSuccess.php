@@ -1,16 +1,26 @@
 <?php
 
+// Tato stranka sa automaticky refreshuje, takze vypiname analytics
+slot('no_analytics', '');
+
 slot('title', 'Aktuálne prebiehajúca výučba');
 
 slot('top');
 include_component('timetable','top');
 end_slot();
 
-slot('kiosk_vrch');
+slot('header');
 ?>
-<h1 style="display: inline">Aktuálna výučba</h1>
+<h1>Aktuálna výučba</h1>
 prebiehajúca o <?php echo date('H:i', $queryTime); ?>
-<div style="clear: both"></div>
+<ul class="quickswitch">
+    <?php $options = array(0,15,30,60);
+        foreach ($options as $option) {
+            ?><li<?php echo ($option == $offsetMinutes)?' class="active"':'';
+            ?>><?php echo link_to('+'.$option.'m', array('sf_route' => 'lessonSearch_current', 'offset' => $option)); ?></li><?php
+        }
+    ?>
+</ul>
 <?php
 end_slot();
 
@@ -18,7 +28,7 @@ if (count($lessonIntervals) == 0):
     echo 'Momentálne neprebieha žiadna výučba.';
 else:
 
-$cols = array(0, intval(count($lessonIntervals) / 2), count($lessonIntervals));
+$cols = array(0, intval((count($lessonIntervals) + 1) / 2), count($lessonIntervals));
 for ($j = 0; $j < count($cols) - 1; $j++):
 ?>
 <table class="aktualne <?php echo 'stlpec' . $j ?>">

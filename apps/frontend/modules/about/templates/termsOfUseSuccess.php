@@ -1,7 +1,9 @@
 <?php
 slot('title', 'Podmienky používania');
+slot('header');
 ?>
 <h1>Podmienky používania</h1>
+<?php end_slot(); ?>
 <ol class="termsofuse">
 <li> Súhlas s podmienkami:
     <ol>

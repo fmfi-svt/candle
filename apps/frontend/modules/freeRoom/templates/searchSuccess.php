@@ -11,8 +11,10 @@ slot('top');
 include_component('timetable','top');
 end_slot();
 
+slot('header');
 ?>
-<h1 class="posunuty">Vyhľadávanie voľných miestností</h1>
+<h1>Vyhľadávanie voľných miestností</h1>
+<?php end_slot(); ?>
 
 <?php echo form_tag('@freeRoom_search'); ?>
 <?php echo $form->renderGlobalErrors(); ?>
