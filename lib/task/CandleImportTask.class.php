@@ -26,21 +26,8 @@
  */
 
 
-class CandleImportTask extends sfBaseTask
+class CandleImportTask extends sfBaseTask/* implements RozvrhXMLConsumer*/
 {
-
-  protected static $ucitelFields = array('priezvisko', 'meno', 'iniciala', 'katedra', 'oddelenie', 'login');
-  protected static $miestnostFields = array('nazov', 'kapacita', 'typ');
-  protected static $predmetFields = array('nazov', 'kod', 'kratkykod', 'kredity', 'rozsah');
-  protected static $hodinaFields = array('den', 'zaciatok', 'koniec', 'miestnost', 'trvanie', 'predmet', 'ucitelia', 'kruzky', 'typ', 'zviazanehodiny', 'oldid', 'zviazaneoldid', 'poznamka');
-
-  const STATE_ROOT = 0;
-  const STATE_TYPY = 1;
-  const STATE_TYPYMIESTNOSTI = 2;
-  const STATE_UCITELIA = 3;
-  const STATE_MIESTNOSTI = 4;
-  const STATE_PREDMETY = 5;
-  const STATE_HODINY = 6;
 
   /**
    *
@@ -72,7 +59,6 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('replace', null, sfCommandOption::PARAMETER_NONE, 'Whether to replace data instead of merge'),
         new sfCommandOption('dry-run', null, sfCommandOption::PARAMETER_NONE, 'Don\'t modify data tables'),
         new sfCommandOption('no-merges', null, sfCommandOption::PARAMETER_NONE, 'Don\'t perform merge stage'),
-        new sfCommandOption('ignore-errors', null, sfCommandOption::PARAMETER_NONE, 'Ignore any errors (it is advisable to also use --dry-run)'),
         new sfCommandOption('ignore-warnings', null, sfCommandOption::PARAMETER_NONE, 'Ignore any warnings (i.e. don\'t ask about them at the end)'),
         new sfCommandOption('print-sql', null, sfCommandOption::PARAMETER_NONE, 'Print SQL commands executed'),
         new sfCommandOption('debug-dump-tables', null, sfCommandOption::PARAMETER_NONE, 'Create a persistent copy of temporary tables'),
@@ -111,37 +97,9 @@ EOF;
       return $prepared->execute($params);
   }
 
-  protected function createParseErrorMessage($parser, $description) {
-      $message = 'Line '.xml_get_current_line_number($parser);
-      $message .= ', Column '.xml_get_current_column_number($parser);
-      $message .= ' ('.implode('.', $this->currentElementPath).')';
-      $message .= ': '.$description;
-      return $message;
-  }
-
-  protected function rethrowParseError($parser, Exception $exception) {
-      $message = 'Error: '.$this->createParseErrorMessage($parser, $exception->getMessage());
-      if ($this->ignoreErrors) {
-          $this->logBlock($message, 'ERROR');
-      }
-      else {
-        throw new Exception($message, 0, $exception);
-      }
-  }
-
-  protected function parseError($parser, $description) {
-      $message = 'Error: '.$this->createParseErrorMessage($parser, $description);
-      $this->errorCount += 1;
-      if ($this->ignoreErrors) {
-          $this->logBlock($message);
-      }
-      else {
-          throw new Exception($message);
-      }
-  }
-
-  protected function parseWarning($parser, $description) {
-      $message = 'Warning: '.$this->createParseErrorMessage($parser, $description);
+  protected function parseWarning($location, $description) {
+      $message = 'Warning at ' . $this->parser->formatLocation($location);
+      $message .= ': ' . $description;
       $this->warning($message);
   }
   
@@ -151,363 +109,100 @@ EOF;
           $this->warningCount += 1;
       }
       else {
-          $this->errorCount += 1;
           throw new Exception($message);
       }
   }
-
-  protected function parseErrorUnexpectedElement($parser, $name) {
-      $this->parseError($parser, 'Unexpected element: '.$name);
+  
+  public function consumeRozvrh(array $location, array $rozvrh) {
+      $this->version = $rozvrh['verzia'];
+      $this->skolrok = $rozvrh['skolrok'];
+      $this->semester = $rozvrh['semester'];
   }
-
-  protected function setActiveField($parser, $name) {
-      if ($this->dataField !== null) {
-          $this->parseErrorUnexpectedElement($parser, $name);
-      }
-      if (isset($this->elementData[$name])) {
-          $this->parseError($parser, 'Value for '.$name.' field already set');
-      }
-      $this->dataField = $name;
-  }
-
-  protected function parser_startElement($parser, $name, $attrs) {
-      //echo '<'.$name.' '.$this->state."\n";
-      $this->currentElementPath[] = $name;
-      if ($this->state == self::STATE_ROOT) {
-          if ($name == 'rozvrh') {
-              if (!isset($attrs['verzia'])) {
-                  $this->parseError($parser, 'Element "rozvrh" missing attribute "verzia"');
-              }
-              if (!isset($attrs['skolrok'])) {
-                  $this->parseError($parser, 'Element "rozvrh" missing attribute "skolrok"');
-              }
-              if (!isset($attrs['semester'])) {
-                  $this->parseError($parser, 'Element "rozvrh" missing attribute "semester"');
-              }
-              // Toto je az od PHP 5.3
-              //$this->version = DateTime::createFromFormat('YmdHis', $attrs['verzia'])->getTimestamp();
-              $v = $attrs['verzia'];
-              $ty = intval(substr($v, 0, 4));
-              $tm = intval(substr($v, 4, 2));
-              $td = intval(substr($v, 6, 2));
-              $th = intval(substr($v, 8, 2));
-              $ti = intval(substr($v, 10, 2));
-              $ts = intval(substr($v, 12, 2));
-              $this->version = mktime($th, $ti, $ts, $tm, $td, $ty);
-              $this->semester = $attrs['semester'];
-              $this->skolrok = $attrs['skolrok'];
-          }
-          else if ($name == 'typy') {
-              $this->state = self::STATE_TYPY;
-          }
-          else if ($name == 'typymiestnosti') {
-              $this->state = self::STATE_TYPYMIESTNOSTI;
-          }
-          else if ($name == 'ucitelia') {
-              $this->state = self::STATE_UCITELIA;
-          }
-          else if ($name == 'miestnosti') {
-              $this->state = self::STATE_MIESTNOSTI;
-          }
-          else if ($name == 'predmety') {
-              $this->state = self::STATE_PREDMETY;
-          }
-          else if ($name == 'hodiny') {
-              $this->state = self::STATE_HODINY;
-          }
-          else {
-              $this->parseErrorUnexpectedElement($parser, $name);
-          }
-      }
-      else if ($this->state == self::STATE_TYPY) {
-          if ($name == 'typ') {
-              if ($this->elementData != null) {
-                  $this->parseErrorUnexpectedElement ($parser, $name);
-              }
-              $this->elementData = array();
-              $this->elementData['id'] = $attrs['id'];
-              $this->elementData['popis'] = $attrs['popis'];
-              try {
-                $this->handleTyp();
-              }
-              catch (Exception $e) {
-                $this->rethrowParseError($parser, $e);
-              }
-          }
-          else {
-              $this->parseErrorUnexpectedElement($parser, $name);
-          }
-      }
-      else if ($this->state == self::STATE_TYPYMIESTNOSTI) {
-          if ($name == 'typmiestnosti') {
-              if ($this->elementData != null) {
-                  $this->parseErrorUnexpectedElement ($parser, $name);
-              }
-              $this->elementData = array();
-              $this->elementData['id'] = $attrs['id'];
-              $this->elementData['popis'] = $attrs['popis'];
-              try {
-                $this->handleTypMiestnosti();
-              }
-              catch (Exception $e) {
-                $this->rethrowParseError($parser, $e);
-              }
-          }
-          else {
-              $this->parseErrorUnexpectedElement($parser, $name);
-          }
-      }
-      else if ($this->state == self::STATE_UCITELIA) {
-          if ($name == 'ucitel') {
-              if ($this->elementData != null) {
-                  $this->parseErrorUnexpectedElement ($parser, $name);
-              }
-              $this->elementData = array();
-              $this->elementData['id'] = $attrs['id'];
-              $this->dataFields = self::$ucitelFields;
-          }
-          else if ($this->dataFields != null) {
-              $this->setActiveField($parser, $name);
-          }
-          else {
-              $this->parseErrorUnexpectedElement($parser, $name);
-          }
-      }
-      else if ($this->state == self::STATE_MIESTNOSTI) {
-          if ($name == 'miestnost') {
-              if ($this->elementData != null) {
-                  $this->parseErrorUnexpectedElement ($parser, $name);
-              }
-              $this->elementData = array();
-              $this->dataFields = self::$miestnostFields;
-          }
-          else if ($this->dataFields != null) {
-              $this->setActiveField($parser, $name);
-          }
-          else {
-              $this->parseErrorUnexpectedElement($parser, $name);
-          }
-      }
-      else if ($this->state == self::STATE_PREDMETY) {
-          if ($name == 'predmet') {
-              if ($this->elementData != null) {
-                  $this->parseErrorUnexpectedElement ($parser, $name);
-              }
-              $this->elementData = array();
-              $this->elementData['id']=$attrs['id'];
-              $this->dataFields = self::$predmetFields;
-          }
-          else if ($this->dataFields != null) {
-              $this->setActiveField($parser, $name);
-          }
-          else {
-              $this->parseErrorUnexpectedElement($parser, $name);
-          }
-      }
-      else if ($this->state == self::STATE_HODINY) {
-          if ($name == 'hodina') {
-              if ($this->elementData != null) {
-                  $this->parseErrorUnexpectedElement ($parser, $name);
-              }
-              $this->elementData = array();
-              $this->elementData['id']=$attrs['id'];
-              $this->dataFields = self::$hodinaFields;
-          }
-          else if ($this->dataFields != null) {
-              $this->setActiveField($parser, $name);
-          }
-          else {
-              $this->parseErrorUnexpectedElement($parser, $name);
-          }
-      }
-      else {
-          $this->parseError($parser, 'Some internal state messed, '.$this->state);
-      }
-  }
-
-  protected function parser_endElement($parser, $name) {
-      //echo '</'.$name."\n";
-      $this->dataField = null;
-      if ($this->state == self::STATE_TYPY) {
-          if ($name == 'typy') {
-              $this->state = self::STATE_ROOT;
-          }
-          else if ($name == 'typ') {
-              $this->elementData = null;
-          }
-      }
-      else if ($this->state == self::STATE_TYPYMIESTNOSTI) {
-          if ($name == 'typymiestnosti') {
-              $this->state = self::STATE_ROOT;
-          }
-          else if ($name == 'typmiestnosti') {
-              $this->elementData = null;
-          }
-      }
-      else if ($this->state == self::STATE_UCITELIA) {
-          if ($name == 'ucitelia') {
-              $this->state = self::STATE_ROOT;
-          }
-          else if ($name == 'ucitel') {
-              $this->dataFields = null;
-              try {
-                $this->handleUcitel($parser);
-              }
-              catch (Exception $e) {
-                  $this->rethrowParseError($parser, $e);
-              }
-              $this->elementData = null;
-          }
-      }
-      else if ($this->state == self::STATE_MIESTNOSTI) {
-          if ($name == 'miestnosti') {
-              $this->state = self::STATE_ROOT;
-          }
-          else if ($name == 'miestnost') {
-              $this->dataFields = null;
-              try {
-                $this->handleMiestnost($parser);
-              }
-              catch (Exception $e) {
-                  $this->rethrowParseError($parser, $e);
-              }
-              $this->elementData = null;
-          }
-      }
-      else if ($this->state == self::STATE_PREDMETY) {
-          if ($name == 'predmety') {
-              $this->state = self::STATE_ROOT;
-          }
-          else if ($name == 'predmet') {
-              $this->dataFields = null;
-              try {
-                $this->handlePredmet($parser);
-              }
-              catch (Exception $e) {
-                  $this->rethrowParseError($parser, $e);
-              }
-              $this->elementData = null;
-          }
-      }
-      else if ($this->state == self::STATE_HODINY) {
-          if ($name == 'hodiny') {
-              $this->state = self::STATE_ROOT;
-          }
-          else if ($name == 'hodina') {
-              $this->dataFields = null;
-              try {
-                $this->handleHodina($parser);
-              }
-              catch (Exception $e) {
-                  $this->rethrowParseError($parser, $e);
-              }
-              $this->elementData = null;
-          }
-      }
-      // Remove last path element
-      array_splice($this->currentElementPath, -1);
-  }
-
-  protected function parser_characterData($parser, $data) {
-      if ($this->dataField == null) return;
-      if (!isset($this->elementData[$this->dataField])) {
-          $this->elementData[$this->dataField] = $data;
-      }
-      else {
-          $this->elementData[$this->dataField] .= $data;
-      }
-  }
-
-  protected function handleTyp($parser) {
-    //print_r($this->elementData);
+  
+  public function consumeTypHodiny(array $location, array $typHodiny) {
     $this->insertLessonType->execute(array(
-        $this->elementData['popis'], $this->elementData['id']
+        $typHodiny['popis'], $typHodiny['id']
     ));
   }
 
-  protected function handleTypMiestnosti($parser) {
-    //print_r($this->elementData);
+  public function consumeTypMiestnosti(array $location, array $typMiestnosti) {
     $this->insertRoomType->execute(array(
-        $this->elementData['popis'], $this->elementData['id']
+        $typMiestnosti['popis'], $typMiestnosti['id']
     ));
   }
 
-  protected function handleUcitel($parser) {
-    //print_r($this->elementData);
-    if (isset($this->elementData['login'])) {
-        $login = trim($this->elementData['login']);
+  public function consumeUcitel(array $location, array $ucitel) {
+    if (isset($ucitel['login'])) {
+        $login = trim($ucitel['login']);
     }
     else {
         $login = null;
     }
     $this->insertTeacher->execute(array(
-        trim($this->elementData['meno']), trim($this->elementData['priezvisko']),
-        trim($this->elementData['iniciala']), trim($this->elementData['oddelenie']),
-        trim($this->elementData['katedra']), $this->mangleExtId($this->elementData['id']),
+        trim($ucitel['meno']), trim($ucitel['priezvisko']),
+        trim($ucitel['iniciala']), trim($ucitel['oddelenie']),
+        trim($ucitel['katedra']), $this->mangleExtId($ucitel['id']),
         $login
     ));
   }
 
-  protected function handleMiestnost($parser) {
-    //print_r($this->elementData);
+  public function consumeMiestnost(array $location, array $miestnost) {
     $this->insertRoom->execute(array(
-        $this->elementData['nazov'], $this->elementData['typ'],
-        (int) $this->elementData['kapacita']
+        $miestnost['nazov'], $miestnost['typ'],
+        (int) $miestnost['kapacita']
     ));
   }
 
-  protected function handlePredmet($parser) {
-    //print_r($this->elementData);
-    $myShortCode = Candle::subjectShortCodeFromLongCode($this->elementData['kod']);
+  public function consumePredmet(array $location, array $predmet) {
+    $myShortCode = Candle::subjectShortCodeFromLongCode($predmet['kod']);
     $myShorterCode = Candle::subjectShorterCode($myShortCode);
 
     if ($myShortCode !== false && $myShorterCode !== false && 
-            !($myShortCode == $this->elementData['kratkykod'] || $myShorterCode == $this->elementData['kratkykod'])) {
-        $this->parseWarning($parser, 
+            !($myShortCode == $predmet['kratkykod'] || $myShorterCode == $predmet['kratkykod'])) {
+        $this->parseWarning($location, 
                 'Short code does not have expected value, got \''.
-                $this->elementData['kratkykod'].'\', expected \''.$myShortCode.'\'');
+                $predmet['kratkykod'].'\', expected \''.$myShortCode.'\'');
     }
 
     $this->insertSubject->execute(array(
-        $this->elementData['nazov'], $this->elementData['kod'],
-        $myShortCode, (int) $this->elementData['kredity'],
-        $this->elementData['rozsah'], $this->elementData['id']
+        $predmet['nazov'], $predmet['kod'],
+        $myShortCode, (int) $predmet['kredity'],
+        $predmet['rozsah'], $predmet['id']
     ));
   }
 
-  protected function handleHodina($parser) {
-    //print_r($this->elementData);
-    $lessonId = (int) $this->elementData['oldid'];
-    if (isset($this->elementData['poznamka'])) {
-        $note = $this->elementData['poznamka'];
+  public function consumeHodina(array $location, array $hodina) {
+    $lessonId = (int) $hodina['oldid'];
+    if (isset($hodina['poznamka'])) {
+        $note = $hodina['poznamka'];
     }
     else {
         $note = null;
     }
 
     $this->insertLesson->execute(array(
-        Candle::dayFromCode($this->elementData['den']), (int) $this->elementData['zaciatok'],
-        (int) $this->elementData['koniec'], $this->elementData['typ'],
-        $this->elementData['miestnost'], $this->elementData['predmet'],
+        Candle::dayFromCode($hodina['den']), (int) $hodina['zaciatok'],
+        (int) $hodina['koniec'], $hodina['typ'],
+        $hodina['miestnost'], $hodina['predmet'],
         $lessonId, $note
     ));
 
-    if (isset($this->elementData['ucitelia'])) {
-        $ucitelia = explode(',', $this->elementData['ucitelia']);
+    if (isset($hodina['ucitelia'])) {
+        $ucitelia = explode(',', $hodina['ucitelia']);
         foreach ($ucitelia as $ucitelId) {
             $this->insertLessonTeacher->execute(array($lessonId, $this->mangleExtId($ucitelId)));
         }
     }
 
-    if (isset($this->elementData['kruzky'])) {
-        $kruzky = explode(',', $this->elementData['kruzky']);
+    if (isset($hodina['kruzky'])) {
+        $kruzky = explode(',', $hodina['kruzky']);
         foreach ($kruzky as $kruzok) {
             $this->insertLessonStudentGroup->execute(array($lessonId, $kruzok));
         }
     }
 
-    if (isset($this->elementData['zviazaneoldid'])) {
-        $zviazaneHodiny = explode(',', $this->elementData['zviazaneoldid']);
+    if (isset($hodina['zviazaneoldid'])) {
+        $zviazaneHodiny = explode(',', $hodina['zviazaneoldid']);
         foreach ($zviazaneHodiny as $zviazanaHodina) {
             $this->insertLessonLink->execute(array($lessonId, $zviazanaHodina));
         }
@@ -891,16 +586,12 @@ EOF;
     $this->doctrineConnection = Doctrine_Manager::connection();
     $this->connection = $this->doctrineConnection->getDbh();
     $environment = $this->configuration instanceof sfApplicationConfiguration ? $this->configuration->getEnvironment() : 'all';
-    $this->elementData = null;
     $this->dataField = null;
-    $this->state = self::STATE_ROOT;
     $this->currentElementPath = array();
-    $this->ignoreErrors = $options['ignore-errors'];
     $this->printSQL = $options['print-sql'];
     $this->warningsAsErrors = $options['warnings-as-errors'];
     $this->updateDescription = $options['message'];
     $this->warningCount = 0;
-    $this->errorCount = 0;
     $this->ignoreWarnings = $options['ignore-warnings'];
 
     $messageToAsk = 'This command will update source timetable data in the "%s" connection.';
@@ -920,11 +611,8 @@ EOF;
       return 1;
     }
 
-    $parser = xml_parser_create();
-    xml_set_element_handler($parser, array($this, 'parser_startElement'), array($this, 'parser_endElement'));
-    xml_set_character_data_handler($parser, array($this, 'parser_characterData'));
-    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-
+    $this->parser = new RozvrhXMLParser($this);
+    
     // Sice som uz znizil pamatove naroky, stale treba zvysit limit
     ini_set("memory_limit",$options['memory']);
 
@@ -935,18 +623,15 @@ EOF;
     $this->createPrimaryKeys();
 
     $this->doctrineConnection->beginTransaction();
+    $error = false;
 
     try {
 
         $this->prepareInsertStatements();
 
         $this->logSection('candle', 'Loading xml data into database');
-        $parseResult = xml_parse($parser, file_get_contents($arguments['file']));
-        if ($parseResult == 0) {
-            // parse failed
-            $errorCode = xml_get_error_code($parser);
-            $this->parseError($parser, 'Parse error '. $errorCode. ': '.xml_error_string($errorCode));
-        }
+        // TODO: feedovat parser po castiach
+        $this->parser->parse(file_get_contents($arguments['file']), true);
 
         if ($options['replace']) {
             $this->deleteAllData();
@@ -992,7 +677,7 @@ EOF;
             $commit = false;
         }
         else {
-            if (!$this->ignoreErrors && !$this->ignoreWarnings && $this->warningCount > 0) {
+            if (!$this->ignoreWarnings && $this->warningCount > 0) {
                 if (!$this->askConfirmation(array_merge(
                     array(sprintf('%d warning(s) occured', $this->warningCount), ''),
                     array('', 'Are you sure you want to commit this transaction? (y/N)')
@@ -1018,13 +703,14 @@ EOF;
         $this->logSection('candle', 'Exception occured, executing rollback');
         $this->logBlock(array($e->getMessage(), $e->getTraceAsString()), 'ERROR');
         $this->doctrineConnection->rollback();
+        $error = true;
     }
 
-    $this->logSection(sprintf('%d error(s), %d warning(s)', $this->errorCount, $this->warningCount));
+    $this->logSection(sprintf('%d warning(s)', $this->warningCount));
+    
+    $this->parser->close();
 
-    xml_parser_free($parser);
-
-    if ($this->errorCount>1) {
+    if ($error) {
         return 1;
     }
 
