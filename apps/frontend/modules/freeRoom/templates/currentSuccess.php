@@ -23,13 +23,13 @@ v čase <?php echo date('H:i', $queryTime); ?>
 </ul>
 <?php
 end_slot();
+
+if (count($freeRoomIntervals) == 0):
+    echo 'Momentálne nie je voľná žiadna miestnosť.';
+else:
 ?>
 <p>Tu zobrazené miestnosti nemusia byť v skutočnosti voľné, pretože sa dajú rezervovať aj mimo rozvrhu v AISe!</p>
 <?php
-
-if (count($freeRoomIntervals) == 0):
-    echo 'Momentálne neprebieha žiadna výučba.';
-else:
 
 $cols = array(0, intval((count($freeRoomIntervals) + 1) / 2), count($freeRoomIntervals));
 for ($j = 0; $j < count($cols) - 1; $j++):
