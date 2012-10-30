@@ -70,6 +70,7 @@
 </div>
 <ul id="sidebar">
     <li class="button"><?php echo link_to('Aktuálna výučba', array('sf_route' => 'lessonSearch_current')) ?></li>
+    <li class="button"><?php echo link_to('Aktuálne voľné miestnosti', array('sf_route' => 'freeRoom_current')) ?></li>
     <li class="button"><?php echo link_to('Krúžky', array('sf_route' => 'studentGroup_list')) ?></li>
     <li class="button"><?php echo link_to('Miestnosti', array('sf_route' => 'room_list')) ?></li>
     <li class="button"><?php echo link_to('Učitelia', array('sf_route' => 'timetable_teacher_list')) ?></li>
