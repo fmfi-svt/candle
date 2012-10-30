@@ -26,26 +26,14 @@
  */
 
 
-class CandleImportTask extends sfBaseTask/* implements RozvrhXMLConsumer*/
+class CandleImportTask extends sfBaseTask
 {
 
   /**
    *
-   * @var Doctrine_Connection
+   * @var PDO
    */
   protected $connection;
-
-  /**
-   *
-   * @var Doctrine_Connection_Statement
-   */
-  protected $insertLessonType;
-
-  /**
-   *
-   * @var Doctrine_Connection_Statement
-   */
-  protected $insertRoomType;
 
   protected function configure()
   {
@@ -113,102 +101,6 @@ EOF;
       }
   }
   
-  public function consumeRozvrh(array $location, array $rozvrh) {
-      $this->version = $rozvrh['verzia'];
-      $this->skolrok = $rozvrh['skolrok'];
-      $this->semester = $rozvrh['semester'];
-  }
-  
-  public function consumeTypHodiny(array $location, array $typHodiny) {
-    $this->insertLessonType->execute(array(
-        $typHodiny['popis'], $typHodiny['id']
-    ));
-  }
-
-  public function consumeTypMiestnosti(array $location, array $typMiestnosti) {
-    $this->insertRoomType->execute(array(
-        $typMiestnosti['popis'], $typMiestnosti['id']
-    ));
-  }
-
-  public function consumeUcitel(array $location, array $ucitel) {
-    if (isset($ucitel['login'])) {
-        $login = trim($ucitel['login']);
-    }
-    else {
-        $login = null;
-    }
-    $this->insertTeacher->execute(array(
-        trim($ucitel['meno']), trim($ucitel['priezvisko']),
-        trim($ucitel['iniciala']), trim($ucitel['oddelenie']),
-        trim($ucitel['katedra']), $this->mangleExtId($ucitel['id']),
-        $login
-    ));
-  }
-
-  public function consumeMiestnost(array $location, array $miestnost) {
-    $this->insertRoom->execute(array(
-        $miestnost['nazov'], $miestnost['typ'],
-        (int) $miestnost['kapacita']
-    ));
-  }
-
-  public function consumePredmet(array $location, array $predmet) {
-    $myShortCode = Candle::subjectShortCodeFromLongCode($predmet['kod']);
-    $myShorterCode = Candle::subjectShorterCode($myShortCode);
-
-    if ($myShortCode !== false && $myShorterCode !== false && 
-            !($myShortCode == $predmet['kratkykod'] || $myShorterCode == $predmet['kratkykod'])) {
-        $this->parseWarning($location, 
-                'Short code does not have expected value, got \''.
-                $predmet['kratkykod'].'\', expected \''.$myShortCode.'\'');
-    }
-
-    $this->insertSubject->execute(array(
-        $predmet['nazov'], $predmet['kod'],
-        $myShortCode, (int) $predmet['kredity'],
-        $predmet['rozsah'], $predmet['id']
-    ));
-  }
-
-  public function consumeHodina(array $location, array $hodina) {
-    $lessonId = (int) $hodina['oldid'];
-    if (isset($hodina['poznamka'])) {
-        $note = $hodina['poznamka'];
-    }
-    else {
-        $note = null;
-    }
-
-    $this->insertLesson->execute(array(
-        Candle::dayFromCode($hodina['den']), (int) $hodina['zaciatok'],
-        (int) $hodina['koniec'], $hodina['typ'],
-        $hodina['miestnost'], $hodina['predmet'],
-        $lessonId, $note
-    ));
-
-    if (isset($hodina['ucitelia'])) {
-        $ucitelia = explode(',', $hodina['ucitelia']);
-        foreach ($ucitelia as $ucitelId) {
-            $this->insertLessonTeacher->execute(array($lessonId, $this->mangleExtId($ucitelId)));
-        }
-    }
-
-    if (isset($hodina['kruzky'])) {
-        $kruzky = explode(',', $hodina['kruzky']);
-        foreach ($kruzky as $kruzok) {
-            $this->insertLessonStudentGroup->execute(array($lessonId, $kruzok));
-        }
-    }
-
-    if (isset($hodina['zviazaneoldid'])) {
-        $zviazaneHodiny = explode(',', $hodina['zviazaneoldid']);
-        foreach ($zviazaneHodiny as $zviazanaHodina) {
-            $this->insertLessonLink->execute(array($lessonId, $zviazanaHodina));
-        }
-    }
-  }
-
   protected function deleteAllData() {
     $this->logSection('candle', 'Deleting all data');
 
@@ -237,114 +129,14 @@ EOF;
   protected function createTemporaryTables() {
       $this->logSection('candle', 'Creating temporary tables');
 
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_type ";
-      $sql .= "(name varchar(30) not null, code varchar(1) not null)";
-      $res = $this->executeSQL($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_room_type ";
-      $sql .= "(name varchar(30) not null, code varchar(1) not null)";
-      $res = $this->executeSQL($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_teacher ";
-      $sql .= "(given_name varchar(50), family_name varchar(50) not null,";
-      $sql .= "iniciala varchar(50), oddelenie varchar(50), katedra varchar(50),";
-      $sql .= "external_id varchar(50) binary not null collate utf8_bin, ";
-      $sql .= "login varchar(50))";
-      $res = $this->executeSQL($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_room ";
-      $sql .= "(name varchar(30) not null, room_type varchar(1) not null, capacity integer not null)";
-      $res = $this->executeSQL($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_subject ";
-      $sql .= "(name varchar(100), code varchar(50), short_code varchar(20), ";
-      $sql .= "credit_value integer not null, rozsah varchar(30), external_id varchar(30) binary not null collate utf8_bin)";
-      $res = $this->executeSQL($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson ";
-      $sql .= "(day integer not null, start integer not null, end integer not null, ";
-      $sql .= "lesson_type varchar(1) not null, room varchar(30) not null, ";
-      $sql .= "subject varchar(30) not null, external_id integer not null, ";
-      $sql .= "note varchar(240))";
-      $res = $this->executeSQL($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_teacher ";
-      $sql .= "(lesson_external_id integer not null, teacher_external_id varchar(50) binary not null collate utf8_bin)";
-      $res = $this->executeSQL($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_student_group ";
-      $sql .= "(lesson_external_id integer not null, student_group varchar(30) not null)";
-      $res = $this->executeSQL($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_link ";
-      $sql .= "(lesson1_external_id integer not null, lesson2_external_id integer not null)";
-      $res = $this->executeSQL($sql);
   }
 
   protected function prepareInsertStatements() {
       $this->logSection('candle', 'Creating prepared statements');
-
-      $sql = 'INSERT INTO tmp_insert_lesson_type (name, code) VALUES (?, ?)';
-      $this->insertLessonType = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_room_type (name, code) VALUES (?, ?)';
-      $this->insertRoomType = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_teacher (given_name, family_name, iniciala, ';
-      $sql .= 'oddelenie, katedra, external_id, login) VALUES (?, ?, ?, ?, ?, ?, ?)';
-      $this->insertTeacher = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_room (name, room_type, capacity';
-      $sql .= ') VALUES (?, ?, ?)';
-      $this->insertRoom = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_subject (name, code, short_code, ';
-      $sql .= 'credit_value, rozsah, external_id) VALUES (?, ?, ?, ?, ?, ?)';
-      $this->insertSubject = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_lesson (day, start, end, lesson_type, ';
-      $sql .= 'room, subject, external_id, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-      $this->insertLesson = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_lesson_teacher (lesson_external_id, ';
-      $sql .= 'teacher_external_id) VALUES (?, ?)';
-      $this->insertLessonTeacher = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_lesson_student_group (lesson_external_id, ';
-      $sql .= 'student_group) VALUES (?, ?)';
-      $this->insertLessonStudentGroup = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_lesson_link (lesson1_external_id, ';
-      $sql .= 'lesson2_external_id) VALUES (?, ?)';
-      $this->insertLessonLink = $this->connection->prepare($sql);
   }
 
   protected function createPrimaryKeys() {
       $this->logSection('candle', 'Creating primary keys on temporary tables');
-
-      $sql = 'ALTER TABLE tmp_insert_lesson_type';
-      $sql .= ' ADD PRIMARY KEY (code)';
-      $this->executeSQL($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_room_type';
-      $sql .= ' ADD PRIMARY KEY (code)';
-      $this->executeSQL($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_teacher';
-      $sql .= ' ADD PRIMARY KEY (external_id)';
-      $this->executeSQL($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_room';
-      $sql .= ' ADD PRIMARY KEY (name)';
-      $this->executeSQL($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_subject';
-      $sql .= ' ADD PRIMARY KEY (external_id)';
-      $this->executeSQL($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_lesson';
-      $sql .= ' ADD PRIMARY KEY (external_id)';
-      $this->executeSQL($sql);
   }
 
   protected function debugDumpTables() {
@@ -562,18 +354,18 @@ EOF;
       $sql .= ' (datetime, description, version, semester, school_year_low)';
       $sql .= ' VALUES (NOW(), ?, ?, ?, ?)';
       
-      $pos = strpos($this->skolrok, '/');
+      $pos = strpos($this->importer->getSkolrok(), '/');
       if ($pos === false) {
-          $skolrok = intval($this->skolrok);
+          $skolrok = intval($this->importer->getSkolrok());
       }
       else {
-          $skolrok = intval(substr($this->skolrok, 0, $pos));
+          $skolrok = intval(substr($this->importer->getSkolrok(), 0, $pos));
       }
 
       $prepared = $this->connection->prepare($sql);
       $data = array($this->updateDescription,
-          date('Y-m-d H:i:s', $this->version),
-          $this->semester,
+          date('Y-m-d H:i:s', $this->importer->getVersion()),
+          $this->importer->getSemester(),
           $skolrok);
       $this->executePreparedSQL($prepared, $data);
 
@@ -611,7 +403,8 @@ EOF;
       return 1;
     }
 
-    $this->parser = new RozvrhXMLParser($this);
+    $this->importer = new RozvrhXMLImporter($this->connection);
+    $this->parser = new RozvrhXMLParser($this->importer);
     
     // Sice som uz znizil pamatove naroky, stale treba zvysit limit
     ini_set("memory_limit",$options['memory']);
@@ -619,15 +412,13 @@ EOF;
     // Tieto DDL statementy musia byt pred createTransaction,
     // pretoze MySQL automaticky commituje transakciu po akomkolvek
     // DDL (aj napriek tomu, ze su to docasne tabulky)
-    $this->createTemporaryTables();
-    $this->createPrimaryKeys();
+    $this->importer->prepareDatabase();
 
     $this->doctrineConnection->beginTransaction();
     $error = false;
 
     try {
-
-        $this->prepareInsertStatements();
+        $this->importer->prepareTransaction();
 
         $this->logSection('candle', 'Loading xml data into database');
         // TODO: feedovat parser po castiach
