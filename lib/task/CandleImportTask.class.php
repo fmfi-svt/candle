@@ -126,19 +126,6 @@ EOF;
                             ->delete()->execute();
   }
 
-  protected function createTemporaryTables() {
-      $this->logSection('candle', 'Creating temporary tables');
-
-  }
-
-  protected function prepareInsertStatements() {
-      $this->logSection('candle', 'Creating prepared statements');
-  }
-
-  protected function createPrimaryKeys() {
-      $this->logSection('candle', 'Creating primary keys on temporary tables');
-  }
-
   protected function debugDumpTables() {
       $this->logSection('candle', 'Dumping temporary tables into debug tables');
 
@@ -505,9 +492,5 @@ EOF;
         return 1;
     }
 
-  }
-
-  public function mangleExtId($id) {
-      return substr(sha1($id),0,30);
   }
 }
