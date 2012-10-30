@@ -129,6 +129,15 @@ class FreeRoomIntervalTable extends Doctrine_Table
 
         $q->andWhere('r.capacity >= ?', $minKapacitaMiestnosti);
         
+        /*
+         * t.code je typ miestnosti, v XML je definovany nasledovne:
+         * s: Seminárna miestnosť (sem sa nedá presúvať výučba)
+         * l: Praktická učebňa (na labáky)
+         * e: Externá miestnosť (miestnosť na inej fakulte)
+         * u: Učebňa
+         * 0: Nezadaný typ / špeciálna miestnosť
+         */
+
         $q->andWhere('t.code != ?', '0');
 
         if (!$seminarne) {
