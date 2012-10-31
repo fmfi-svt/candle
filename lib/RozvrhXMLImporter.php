@@ -297,14 +297,11 @@ class RozvrhXMLImporter /* implements RozvrhXMLConsumer*/
   }
 
   public function getVersion() {
-      return $this->version;
+      return array(
+          'date' => $this->version,
+          'skolrok' => $this->skolrok,
+          'semester' => $this->semester,
+      );
   }
 
-  public function getSkolrok() {
-      return $this->skolrok;
-  }
-
-  public function getSemester() {
-      return $this->semester;
-  }
 }
