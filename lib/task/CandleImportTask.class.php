@@ -85,12 +85,6 @@ EOF;
       return $prepared->execute($params);
   }
 
-  protected function parseWarning($location, $description) {
-      $message = 'Warning at ' . $this->parser->formatLocation($location);
-      $message .= ': ' . $description;
-      $this->warning($message);
-  }
-  
   protected function warning($message) {
       if (!$this->warningsAsErrors) {
           $this->logBlock($message, 'INFO');
