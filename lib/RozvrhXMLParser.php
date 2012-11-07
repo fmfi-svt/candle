@@ -97,7 +97,6 @@ class RozvrhXMLParser
   }
 
   protected function parser_startElement($parser, $name, $attrs) {
-      //echo '<'.$name.' '.$this->state."\n";
       $this->currentElementPath[] = $name;
       if ($this->state == self::STATE_ROOT) {
           if ($name == 'rozvrh') {
@@ -257,7 +256,6 @@ class RozvrhXMLParser
   }
 
   protected function parser_endElement($parser, $name) {
-      //echo '</'.$name."\n";
       $this->dataField = null;
       if ($this->state == self::STATE_TYPY) {
           if ($name == 'typy') {
