@@ -2,7 +2,7 @@
 
 /**
 
-    Copyright 2010 Martin Sucha
+    Copyright 2010, 2012 Martin Sucha
 
     This file is part of Candle.
 
@@ -87,6 +87,21 @@ class freeRoomActions extends sfActions {
         $thisUrl = array('sf_route'=>'freeRoom_search');
 
         $this->thisUrl = $thisUrl;
+    }
+    
+    public function executeCurrent(sfWebRequest $request) {
+        list($day, $time) = Candle::setupRefreshTimeSlot($request, $this->response, $this, 0);
+        $sem_start = sfConfig::get('app_semester_start');
+        $sem_end = sfConfig::get('app_semester_end');
+        if ($this->queryTime >= $sem_start && $this->queryTime <= $sem_end+86400) {
+            $freeRooms = Doctrine::getTable('FreeRoomInterval')
+                    ->findIntervals(0, array(array($day, $time, $time)));
+        }
+        else {
+            $freeRooms = array();
+        }
+        
+        $this->freeRoomIntervals = $freeRooms;
     }
 
 }

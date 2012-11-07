@@ -108,6 +108,7 @@
             <li><?php echo link_to('Vyhľadávanie voľných miestností','@freeRoom_search_parameters'); ?></li>
             <li><?php echo link_to('Vyhľadávanie hodín podľa času','@lessonSearch_search_parameters'); ?></li>
             <li><?php echo link_to('Aktuálne prebiehajúca výučba','@lessonSearch_current'); ?></li>
+            <li><?php echo link_to('Aktuálne voľné miestnosti','@freeRoom_current'); ?></li>
         </ul>
     </div>
 </div>
