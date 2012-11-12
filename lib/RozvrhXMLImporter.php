@@ -126,7 +126,7 @@ class RozvrhXMLImporter /* implements RozvrhXMLConsumer*/
     }
 
     $this->insertLesson->execute(array(
-        Candle::dayFromCode($hodina['den']), (int) $hodina['zaciatok'],
+        $this->dayFromCode($hodina['den']), (int) $hodina['zaciatok'],
         (int) $hodina['koniec'], $hodina['typ'],
         $hodina['miestnost'], $hodina['predmet'],
         $lessonId, $note
@@ -302,6 +302,11 @@ class RozvrhXMLImporter /* implements RozvrhXMLConsumer*/
           'skolrok' => $this->skolrok,
           'semester' => $this->semester,
       );
+  }
+  
+  protected function dayFromCode($code) {
+    $days = array('pon'=>0, 'uto'=>1, 'str'=>2, 'stv'=>3, 'pia'=>4);
+    return $days[$code];
   }
 
 }
