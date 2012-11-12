@@ -251,8 +251,10 @@ class CandleImporter
           return;
       }
 
-      if (date('Y-m-d H:i:s', $version['datetime']) <= $max_version) {
-          $this->warning('You are probably trying to import version older than already stored in database');
+      $import_version = date('Y-m-d H:i:s', $version['date']);
+      if ($import_version <= $max_version) {
+          $this->warning('You are probably trying to import version older than already stored in database! ' . 
+                  "Latest version is $max_version, you are importing $import_version");
       }
   }
 
