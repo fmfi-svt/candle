@@ -85,7 +85,7 @@ class RozvrhXMLImporter /* implements RozvrhXMLConsumer*/
                   'room_type' => 'varchar(1) not null',
                   'capacity' => 'integer not null',
               ),
-              'primary-key' => array(name),
+              'primary-key' => array('name'),
           ),
           'predmet' => array(
               'table-name' => 'tmp_insert_subject',
