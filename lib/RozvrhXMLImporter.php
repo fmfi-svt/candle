@@ -32,91 +32,181 @@ class RozvrhXMLImporter /* implements RozvrhXMLConsumer*/
   /** @var PDO */
   protected $connection;
 
-  /** @var PDOStatement */
-  protected $insertLessonType;
+  /** @var array(PDOStatement) */
+  protected $insert;
 
-  /** @var PDOStatement */
-  protected $insertRoomType;
-
-  /** @var PDOStatement */
-  protected $insertTeacher;
-
-  /** @var PDOStatement */
-  protected $insertRoom;
-
-  /** @var PDOStatement */
-  protected $insertLesson;
-
-  /** @var PDOStatement */
-  protected $insertLessonTeacher;
-
-  /** @var PDOStatement */
-  protected $insertLessonStudentGroup;
-
-  /** @var PDOStatement */
-  protected $insertLessonLink;
-
-  /** @var PDOStatement */
-  protected $insertSubject;
-
-  /** @var int Unix time */
-  protected $version;
-
-  /** @var string */
-  protected $skolrok;
-
-  /** @var string */
-  protected $semester;
-
+  protected $rozvrhData;
+  
+  /**
+   * 
+   * @return array(xml-elem-type => array(
+   *    'table-name' => table name, 
+   *    'columns' => array(
+   *        column name => sql column type,
+   *    ),
+   *    'primary-key' => array(column names),
+   *  )
+   */
+  protected function getTableDefinitions() {
+      return array(
+          'typ-hodiny' => array(
+              'table-name' => 'tmp_insert_lesson_type',
+              'columns' => array(
+                  'name' => 'varchar(30) not null',
+                  'code' => 'varchar(1) not null',
+              ),
+              'primary-key' => array('code'),
+           ),
+          'typ-miestnosti' => array(
+              'table-name' => 'tmp_insert_room_type',
+              'columns' => array(
+                  'name' => 'varchar(30) not null',
+                  'code' => 'varchar(1) not null',
+              ),
+              'primary-key' => array('code'),
+           ),
+          'ucitel' => array(
+              'table-name' => 'tmp_insert_teacher',
+              'columns' => array(
+                  'given_name' => 'varchar(50)',
+                  'family_name' => 'varchar(50) not null',
+                  'iniciala' => 'varchar(50)',
+                  'oddelenie' => 'varchar(50)',
+                  'katedra' => 'varchar(50)',
+                  'external_id' => 'varchar(50) binary not null collate utf8_bin',
+                  'login' => 'varchar(50)',
+              ),
+              'primary-key' => array('external_id'),
+          ),
+          'miestnost' => array(
+              'table-name' => 'tmp_insert_room',
+              'columns' => array(
+                  'name' => 'varchar(30) not null',
+                  'room_type' => 'varchar(1) not null',
+                  'capacity' => 'integer not null',
+              ),
+              'primary-key' => array(name),
+          ),
+          'predmet' => array(
+              'table-name' => 'tmp_insert_subject',
+              'columns' => array(
+                  'name' => 'varchar(100)',
+                  'code' => 'varchar(50)',
+                  'short_code' => 'varchar(20)',
+                  'credit_value' => 'integer not null',
+                  'rozsah' => 'varchar(30)',
+                  'external_id' => 'varchar(50) binary not null collate utf8_bin',
+              ),
+              'primary-key' => array('external_id'),
+          ),
+          'hodina' => array(
+              'table-name' => 'tmp_insert_lesson',
+              'columns' => array(
+                  'day' => 'integer not null',
+                  'start' => 'integer not null',
+                  'end' => 'integer not null',
+                  'lesson_type' => 'varchar(1) not null',
+                  'room' => 'varchar(30) not null',
+                  'subject' => 'varchar(50) not null',
+                  'external_id' => 'integer not null',
+                  'note' => 'varchar(240)',
+              ),
+              'primary-key' => array('external_id'),
+          ),
+          'hodina-ucitel' => array(
+              'table-name' => 'tmp_insert_lesson_teacher',
+              'columns' => array(
+                  'lesson_external_id' => 'integer not null',
+                  'teacher_external_id' => 'varchar(50) binary not null collate utf8_bin',
+              ),
+          ),
+          'hodina-kruzok' => array(
+              'table-name' => 'tmp_insert_lesson_student_group',
+              'columns' => array(
+                  'lesson_external_id' => 'integer not null',
+                  'student_group' => 'varchar(30) not null',
+              )
+          ),
+          'hodina-hodina' => array(
+              'table-name' => 'tmp_insert_lesson_link',
+              'columns' => array(
+                  'lesson1_external_id' => 'integer not null',
+                  'lesson2_external_id' => 'integer not null',
+              )
+          ),
+      );
+  }
+  
   public function consumeRozvrh(array $location, array $rozvrh) {
-      $this->version = $rozvrh['verzia'];
-      $this->skolrok = $rozvrh['skolrok'];
-      $this->semester = $rozvrh['semester'];
+      $this->rozvrhData = $rozvrh;
   }
 
+  protected function convertTypHodiny(array $location, array $typHodiny) {
+      return array('name' => $typHodiny['popis'], 'code' => $typHodiny['id']);
+  }
+  
   public function consumeTypHodiny(array $location, array $typHodiny) {
-    $this->insertLessonType->execute(array(
-        $typHodiny['popis'], $typHodiny['id']
-    ));
+    $this->insert['typ-hodiny']->execute($this->convertTypHodiny($location, $typHodiny));
   }
 
+  protected function convertTypMiestnosti(array $location, array $typMiestnosti) {
+      return array('name' => $typMiestnosti['popis'], 'code' => $typMiestnosti['id']);
+  }
+  
   public function consumeTypMiestnosti(array $location, array $typMiestnosti) {
-    $this->insertRoomType->execute(array(
-        $typMiestnosti['popis'], $typMiestnosti['id']
-    ));
+    $this->insert['typ-miestnosti']->execute($this->convertTypMiestnosti($location, $typMiestnosti));
   }
 
-  public function consumeUcitel(array $location, array $ucitel) {
-    if (isset($ucitel['login'])) {
+  protected function convertUcitel(array $location, array $ucitel) {
+      if (isset($ucitel['login'])) {
         $login = trim($ucitel['login']);
-    }
-    else {
+      }
+      else {
         $login = null;
-    }
-    $this->insertTeacher->execute(array(
-        trim($ucitel['meno']), trim($ucitel['priezvisko']),
-        trim($ucitel['iniciala']), trim($ucitel['oddelenie']),
-        trim($ucitel['katedra']), $this->mangleExtId($ucitel['id']),
-        $login
-    ));
+      }
+      return array(
+          'given_name' => trim($ucitel['meno']),
+          'family_name' => trim($ucitel['priezviko']),
+          'iniciala' => trim($ucitel['iniciala']),
+          'oddelenie' => trim($ucitel['oddelenie']),
+          'katedra' => trim($ucitel['katedra']),
+          'external_id' => $this->mangleExtId($ucitel['id']),
+          'login' => $login,
+      );
+  }
+  
+  public function consumeUcitel(array $location, array $ucitel) {
+    $this->insert['ucitel']->execute($this->convertUcitel($location, $ucitel));
   }
 
+  protected function convertMiestnost(array $location, array $miestnost) {
+      return array(
+          'name' => $miestnost['nazov'],
+          'room_type' => $miestnost['typ'],
+          'capacity' => (int) $miestnost['kapacita'],
+      );
+  }
+  
   public function consumeMiestnost(array $location, array $miestnost) {
-    $this->insertRoom->execute(array(
-        $miestnost['nazov'], $miestnost['typ'],
-        (int) $miestnost['kapacita']
-    ));
+    $this->insert['miestnost']->execute($this->convertMiestnost($location, $miestnost));
   }
 
+  protected function convertPredmet(array $location, array $predmet) {
+    return array(
+        'name' => $predmet['nazov'],
+        'code' => $predmet['kod'],
+        'short_code' => $predmet['kratkykod'],
+        'credit_value' => (int) $predmet['kredity'],
+        'rozsah' => $predmet['rozsah'],
+        'external_id' => $predmet['id'],
+    );
+  }
+  
   public function consumePredmet(array $location, array $predmet) {
-    $this->insertSubject->execute(array(
-        $predmet['nazov'], $predmet['kod'],
-        $myShortCode, (int) $predmet['kredity'],
-        $predmet['rozsah'], $predmet['id']
-    ));
+    $this->insert['predmet']->execute($this->convertPredmet($location, $predmet));
   }
 
-  public function consumeHodina(array $location, array $hodina) {
+  protected function convertHodina(array $location, array $hodina) {
     $lessonId = (int) $hodina['oldid'];
     if (isset($hodina['poznamka'])) {
         $note = $hodina['poznamka'];
@@ -124,141 +214,126 @@ class RozvrhXMLImporter /* implements RozvrhXMLConsumer*/
     else {
         $note = null;
     }
-
-    $this->insertLesson->execute(array(
-        $this->dayFromCode($hodina['den']), (int) $hodina['zaciatok'],
-        (int) $hodina['koniec'], $hodina['typ'],
-        $hodina['miestnost'], $hodina['predmet'],
-        $lessonId, $note
-    ));
-
+    
+    return array(
+        'day' => $this->dayFromCode($hodina['den']),
+        'start' => (int) $hodina['zaciatok'],
+        'end' => (int) $hodina['koniec'],
+        'lesson_type' => $hodina['typ'],
+        'room' => $hodina['miestnost'],
+        'subject' => $hodina['predmet'],
+        'external_id' => $lessonId,
+        'note' => $note,
+    );
+  }
+  
+  protected function convertHodinaUcitel(array $location, array $convertedHodina,
+          $ucitelId) {
+      return array(
+          'lesson_external_id' => $convertedHodina['external_id'],
+          'teacher_external_id' => $this->mangleExtId($ucitelId),
+      );
+  }
+  
+  protected function convertHodinaKruzok(array $location, array $convertedHodina,
+          $kruzok) {
+      return array(
+          'lesson_external_id' => $convertedHodina['external_id'],
+          'student_group' => $kruzok,
+      );
+  }
+  
+  protected function convertHodinaHodina(array $location, array $convertedHodina,
+          $zviazanaHodina) {
+      return array(
+          'lesson1_external_id' => $convertedHodina['external_id'],
+          'lesson2_external_id' => (int) $zviazanaHodina,
+      );
+  }
+  
+  public function consumeHodina(array $location, array $hodina) {
+    $convertedHodina = $this->convertHodina($location, $hodina);
+    $this->insert['hodina']->execute($convertedHodina);
+    
     if (isset($hodina['ucitelia'])) {
         $ucitelia = explode(',', $hodina['ucitelia']);
         foreach ($ucitelia as $ucitelId) {
-            $this->insertLessonTeacher->execute(array($lessonId, $this->mangleExtId($ucitelId)));
+            $this->insert['hodina-ucitel']->execute($this->convertHodinaUcitel($location,
+                    $convertedHodina, $ucitelId));
         }
     }
 
     if (isset($hodina['kruzky'])) {
         $kruzky = explode(',', $hodina['kruzky']);
         foreach ($kruzky as $kruzok) {
-            $this->insertLessonStudentGroup->execute(array($lessonId, $kruzok));
+            $this->insert['hodina-kruzok']->execute($this->convertHodinaKruzok($location,
+                    $convertedHodina, $kruzok));
         }
     }
 
     if (isset($hodina['zviazaneoldid'])) {
         $zviazaneHodiny = explode(',', $hodina['zviazaneoldid']);
         foreach ($zviazaneHodiny as $zviazanaHodina) {
-            $this->insertLessonLink->execute(array($lessonId, $zviazanaHodina));
+            $this->insert['hodina-hodina']->execute($this->convertHodinaHodina($location,
+                    $convertedHodina, $zviazanaHodina));
         }
     }
   }
 
   protected function createTemporaryTables() {
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_type ";
-      $sql .= "(name varchar(30) not null, code varchar(1) not null)";
-      $res = $this->connection->exec($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_room_type ";
-      $sql .= "(name varchar(30) not null, code varchar(1) not null)";
-      $res = $this->connection->exec($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_teacher ";
-      $sql .= "(given_name varchar(50), family_name varchar(50) not null,";
-      $sql .= "iniciala varchar(50), oddelenie varchar(50), katedra varchar(50),";
-      $sql .= "external_id varchar(50) binary not null collate utf8_bin, ";
-      $sql .= "login varchar(50))";
-      $res = $this->connection->exec($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_room ";
-      $sql .= "(name varchar(30) not null, room_type varchar(1) not null, capacity integer not null)";
-      $res = $this->connection->exec($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_subject ";
-      $sql .= "(name varchar(100), code varchar(50), short_code varchar(20), ";
-      $sql .= "credit_value integer not null, rozsah varchar(30), external_id varchar(30) binary not null collate utf8_bin)";
-      $res = $this->connection->exec($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson ";
-      $sql .= "(day integer not null, start integer not null, end integer not null, ";
-      $sql .= "lesson_type varchar(1) not null, room varchar(30) not null, ";
-      $sql .= "subject varchar(30) not null, external_id integer not null, ";
-      $sql .= "note varchar(240))";
-      $res = $this->connection->exec($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_teacher ";
-      $sql .= "(lesson_external_id integer not null, teacher_external_id varchar(50) binary not null collate utf8_bin)";
-      $res = $this->connection->exec($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_student_group ";
-      $sql .= "(lesson_external_id integer not null, student_group varchar(30) not null)";
-      $res = $this->connection->exec($sql);
-
-      $sql = "CREATE TEMPORARY TABLE tmp_insert_lesson_link ";
-      $sql .= "(lesson1_external_id integer not null, lesson2_external_id integer not null)";
-      $res = $this->connection->exec($sql);
+      $tables = $this->getTableDefinitions();
+      foreach ($tables as $key => $table) {
+          $sql = "CREATE TEMPORARY TABLE ";
+          if (!isset($table['table-name'])) {
+              throw new LogicException('Table name must be defined for ' . $key);
+          }
+          $sql .= $table['table-name'];
+          $sql .= ' (';
+          if (!isset($table['columns'])) {
+              throw new LogicException('Columns must be defined for ' . $key);
+          }
+          $first = true;
+          foreach ($table['columns'] as $name => $type) {
+              if (!$first) $sql .= ', ';
+              $first = false;
+              $sql .= $name . ' ' . $type;
+          }
+          $sql .= ')';
+          $this->connection->exec($sql);
+      }
   }
 
   protected function prepareInsertStatements() {
-      $sql = 'INSERT INTO tmp_insert_lesson_type (name, code) VALUES (?, ?)';
-      $this->insertLessonType = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_room_type (name, code) VALUES (?, ?)';
-      $this->insertRoomType = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_teacher (given_name, family_name, iniciala, ';
-      $sql .= 'oddelenie, katedra, external_id, login) VALUES (?, ?, ?, ?, ?, ?, ?)';
-      $this->insertTeacher = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_room (name, room_type, capacity';
-      $sql .= ') VALUES (?, ?, ?)';
-      $this->insertRoom = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_subject (name, code, short_code, ';
-      $sql .= 'credit_value, rozsah, external_id) VALUES (?, ?, ?, ?, ?, ?)';
-      $this->insertSubject = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_lesson (day, start, end, lesson_type, ';
-      $sql .= 'room, subject, external_id, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-      $this->insertLesson = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_lesson_teacher (lesson_external_id, ';
-      $sql .= 'teacher_external_id) VALUES (?, ?)';
-      $this->insertLessonTeacher = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_lesson_student_group (lesson_external_id, ';
-      $sql .= 'student_group) VALUES (?, ?)';
-      $this->insertLessonStudentGroup = $this->connection->prepare($sql);
-
-      $sql = 'INSERT INTO tmp_insert_lesson_link (lesson1_external_id, ';
-      $sql .= 'lesson2_external_id) VALUES (?, ?)';
-      $this->insertLessonLink = $this->connection->prepare($sql);
+      $tables = $this->getTableDefinitions();
+      $this->insert = array();
+      foreach ($tables as $key => $table) {
+          $sql = 'INSERT INTO ' . $table['table-name'];
+          $sql .= ' (' . join(', ', array_keys($table['columns']));
+          $sql .= ') VALUES (';
+          $first = true;
+          foreach ($table['columns'] as $name => $type) {
+              if (!$first) $sql .= ', ';
+              $first = false;
+              $sql .= ':' . $name;
+          }
+          $sql .= ')';
+          $this->insert[$key] = $this->connection->prepare($sql);
+      }
   }
 
   protected function createPrimaryKeys() {
-      $sql = 'ALTER TABLE tmp_insert_lesson_type';
-      $sql .= ' ADD PRIMARY KEY (code)';
-      $this->connection->exec($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_room_type';
-      $sql .= ' ADD PRIMARY KEY (code)';
-      $this->connection->exec($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_teacher';
-      $sql .= ' ADD PRIMARY KEY (external_id)';
-      $this->connection->exec($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_room';
-      $sql .= ' ADD PRIMARY KEY (name)';
-      $this->connection->exec($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_subject';
-      $sql .= ' ADD PRIMARY KEY (external_id)';
-      $this->connection->exec($sql);
-
-      $sql = 'ALTER TABLE tmp_insert_lesson';
-      $sql .= ' ADD PRIMARY KEY (external_id)';
-      $this->connection->exec($sql);
+      $tables = $this->getTableDefinitions();
+      
+      foreach ($tables as $table) {
+          if (isset($table['primary-key'])) {
+              $sql = 'ALTER TABLE ';
+              $sql .= $table['table-name'];
+              $sql .= ' ADD PRIMARY KEY (';
+              $sql .= join(', ', $table['primary-key']);
+              $sql .= ')';
+              $this->connection->exec($sql);
+          }
+      }
   }
 
   protected function mangleExtId($id) {
@@ -268,9 +343,7 @@ class RozvrhXMLImporter /* implements RozvrhXMLConsumer*/
   public function __construct(PDO $connection)
   {
       $this->connection = $connection;
-      $this->version = null;
-      $this->skolrok = null;
-      $this->semester = null;
+      $this->rozvrhData = null;
   }
 
   /**
@@ -298,9 +371,9 @@ class RozvrhXMLImporter /* implements RozvrhXMLConsumer*/
 
   public function getVersion() {
       return array(
-          'date' => $this->version,
-          'skolrok' => $this->skolrok,
-          'semester' => $this->semester,
+          'date' => $this->rozvrhData['verzia'],
+          'skolrok' => $this->rozvrhData['skolrok'],
+          'semester' => $this->rozvrhData['semester'],
       );
   }
   
