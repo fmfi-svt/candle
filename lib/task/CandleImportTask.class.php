@@ -146,9 +146,21 @@ EOF;
         $this->xmlImporter->prepareTransaction();
 
         $this->logSection('candle', 'Loading xml data into database');
-        // TODO: feedovat parser po castiach
-        $this->parser->parse(file_get_contents($arguments['file']), true);
-
+        $file = fopen($arguments['file'], 'r');
+        if ($file === false) {
+            throw new Exception('Failed to open file');
+        }
+        
+        while (!feof($file)) {
+            $data = fread($file, 4096);
+            if ($data === false) {
+                throw new Exception('Failed reading file');
+            }
+            $this->parser->parse($data, false);
+        }
+        $this->parser->parse('', true);
+        fclose($file);
+        
         if ($options['replace']) {
             $this->logSection('candle', 'Deleting all data');
             $this->candleImporter->deleteAllData();
