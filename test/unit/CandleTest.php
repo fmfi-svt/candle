@@ -26,7 +26,7 @@
  */
 
 
-$t = new lime_test(78);
+$t = new lime_test(84);
 
 $t->is(Candle::formatTime(0),'0:00');
 $t->is(Candle::formatTime(5),'0:05');
@@ -56,10 +56,18 @@ $t->is(Candle::floorTo(60, 60), 60);
 $t->is(Candle::floorTo(69,60), 60);
 $t->is(Candle::floorTo(30, 15), 30);
 
+$t->is(Candle::floorTo(30, 15, 0), 30);
+$t->is(Candle::floorTo(30, 15, 5), 20);
+$t->is(Candle::floorTo(30, 15, 14), 29);
+
 $t->is(Candle::ceilTo(30, 60), 60);
 $t->is(Candle::ceilTo(0, 60), 0);
 $t->is(Candle::ceilTo(40, 30), 60);
 $t->is(Candle::ceilTo(60, 60), 60);
+
+$t->is(Candle::ceilTo(60, 60, 0), 60);
+$t->is(Candle::ceilTo(60, 60, 30), 90);
+$t->is(Candle::ceilTo(30, 60, 30), 30);
 
 $t->is(Candle::formatShortName(array('given_name'=>'Ľubomír', 'family_name'=>'Vráskavý')), 'Ľ. Vráskavý');
 $t->is(Candle::formatShortName(array('family_name'=>'Vráskavý')), 'Vráskavý');

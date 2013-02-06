@@ -121,13 +121,14 @@ class Candle {
                        $tagTitle . '>';
     }
     
-    static public function floorTo($number, $precision) {
-        return $number - ($number % $precision);
+    static public function floorTo($number, $precision, $offset = 0) {
+        return $number - (($number + $precision - $offset) % $precision);
     }
     
-    static public function ceilTo($number, $precision) {
-        if (($number % $precision) == 0) return $number;
-        return Candle::floorTo($number, $precision) + $precision;
+    static public function ceilTo($number, $precision, $offset = 0) {
+        if ((($number + $precision - $offset) % $precision) == 0)
+            return $number;
+        return Candle::floorTo($number, $precision, $offset) + $precision;
     }
     
     static public function dayFromCode($code) {
