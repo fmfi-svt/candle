@@ -70,6 +70,7 @@ $maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
                     $pos = $counters[$day][$ix];
                     if ($pos >= count($days[$day][$ix])) {
                         // tento stlpec je hotovy
+                        $cell_classes[] = 'emptyCell';
                         echo Candle::formatTD($cell_classes).'</td>';
                         continue;
                     }
@@ -80,6 +81,7 @@ $maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
                         $pos = $counters[$day][$ix];
                         if ($pos >= count($days[$day][$ix])) {
                             // tento stlpec je hotovy
+                            $cell_classes[] = 'emptyCell';
                             echo Candle::formatTD($cell_classes).'</td>';
                             continue;
                         }
@@ -112,6 +114,7 @@ $maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
                     }
                     else {
                         // treba vypisat prazdnu bunku
+                        $cell_classes[] = 'emptyCell';
                         echo Candle::formatTD($cell_classes).'</td>';
                     }
                 }
