@@ -17,18 +17,16 @@ for ($i = 0; $i < 5; $i++) {
 if ($layout->isFMPHLike()) {
     $rowmins = 50; // pocet minut na jeden riadok tabulky
     $rowspanmins = 45; // pocet minut dlzky, za ktore sa ma vygenerovat jeden rowspan
-    $mintime = 490;
-    $maxtime = 1190;
-    $mintime = min($mintime, 40+Candle::floorTo($layout->getLessonMinTime()-40, 50));
-    $maxtime = max($maxtime, 40+Candle::ceilTo($layout->getLessonMaxTime()-40, 50));
     $time_header_spans = 1; // kolko riadkov zabera hlavicka s casom
 }
 else {
     $rowmins = $rowspanmins = 5;
-    $time_header_spans = 12; // na kazdu hodinu
-    $mintime = Candle::floorTo($layout->getLessonMinTime(), 60);
-    $maxtime = Candle::ceilTo($layout->getLessonMaxTime(), 60);
+    $time_header_spans = 10; // na kazdych 50 min
 }
+$mintime = 490;
+$maxtime = 1190;
+$mintime = min($mintime, Candle::floorTo($layout->getLessonMinTime(), 50, 40));
+$maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
 ?>
 <table id="rozvrh" <?php if (!$layout->isFMPHLike()) echo 'class="precise"' ?>>
     <tr>
@@ -72,6 +70,7 @@ else {
                     $pos = $counters[$day][$ix];
                     if ($pos >= count($days[$day][$ix])) {
                         // tento stlpec je hotovy
+                        $cell_classes[] = 'emptyCell';
                         echo Candle::formatTD($cell_classes).'</td>';
                         continue;
                     }
@@ -82,6 +81,7 @@ else {
                         $pos = $counters[$day][$ix];
                         if ($pos >= count($days[$day][$ix])) {
                             // tento stlpec je hotovy
+                            $cell_classes[] = 'emptyCell';
                             echo Candle::formatTD($cell_classes).'</td>';
                             continue;
                         }
@@ -114,6 +114,7 @@ else {
                     }
                     else {
                         // treba vypisat prazdnu bunku
+                        $cell_classes[] = 'emptyCell';
                         echo Candle::formatTD($cell_classes).'</td>';
                     }
                 }

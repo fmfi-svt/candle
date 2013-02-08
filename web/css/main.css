@@ -389,6 +389,11 @@ ul.vysledky_hladania li+li {
     border-right: 2px solid;
 }
 
+#rozvrh td.emptyCell {
+    padding: 0;
+    border-bottom-width: 0;
+}
+
 #rozvrh td.cas {
     text-align: right;
     padding: 2px;
