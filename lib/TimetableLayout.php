@@ -108,8 +108,10 @@ class TimetableLayout {
                 for($i=0; $i<count($layout[$day][$col])-1; $i++){
                     $layout[$day][$col][$i]['breakTime'] = $this->breakTime($layout[$day][$col][$i], $layout[$day][$col][$i+1]);
                 }
-                if(count($layout[$day][$col]) > 0)
-                    $layout[$day][$col][count($layout[$day][$col])-1]['breakTime'] = $this->breakTime($layout[$day][$col][count($layout[$day][$col])-1]);
+                if(count($layout[$day][$col]) > 0){
+                    $last = count($layout[$day][$col])-1;
+                    $layout[$day][$col][$last]['breakTime'] = $this->breakTime($layout[$day][$col][$last]);
+                }
             }
         }            
 
@@ -133,7 +135,7 @@ class TimetableLayout {
         $breakTime = ($lesson['end']-$lesson['start'])/45*5;
         //nasledujuci predmet sa nesmie zacinat cez prestavku
         if($lesson2 != null && $lesson['end']+$breakTime>$lesson2['start']) return 0;
-        return ($lesson['end']-$lesson['start'])/45*5;
+        return $breakTime;
     }
     
     public function getLessonMinTime() {
