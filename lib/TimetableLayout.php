@@ -60,7 +60,7 @@ class TimetableLayout {
         foreach($this->lessons as $lesson) {
             $this->lessonMinTime = min($this->lessonMinTime, $lesson['start']);
             $this->lessonMaxTime = max($this->lessonMaxTime, $lesson['end']);
-            if (($lesson['start'] % 50) != 40 || (($lesson['end']-$lesson['start']) % 45 != 0)) {
+            if (!$this->isLessonFMPHLike($lesson)) {
                 // toto nie je FMFI hodina
                 $this->isFMPHLike = false;
             }
@@ -102,12 +102,40 @@ class TimetableLayout {
                 }
             }
         }
-        
+        //doratanie prestavkoveho casu
+        for($day=0; $day<5; $day++){
+            for($col=0; $col<count($layout[$day]); $col++){
+                for($i=0; $i<count($layout[$day][$col])-1; $i++){
+                    $layout[$day][$col][$i]['breakTime'] = $this->breakTime($layout[$day][$col][$i], $layout[$day][$col][$i+1]);
+                }
+                if(count($layout[$day][$col]) > 0){
+                    $last = count($layout[$day][$col])-1;
+                    $layout[$day][$col][$last]['breakTime'] = $this->breakTime($layout[$day][$col][$last]);
+                }
+            }
+        }            
+
         return $layout;
     }   
 
     public function isFMPHLike() {
         return $this->isFMPHLike;
+    }
+
+    public function isLessonFMPHLike($lesson) {
+        if (($lesson['start'] % 50) != 40 || (($lesson['end']-$lesson['start']) % 45 != 0)) {
+            return false;
+        }
+        return true;
+    }
+
+    public function breakTime($lesson, $lesson2 = null){
+        if(!$this->isLessonFMPHLike($lesson)) return 0;
+        //na kazdych 45min na matfyze pripada prestavka 5min
+        $breakTime = ($lesson['end']-$lesson['start'])/45*5;
+        //nasledujuci predmet sa nesmie zacinat cez prestavku
+        if($lesson2 != null && $lesson['end']+$breakTime>$lesson2['start']) return 0;
+        return $breakTime;
     }
     
     public function getLessonMinTime() {
