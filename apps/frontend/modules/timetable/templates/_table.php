@@ -75,7 +75,19 @@ $maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
                         continue;
                     }
                     $lesson = $days[$day][$ix][$pos];
-                    if ($lesson['end']<=$time) {
+                    //vypocitame o kolko treba natiahnut hodinu (koli prestavke) tak aby neboli medzeri v rozvrhu ak je tam nematfyz predmet
+                    $breakTime = 0;
+                    if (!$layout->isFMPHLike()){
+                        if (($pos+1) >= count($days[$day][$ix])){
+                            //ak je posledny v ten den
+                            $breakTime = $layout->breakTime($lesson);
+                        }
+                        else{
+                            //ak za nim nasleduje nejaky predmet
+                            $breakTime = $layout->breakTime($lesson, $days[$day][$ix][$pos+1]);
+                        }
+                    }
+                    if ($lesson['end']+($breakTime*$rowmins)<=$time) {
                         // je treba sa posunut dalej
                         $counters[$day][$ix]++;
                         $pos = $counters[$day][$ix];
@@ -87,9 +99,21 @@ $maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
                         }
                         $lesson = $days[$day][$ix][$pos];
                     }
+                    //mohla sa zmenit hodina, musime prepocitat prestavky
+                    $breakTime = 0;
+                    if (!$layout->isFMPHLike()){
+                        if (($pos+1) >= count($days[$day][$ix])){
+                            //ak je posledny v ten den
+                            $breakTime = $layout->breakTime($lesson);
+                        }
+                        else{
+                            //ak za nim nasleduje nejaky predmet
+                            $breakTime = $layout->breakTime($lesson, $days[$day][$ix][$pos+1]);
+                        }
+                    }
                     // treba vypisat bunku?
                     if ($lesson['start']==$time) {
-                        $rowspan = intval(($lesson['end']-$lesson['start'])/$rowspanmins);
+                        $rowspan = intval(($lesson['end']-$lesson['start'])/$rowspanmins+$breakTime);
                         $highlighted = $timetable->isLessonHighlighted($lesson['id']);
                         $cell_classes[] = 'hodina';
                         if ($highlighted) {
@@ -109,7 +133,7 @@ $maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
                         include_partial('timetable/cell', array('lesson'=>$lesson, 'highlighted'=>$highlighted, 'editable'=>$editable));
                         echo '</td>';
                     }
-                    else if ($lesson['start']<$time && $lesson['end']>$time) {
+                    else if ($lesson['start']<$time && $lesson['end']+($breakTime*$rowmins)>$time) {
                         // treba nevypisat nic
                     }
                     else {

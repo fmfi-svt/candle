@@ -60,7 +60,7 @@ class TimetableLayout {
         foreach($this->lessons as $lesson) {
             $this->lessonMinTime = min($this->lessonMinTime, $lesson['start']);
             $this->lessonMaxTime = max($this->lessonMaxTime, $lesson['end']);
-            if (($lesson['start'] % 50) != 40 || (($lesson['end']-$lesson['start']) % 45 != 0)) {
+            if (!$this->isLessonFMPHLike($lesson)) {
                 // toto nie je FMFI hodina
                 $this->isFMPHLike = false;
             }
@@ -108,6 +108,29 @@ class TimetableLayout {
 
     public function isFMPHLike() {
         return $this->isFMPHLike;
+    }
+
+    public function isLessonFMPHLike($lesson) {
+        if (($lesson['start'] % 50) != 40 || (($lesson['end']-$lesson['start']) % 45 != 0)) {
+            return false;
+        }
+        return true;
+    }
+
+    public function breakTime($lesson, $lesson2 = null){
+        $breakTime = 0;
+        if($this->isLessonFMPHLike($lesson)){
+            //na kazdych 45min na matfyze pripada prestavka
+            if($lesson2 == null){
+                $breakTime = ($lesson['end']-$lesson['start'])/45;
+            }
+            else{
+                //iba ak nasledujuci predmet nezacina hned za nim
+                if($lesson['end']!=$lesson2['start'] || $layout->isLessonFMPHLike($lesson2))
+ 				    $breakTime = ($lesson['end']-$lesson['start'])/45;
+            }
+  		}
+        return $breakTime;
     }
     
     public function getLessonMinTime() {
