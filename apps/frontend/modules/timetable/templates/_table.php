@@ -75,7 +75,7 @@ $maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
                         continue;
                     }
                     $lesson = $days[$day][$ix][$pos];
-                    if ($lesson['end']<=$time) {
+                    if ($lesson['end']+$lesson['breakTime']<=$time) {
                         // je treba sa posunut dalej
                         $counters[$day][$ix]++;
                         $pos = $counters[$day][$ix];
@@ -89,7 +89,7 @@ $maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
                     }
                     // treba vypisat bunku?
                     if ($lesson['start']==$time) {
-                        $rowspan = intval(($lesson['end']-$lesson['start'])/$rowspanmins);
+                        $rowspan = intval(($lesson['end']-$lesson['start']+$lesson['breakTime'])/$rowspanmins);
                         $highlighted = $timetable->isLessonHighlighted($lesson['id']);
                         $cell_classes[] = 'hodina';
                         if ($highlighted) {
@@ -109,7 +109,7 @@ $maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
                         include_partial('timetable/cell', array('lesson'=>$lesson, 'highlighted'=>$highlighted, 'editable'=>$editable));
                         echo '</td>';
                     }
-                    else if ($lesson['start']<$time && $lesson['end']>$time) {
+                    else if ($lesson['start']<$time && $lesson['end']+$lesson['breakTime']>$time) {
                         // treba nevypisat nic
                     }
                     else {
