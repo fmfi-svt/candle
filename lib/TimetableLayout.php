@@ -102,7 +102,17 @@ class TimetableLayout {
                 }
             }
         }
-        
+        //doratanie prestavkoveho casu
+        for($day=0; $day<5; $day++){
+            for($col=0; $col<count($layout[$day]); $col++){
+                for($i=0; $i<count($layout[$day][$col])-1; $i++){
+                    $layout[$day][$col][$i]['breakTime'] = $this->breakTime($layout[$day][$col][$i], $layout[$day][$col][$i+1]);
+                }
+                if(count($layout[$day][$col]) > 0)
+                    $layout[$day][$col][count($layout[$day][$col])-1]['breakTime'] = $this->breakTime($layout[$day][$col][count($layout[$day][$col])-1]);
+            }
+        }            
+
         return $layout;
     }   
 
@@ -118,19 +128,12 @@ class TimetableLayout {
     }
 
     public function breakTime($lesson, $lesson2 = null){
-        $breakTime = 0;
-        if($this->isLessonFMPHLike($lesson)){
-            //na kazdych 45min na matfyze pripada prestavka
-            if($lesson2 == null){
-                $breakTime = ($lesson['end']-$lesson['start'])/45;
-            }
-            else{
-                //iba ak nasledujuci predmet nezacina hned za nim
-                if($lesson['end']!=$lesson2['start'] || $layout->isLessonFMPHLike($lesson2))
- 				    $breakTime = ($lesson['end']-$lesson['start'])/45;
-            }
-  		}
-        return $breakTime;
+        if(!$this->isLessonFMPHLike($lesson)) return 0;
+        //na kazdych 45min na matfyze pripada prestavka 5min
+        $breakTime = ($lesson['end']-$lesson['start'])/45*5;
+        //nasledujuci predmet sa nesmie zacinat cez prestavku
+        if($lesson2 != null && $lesson['end']+$breakTime>$lesson2['start']) return 0;
+        return ($lesson['end']-$lesson['start'])/45*5;
     }
     
     public function getLessonMinTime() {
