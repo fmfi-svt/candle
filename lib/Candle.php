@@ -131,11 +131,6 @@ class Candle {
         return Candle::floorTo($number, $precision, $offset) + $precision;
     }
     
-    static public function dayFromCode($code) {
-        $days = array('pon'=>0, 'uto'=>1, 'str'=>2, 'stv'=>3, 'pia'=>4);
-        return $days[$code];
-    }
-    
     static public function nbsp($text) {
         return str_replace(' ', '&nbsp;', $text);
     }
