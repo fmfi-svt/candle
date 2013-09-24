@@ -1,8 +1,8 @@
 Candle
 ------
 
-Url:       http://ne.st.dcs.fmph.uniba.sk/projects/candle
-Copyright: 2010 Martin Sucha
+Url:       https://github.com/fmfi-svt/candle
+Copyright: 2010-2013 Martin Sucha
 License:   GNU General Public License version 3 or later - see LICENSE.txt
 
 iCalcreator

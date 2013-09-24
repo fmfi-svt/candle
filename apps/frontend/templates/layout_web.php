@@ -60,11 +60,11 @@
                         <?php include_component('layout', 'lastUpdate', array('mode' => 'normal')); ?>
                         <br />
                         Aplikácia Candle Copyright 2010,2011,2012 Martin Sucha. <span class="disclaimer2">Zdrojové kódy sa nachádzajú na
-                        <a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">stránke projektu</a>.
+                        <a href="https://github.com/fmfi-svt/candle">stránke projektu</a>.
                         Táto aplikácia je študentský projekt a nie je oficiálne podporovaná
                         pracovníkmi CIT, všetky prípadné otázky smerujte na diskusnú skupinu
                         <a href="http://groups.google.com/group/candle-users">candle-users</a>,
-                        časté odpovede nájdete v sekcii <a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki/FAQ">FAQ</a>.
+                        časté odpovede nájdete v sekcii <a href="https://github.com/fmfi-svt/candle/wiki/FAQ">FAQ</a>.
                         Používaním služby súhlasíte s <?php echo link_to('podmienkami používania', '@terms_of_use'); ?></span>
                     </div>
                 </div>
@@ -93,9 +93,9 @@
         <h2 class="pristupnost">Linky</h2>
         <ul><!--
             --><li><?php echo link_to('Rozvrh', '@homepage', array('class'=>'selected')) ?></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle">Zoznam chýb</a></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki">Dokumentácia</a></li><!--
-            --><li><a href="https://ne.st.dcs.fmph.uniba.sk/projects/candle/wiki/FAQ">FAQ</a></li><!--
+            --><li><a href="https://github.com/fmfi-svt/candle">Zoznam chýb</a></li><!--
+            --><li><a href="https://github.com/fmfi-svt/candle/wiki">Dokumentácia</a></li><!--
+            --><li><a href="https://github.com/fmfi-svt/candle/wiki/FAQ">FAQ</a></li><!--
             --><li><a href="http://groups.google.com/group/candle-users">Mailing list</a></li><!--
         --></ul>
     </div>    
