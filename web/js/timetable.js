@@ -83,5 +83,13 @@ var timetablePrepare = function() {
 
 }
 
+var saveButtonHook = function() {
+    var saveButton = $('menuSave');
+    saveButton.addEvent('click', function(e){
+        window.saving = true;
+    });
+}
+
 window.addEvent('domready', timetablePrepare);
 window.addEvent('domready', printButtonPrepare);
+window.addEvent('domready', saveButtonHook);
