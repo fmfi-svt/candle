@@ -368,9 +368,9 @@ window.addEvent('domready', function() {
 
       editor.addEvent('change', function() {
          tabManager.setState('upravený');
-         window.addEvent('beforeunload',function(e){
+         window.onbeforeunload = function() {
              return "Zmeny v rozvrhu ešte neboli uložené. Chcete naozaj odísť?";
-         });
+         };
       });
 
       createEditorPanel(editor);
