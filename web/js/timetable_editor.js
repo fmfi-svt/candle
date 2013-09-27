@@ -363,18 +363,28 @@ window.addEvent('domready', function() {
 
   var timetable_editor_element = $('timetable_editor');
 
+  var saving = false;
+
+  var saveButton = $('menuSave');
+  saveButton.addEvent('click', function(e){
+      saving = true;
+  });
+
   if ($chk(timetable_editor_element) && $chk(timetableEditor_changeLessonsURL)) {
       var editor = new TimetableEditor(timetable_editor_element, timetableEditor_changeLessonsURL);
 
       editor.addEvent('change', function() {
-         tabManager.setState('upravený');
-         window.onbeforeunload = function() {
-             return "Zmeny v rozvrhu ešte neboli uložené. Chcete naozaj odísť?";
-         };
+          tabManager.setState('upravený');
+          window.onbeforeunload = function() {
+              if (saving !== true) {
+                  saving = false;
+                  return "Zmeny v rozvrhu ešte neboli uložené. Chcete naozaj odísť?";
+              }
+          };
       });
 
       createEditorPanel(editor);
-          
+
       // Po stlaceni tlacitka back sa musi rozvrh znovu nacitat
       if (Cookie.read("timetableEditor_changeToken") != candleTimetableEditor_changeToken) {
           //alert(Cookie.read("timetableEditor_changeToken") + " != " + candleTimetableEditor_changeToken);
