@@ -364,6 +364,7 @@ window.addEvent('domready', function() {
   var timetable_editor_element = $('timetable_editor');
 
   var saving = false;
+  var modified = document.candleTimetableEditor_modified || false;
 
   if ($chk(timetable_editor_element) && $chk(timetableEditor_changeLessonsURL)) {
       var saveButton = $('menuSave');
@@ -372,15 +373,17 @@ window.addEvent('domready', function() {
       });
       
       var editor = new TimetableEditor(timetable_editor_element, timetableEditor_changeLessonsURL);
+      window.onbeforeunload = function() {
+          if (saving !== true) {
+              saving = false;
+              if (modified)
+                  return "Zmeny v rozvrhu ešte neboli uložené. Chcete naozaj odísť?";
+          }
+      };
 
       editor.addEvent('change', function() {
           tabManager.setState('upravený');
-          window.onbeforeunload = function() {
-              if (saving !== true) {
-                  saving = false;
-                  return "Zmeny v rozvrhu ešte neboli uložené. Chcete naozaj odísť?";
-              }
-          };
+          modified = true;
       });
 
       createEditorPanel(editor);
