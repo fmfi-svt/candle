@@ -365,12 +365,12 @@ window.addEvent('domready', function() {
 
   var saving = false;
 
-  var saveButton = $('menuSave');
-  saveButton.addEvent('click', function(e){
-      saving = true;
-  });
-
   if ($chk(timetable_editor_element) && $chk(timetableEditor_changeLessonsURL)) {
+      var saveButton = $('menuSave');
+      saveButton.addEvent('click', function(e){
+          saving = true;
+      });
+      
       var editor = new TimetableEditor(timetable_editor_element, timetableEditor_changeLessonsURL);
 
       editor.addEvent('change', function() {
