@@ -41,10 +41,11 @@ Candle závisí na niekoľkých projektoch:
 7. Spustite vývojársky server v PHP:
 
    ```bash
+   cd web/
    php -S localhost:8080
    ```
 
-   Aplikácia by mala na tejto adrese už bežať. Keďže na prihlasovanie sa bežne
+   Aplikácia by mala na už bežať na http://localhost:8080. Keďže na prihlasovanie sa bežne
    používa CoSign, cez PHP server nefunguje prihlasovanie. Avšak na testovanie
    postačí, ak na začiatku súboru `web/index.php` nastavíte `REMOTE_USER`
    (ktorý je inak nastavovaný z CoSign modulu v Apachi)
