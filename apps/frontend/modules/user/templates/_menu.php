@@ -1,7 +1,7 @@
 <h2 class="pristupnost">Menu používateľa</h2>
 <span class="username"><?php
 
-if ($username) { 
+if ($username) {
     echo $username;
 }
 else {
@@ -9,13 +9,14 @@ else {
 }
 
 ?></span><!--
---><ul><li><?php
-
+--><ul>
+     <li>
+<?php
 if (!$username) {
     echo link_to('Prihlásiť', '@signin', array('rel' => 'nofollow'));
-    ?></li><li><?php
+} else {
+    echo link_to('Odhlásiť', '@signout', array('rel' => 'nofollow'));
 }
-
-echo link_to('Odhlásiť', '@signout', array('rel' => 'nofollow'));
-
-?></li></ul>
+?>
+     </li>
+   </ul>
