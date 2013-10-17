@@ -16,13 +16,11 @@ slot('header');
 <h1>Rozvrh krúžku <?php echo $studentGroup['name']; ?></h1>
 <?php end_slot(); ?>
 
-<div>
 <?php include_partial('timetable/table',
         array(  'timetable'=>$timetable,
                 'layout'=>$layout,
                 'editable'=>false
         )); ?>
-</div>
 <?php include_partial('timetable/footer',
         array('url'=>array('sf_route'=>'studentGroup_show', 'sf_subject'=>$studentGroup)));
 ?>
