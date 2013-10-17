@@ -12,13 +12,12 @@ slot('header');
 <h1><?php echo $timetable->getName(); ?></h1>
 <?php end_slot(); ?>
 
-<div>
 <?php include_partial('timetable/table',
         array(  'timetable'=>$timetable,
                 'layout'=>$layout,
                 'editable'=>false
         )); ?>
-</div>
+
 <?php include_partial('timetable/footer',
         array('url'=>array('sf_route'=>'timetable_show_published', 'slug'=>$timetable_slug)));
 ?>

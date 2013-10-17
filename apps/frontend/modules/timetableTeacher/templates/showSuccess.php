@@ -21,13 +21,12 @@ slot('header');
 <h1><?php echo Candle::formatLongName($teacher); ?></h1>
 <?php end_slot(); ?>
 
-<div>
 <?php include_partial('timetable/table',
         array(  'timetable'=>$timetable,
                 'layout'=>$layout,
                 'editable'=>false
         )); ?>
-</div>
+
 <?php include_partial('timetable/footer',
         array('url'=>array('sf_route'=>'timetable_teacher_show', 'sf_subject'=>$teacher)));
 ?>

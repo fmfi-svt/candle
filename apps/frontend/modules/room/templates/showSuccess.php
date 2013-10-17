@@ -21,13 +21,11 @@ slot('header');
     Kapacita: <?php echo $room['capacity']; ?><br />
 </p>
 
-<div>
 <?php include_partial('timetable/table',
         array(  'timetable'=>$timetable,
                 'layout'=>$layout,
                 'editable'=>false
         )); ?>
-</div>
 <div>
 <?php include_partial('timetable/footer',
         array('url'=>array('sf_route'=>'room_show', 'sf_subject'=>$room)));
