@@ -9,15 +9,14 @@ else {
 }
 
 ?></span><!--
---><ul><li><?php
-
+--><ul>
+     <li>
+<?php
 if (!$username) {
     echo link_to('Prihlásiť', '@signin', array('rel' => 'nofollow'));
-    ?></li><?php
 } else {
-?> <li> <?php
     echo link_to('Odhlásiť', '@signout', array('rel' => 'nofollow'));
-?> </li> <?php
 }
-
-?></ul>
+?>
+     </li>
+   </ul>
