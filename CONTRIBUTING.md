@@ -40,7 +40,7 @@ uvedených vyššie.
 
 ## Chcem opraviť chybu sám, ako na to?
 
-1. Ak nemáš priamy push prístup do Candle repozitára, tak forkni Candle na githube
+1. [Forkni](https://github.com/fmfi-svt/candle/fork) Candle na GitHube
 2. Vytvor vetvu na tvoju opravu, napríklad
 
    ```bash
