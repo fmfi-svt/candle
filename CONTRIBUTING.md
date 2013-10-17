@@ -52,3 +52,11 @@ uvedených vyššie.
 6. Pushni svoje zmeny na github a otvor pull request
 7. My sa pokúsime čo najskôr na tvoje zmeny pozrieť, niekedy však odpoveď môže
    trvať aj niekoľko pracovných dní. Prosím buďte trpezliví.
+
+## Code style
+
+Candle žiaľ nemá presne stanovený štýl kódu takže by sa mal používať taký, aký
+je v okolitom kóde. Napriek tomu je dobré pozrieť sa na
+[najnovší coding standards Symfony](http://symfony.com/doc/current/contributing/code/standards.html)
+a držať sa ho tam, kde to bude viac-menej konzistentné s okolím. Samozrejme, veci
+ako namespace sa v starej Symfony 1.4 nepoužívajú.
