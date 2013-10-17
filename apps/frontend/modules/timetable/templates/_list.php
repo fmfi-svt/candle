@@ -28,7 +28,18 @@
                     echo $subjectName;
                   endif;
         ?></td>
-        <td><?php echo Candle::formatShortNameList($lesson['Teacher']) ?></td>
+        <td><?php
+        $first = true;
+        foreach ($lesson['Teacher'] as $teacher) {
+            if (!$first) {
+                echo ', ';
+            }
+            $shortName = Candle::formatShortName($teacher);
+            if ($shortName == '') continue;
+            $first = false;
+            echo link_to($shortName, array('sf_route' => 'timetable_teacher_show', 'sf_subject' => $teacher));
+        }
+        ?></td>
         <td><?php echo ($lesson['note'] === null) ? '' : $lesson['note']; ?></td>
     </tr>
 <?php endforeach; ?>
