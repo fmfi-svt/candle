@@ -35,7 +35,7 @@ Candle závisí na niekoľkých projektoch:
 6. Vytvorte štruktúru databázy:
 
    ```bash
-   ./symfony doctrine:insert-sql`
+   ./symfony doctrine:insert-sql
    ```
 
 7. Spustite vývojársky server v PHP:
