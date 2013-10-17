@@ -357,7 +357,13 @@ ul.vysledky_hladania li+li {
 
 #rozvrh {
     border-collapse: collapse;
-    width: 100%;
+
+    /* Aby neprichadzalo k problemom, ako su popisane na
+     * https://github.com/fmfi-svt/candle/issues/30, tento width je treba
+     * minimalne vo Firefoxe zakomentovat*/
+
+    /* width: 100%; */
+
 }
 
 #rozvrh tr.startTimeHeader {
