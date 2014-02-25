@@ -69,3 +69,12 @@ Candle závisí na niekoľkých projektoch:
 Podobne ako vývojársku inštanciu, len sa použije namiesto `php -S` Apache + suphp + mod_cosign.
 Tiež treba nastaviť `session_name` + ukladanie sessions do DB v súbore `apps/frontend/config/factories.yml`
 
+## Ako aktualizovať rozvrh?
+
+Postup je rovnaký ako pri prvkom importe. Aktualizovaný rozvrh importujte pomocou príkazu:
+
+```bash
+./symfony candle:import /cesta/k/suboru.xml
+```
+
+Pred importom odporúčame zálohovať databázu. Pomocou prepínača `--dry-run` si najskôr môžete overiť či celý proces zbehne bez chýb.
