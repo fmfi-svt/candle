@@ -58,15 +58,15 @@ class Candle {
         if ($m > 0) {
             $ret .= $m.'m';
         }
-        
+
         return $ret;
     }
-    
+
     static public function formatShortDay($dayNum) {
         $days = array('Po', 'Ut', 'St', 'Št', 'Pi');
         return $days[$dayNum];
     }
-    
+
     static public function formatLongDay($dayNum) {
         $days = array('Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok');
         return $days[$dayNum];
@@ -96,7 +96,7 @@ class Candle {
 
         return false;
     }
-    
+
     static public function formatRowspan($rowspan) {
         if ($rowspan <= 1) {
             return '';
@@ -105,7 +105,7 @@ class Candle {
             return ' rowspan="'.$rowspan.'" ';
         }
     }
-    
+
     static public function formatClass($classes) {
         if (!$classes || count($classes) == 0) return '';
         return ' class="'.implode(' ', $classes).'" ';
@@ -120,22 +120,22 @@ class Candle {
                        Candle::formatRowspan($rowspan) .
                        $tagTitle . '>';
     }
-    
+
     static public function floorTo($number, $precision, $offset = 0) {
         return $number - (($number + $precision - $offset) % $precision);
     }
-    
+
     static public function ceilTo($number, $precision, $offset = 0) {
         if ((($number + $precision - $offset) % $precision) == 0)
             return $number;
         return Candle::floorTo($number, $precision, $offset) + $precision;
     }
-    
+
     static public function dayFromCode($code) {
         $days = array('pon'=>0, 'uto'=>1, 'str'=>2, 'stv'=>3, 'pia'=>4);
         return $days[$code];
     }
-    
+
     static public function nbsp($text) {
         return str_replace(' ', '&nbsp;', $text);
     }
@@ -148,7 +148,7 @@ class Candle {
         } else {
             $given_name = null;
         }
-        
+
         mb_internal_encoding(mb_detect_encoding($given_name));
         $shortName = ($given_name?mb_substr($given_name, 0, 1).'. ':'').$teacher['family_name'];
         mb_internal_encoding($old_encoding);
@@ -171,7 +171,7 @@ class Candle {
     static public function formatLongName($teacher) {
         return ($teacher['given_name']?$teacher['given_name'].' ':'').$teacher['family_name'];
     }
-    
+
     static public function formatReversedLongName($teacher) {
         return $teacher['family_name'] . ($teacher['given_name']?', '.$teacher['given_name']:'');
     }
@@ -311,14 +311,14 @@ class Candle {
         if ($shortCode == null || trim($shortCode) == '') {
             return null;
         }
-        return 'https://fajr.fmph.uniba.sk/predmety/informacny-list?code='.urlencode($shortCode);
+        return 'https://sluzby.fmph.uniba.sk/infolist/SK/'.urlencode($shortCode).'.html';
     }
-    
+
     static public function formatSubjectCategory($code) {
-        
+
         return rtrim($code, "0123456789-");
     }
-    
+
     static public function getSortingGroup($string) {
         $oldLocale = setlocale(LC_CTYPE, "0");
         $newLocale = 'en_US.UTF-8';
@@ -330,9 +330,9 @@ class Candle {
         if ($status === FALSE) {
             throw new Exception("Nepodarilo sa setlocale($newLocale).");
         }
-        
+
         $group = self::upper($group);
-        
+
         if (mb_substr($group, 0, 2, 'UTF-8') == 'CH') {
             $group = 'Ch';
         }
@@ -342,10 +342,10 @@ class Candle {
                 $group = 'Ostatné';
             }
         }
-        
+
         return $group;
     }
-    
+
     static public function groupSorted($values, $key) {
         $result = array();
         $lastGroup = null;
@@ -360,10 +360,10 @@ class Candle {
             }
             $groupData[] = $value;
         }
-        
+
         return $result;
     }
-    
+
     static public function groupSortedByDashes($values, $key, array $otherPrefixes = array()) {
         $result = array();
         $lastGroup = null;
@@ -385,19 +385,19 @@ class Candle {
             }
             $groupData[] = $value;
         }
-        
+
         if (isset($result['Ostatné'])) {
             $tmp = $result['Ostatné'];
             unset($result['Ostatné']);
             $result['Ostatné'] = $tmp;
         }
-        
+
         return $result;
     }
-    
+
     public static function setupRefreshTimeSlot(sfWebRequest $request, sfWebResponse $response, $ctx, $defaultOffset = 15) {
         $ctx->offsetMinutes = $defaultOffset;
-        
+
         $requestedOffset = $request->getParameter('offset');
         if ($requestedOffset !== null && is_numeric($requestedOffset) &&
                 (intval($requestedOffset) % 5) == 0) {
@@ -414,7 +414,7 @@ class Candle {
          */
         $day = ($timeInfo['wday'] + 6) % 7;
         $time = $timeInfo['hours'] * 60 + $timeInfo['minutes'];
-        
+
         $response->addHttpMeta('refresh', max(60, ($timeSlot + $refreshResolution) - $now));
         return array($day, $time);
     }
