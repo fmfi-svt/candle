@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?php echo '<?xml version="1.0" encoding="utf-8" ?>'; ?>
 <timetable version="0.1" name="<?php echo $timetable->getName(); ?>">
 <?php foreach ($layout->getLessons() as $lesson): ?>
     <lesson id="<?php echo $lesson['id']; ?>">
