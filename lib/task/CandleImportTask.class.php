@@ -64,8 +64,8 @@ class CandleImportTask extends sfBaseTask
   {
     $this->addArguments(array(
         new sfCommandArgument('file', sfCommandArgument::REQUIRED, 'The file to load'),
-    ));    
-    
+    ));
+
     $this->addOptions(array(
         new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application', 'frontend'),
         new sfCommandOption('env', null, sfCommandOption::PARAMETER_OPTIONAL, 'The environement', 'prod'),
@@ -83,22 +83,22 @@ class CandleImportTask extends sfBaseTask
         new sfCommandOption('memory', null, sfCommandOption::PARAMETER_OPTIONAL, 'Memory limit for this task, e.g. 128M', '128M'),
         new sfCommandOption('no-generate-slugs', null, sfCommandOption::PARAMETER_NONE, 'Don\'t generate slugs'),
     ));
- 
+
     $this->namespace = 'candle';
     $this->name = 'import';
     $this->briefDescription = 'Load rozvrh.xml with lesson definitions';
- 
+
     $this->detailedDescription = <<<EOF
 The [candle:import|INFO] task loads the rozvrh.xml into database,
 replacing any definitions currently there:
- 
+
   [./symfony candle:import --env=prod ~/rozvrh.xml|INFO]
 EOF;
-    
+
     $this->warnings = 0;
-    
+
   }
-    
+
   protected function executeSQL($sql) {
       if ($this->printSQL) {
           echo $sql;
@@ -144,7 +144,7 @@ EOF;
       $message = 'Warning: '.$this->createParseErrorMessage($parser, $description);
       $this->warning($message);
   }
-  
+
   protected function warning($message) {
       if (!$this->warningsAsErrors) {
           $this->logBlock($message, 'INFO');
@@ -461,12 +461,14 @@ EOF;
     $myShortCode = Candle::subjectShortCodeFromLongCode($this->elementData['kod']);
     $myShorterCode = Candle::subjectShorterCode($myShortCode);
 
-    if ($myShortCode !== false && $myShorterCode !== false && 
-            !($myShortCode == $this->elementData['kratkykod'] || $myShorterCode == $this->elementData['kratkykod'])) {
-        $this->parseWarning($parser, 
-                'Short code does not have expected value, got \''.
-                $this->elementData['kratkykod'].'\', expected \''.$myShortCode.'\'');
-    }
+    // `kratkykod` is no longer provided in the .zip, this sanity check is therefore
+    // obsolete.
+  //if ($myShortCode !== false && $myShorterCode !== false &&
+  //        !($myShortCode == $this->elementData['kratkykod'] || $myShorterCode == $this->elementData['kratkykod'])) {
+  //    $this->parseWarning($parser,
+  //            'Short code does not have expected value, got \''.
+  //            $this->elementData['kratkykod'].'\', expected \''.$myShortCode.'\'');
+  //}
 
     $this->insertSubject->execute(array(
         $this->elementData['nazov'], $this->elementData['kod'],
@@ -833,28 +835,28 @@ EOF;
       $sql .= ' WHERE l.external_id NOT IN (SELECT i.external_id FROM tmp_insert_lesson i)';
       $this->executeSQL($sql);
   }
-  
+
   protected function checkVersion() {
       $this->logSection('candle', 'Checking version information');
-      
+
       // TODO: Kontrolovat, ci je semester a skol.rok rovnaky!!!
-      
+
       $sql = 'SELECT MAX(version) as max_version FROM data_update';
       $prepared = $this->connection->prepare($sql);
       $prepared->execute();
       $data = $prepared->fetchAll();
-      
+
       if (count($data) != 1) {
           $this->warning('Failed retrieving max version, row# != 1');
           return;
       }
-      
+
       $max_version = $data[0]['max_version'];
       if ($max_version == null) {
           // no previous version stored
           return;
       }
-      
+
       if (date('Y-m-d H:i:s', $this->version) <= $max_version) {
           $this->warning('You are probably trying to import version older than already stored in database');
       }
@@ -866,7 +868,7 @@ EOF;
       $sql = 'INSERT INTO data_update';
       $sql .= ' (datetime, description, version, semester, school_year_low)';
       $sql .= ' VALUES (NOW(), ?, ?, ?, ?)';
-      
+
       $pos = strpos($this->skolrok, '/');
       if ($pos === false) {
           $skolrok = intval($this->skolrok);
@@ -883,7 +885,7 @@ EOF;
       $this->executePreparedSQL($prepared, $data);
 
   }
-    
+
   protected function execute($arguments = array(), $options = array())
   {
 
@@ -974,14 +976,14 @@ EOF;
             $this->logSection('candle', 'Calculating free room intervals');
             Doctrine::getTable('FreeRoomInterval')->calculate();
         }
-        
+
         if (!$options['no-generate-slugs']) {
             $this->logSection('candle', 'Calculating slugs');
 
             $slugifier = new TableSlugifier($this->connection);
             $slugifier->slugifyTable('teacher', array('given_name', 'family_name'));
         }
-        
+
         $this->checkVersion();
         $this->insertDataUpdate();
 
