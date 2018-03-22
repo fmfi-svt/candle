@@ -2,7 +2,7 @@
 
 foreach ($layout->getLessons() as $lesson) {
     echo Candle::formatShortDay($lesson['day']);
-    echo ' ';
+    echo "\t";
     echo Candle::formatTime($lesson['start']);
     echo ' - ';
     echo Candle::formatTime($lesson['end']);
@@ -16,11 +16,13 @@ foreach ($layout->getLessons() as $lesson) {
         echo ' min.) ';
     }
     echo $lesson['Room']['name'];
-    echo ' ';
+    echo "\t";
     echo $lesson['LessonType']['name'];
-    echo ' ';
+    echo "\t";
+    echo $lesson['Subject']['short_code'];
+    echo "\t";
     echo $lesson['Subject']['name'];
-    echo ' ';
+    echo "\t";
     if ($lesson['note'] !== null) {
         echo '(';
         echo $lesson['note'];
