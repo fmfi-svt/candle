@@ -5,6 +5,7 @@
         <type><?php echo $lesson['LessonType']['name']; ?></type>
         <room><?php echo $lesson['Room']['name']; ?></room>
         <subject><?php echo $lesson['Subject']['name']; ?></subject>
+        <day><?php echo Candle::formatShortDay($lesson['day']); ?></day>
         <start><?php echo Candle::formatTime($lesson['start']); ?></start>
         <end><?php echo Candle::formatTime($lesson['end']); ?></end>
         <?php foreach ($lesson['Teacher'] as $teacher): ?>
