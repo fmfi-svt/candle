@@ -6,6 +6,7 @@ foreach ($layout->getLessons() as $lesson) {
     echo Candle::formatTime($lesson['start']);
     echo ' - ';
     echo Candle::formatTime($lesson['end']);
+    echo "\t";
     echo ' (';
     if ($layout->isFMPHLike()) {
         echo ($lesson['end']-$lesson['start'])/45;
@@ -15,6 +16,7 @@ foreach ($layout->getLessons() as $lesson) {
         echo $lesson['end']-$lesson['start'];
         echo ' min.) ';
     }
+    echo "\t";
     echo $lesson['Room']['name'];
     echo "\t";
     echo $lesson['LessonType']['name'];
