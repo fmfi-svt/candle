@@ -42,7 +42,7 @@ function createDiv(){
 function createCookie(name,value,days,permanent) {
     let expires = "";
     if (permanent) {
-        expires = "; expires="+(new Date(cookieHideDate + 24*60*60*1000)).toGMTString();
+        expires = "; expires="+(new Date(cookieHideDate)).toGMTString();
     } else if (days) {
         var date = new Date();
         date.setTime(date.getTime()+(days*24*60*60*1000)); 
