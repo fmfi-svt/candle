@@ -9,6 +9,7 @@ function createDiv(){
     var div = document.createElement('div');
     div.setAttribute('id','cookie-anketa');
     div.innerHTML = `
+      <div class="anketa__backdrop" onclick="removeMe();"></div>
       <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&amp;subset=latin-ext" rel="stylesheet">
       <div class="anketa__wrap">
         <div class="anketa__container">
