@@ -8,8 +8,8 @@ function createDiv(){
     var bodytag = document.getElementsByTagName('body')[0];
     var div = document.createElement('div');
     div.setAttribute('id','cookie-anketa');
-    div.innerHTML = `<div id="cookie-anketa">
-      <style></style>
+    div.innerHTML = `
+      <div class="anketa__backdrop" onclick="removeMe();"></div>
       <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&amp;subset=latin-ext" rel="stylesheet">
       <div class="anketa__wrap">
         <div class="anketa__container">
@@ -26,10 +26,12 @@ function createDiv(){
             <a class="anketa__button anketa__button--secondary" href="javascript:void(0);" onclick="removeMe();">
               Neskôr
             </a>
+            <a class="anketa__button anketa__button--secondary" href="javascript:void(0);" onclick="removeMe(true);">
+              Už som hlasoval(a)
+            </a>
           </div>
         </div>
-      </div>
-    </div>`;    
+      </div>`;    
      
     bodytag.insertBefore(div,bodytag.firstChild); 
      
@@ -37,13 +39,15 @@ function createDiv(){
 }
  
  
-function createCookie(name,value,days) {
-    if (days) {
+function createCookie(name,value,days,permanent) {
+    let expires = "";
+    if (permanent) {
+        expires = "; expires="+(new Date(cookieHideDate)).toGMTString();
+    } else if (days) {
         var date = new Date();
         date.setTime(date.getTime()+(days*24*60*60*1000)); 
-        var expires = "; expires="+date.toGMTString(); 
+        expires = "; expires="+date.toGMTString(); 
     }
-    else var expires = "";
     if(window.dropCookie) { 
         document.cookie = name+"="+value+expires+"; path=/"; 
     }
@@ -71,8 +75,8 @@ window.onload = function (){
     }
 }
 
-function removeMe(){
+function removeMe(permanent){
 	var element = document.getElementById('cookie-anketa');
 	element.parentNode.removeChild(element);     
-        createCookie(window.cookieName,window.cookieValue, window.cookieDuration); // Create the cookie
+    createCookie(window.cookieName,window.cookieValue, window.cookieDuration, permanent); // Create the cookie
 }
