@@ -1,0 +1,32 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+img {
+	display: block;
+}
+
+button,
+input,
+select,
+textarea {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+}
+
+abbr[title] {
+	text-decoration: none;
+	border-bottom: none;
+	cursor: help;
+}

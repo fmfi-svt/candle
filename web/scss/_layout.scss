@@ -1,0 +1,668 @@
+.overlay {
+	position: fixed;
+	z-index: 8;
+	background: rgba(0, 0, 0, .4);
+	right: 0;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity ease-in-out .3s, visibility ease-in-out .3s;
+
+	&--visible {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+.main_wraper {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	min-height: 100vh;
+}
+
+// ---------------------------------------------------------------------------
+// Ľavý tmavý panel s logom a tlačidlom na vysunutie vyhľadávania
+// ---------------------------------------------------------------------------
+
+.sidebar {
+	background: $dark;
+	width: $sidebar-width;
+	height: 100%;
+	min-height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 99;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
+
+	.fa-arrow-left, .fa-bars {
+		display: none;
+	}
+
+	&--expanded {
+		.fa-arrow-right {
+			display: none;
+		}
+		.fa-arrow-left {
+			display: inline-block;
+		}
+	}
+
+	@include mobile {
+		width: 100vw;
+		height: $topbar-height;
+		min-height: auto;
+
+		.fa-arrow-left, .fa-arrow-right {
+			display: none;
+		}
+		.fa-bars {
+			display: block;
+		}
+	}
+
+	&__logo_link {
+		display: block;
+		width: 100%;
+
+		@include mobile {
+			width: auto;
+			height: 100%;
+		}
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
+	&__logo {
+		width: 100%;
+
+		@include mobile {
+			width: auto;
+			height: 100%;
+		}
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	&__elements {
+		list-style: none;
+		margin: 50px auto 20px;
+		width: 100%;
+
+		@include mobile {
+			margin: 0;
+			width: auto;
+		}
+
+		li {
+			display: block;
+			width: 100%;
+			margin: 20px 0;
+			text-align: center;
+			color: rgba(255, 255, 255, 0.9);
+			transition: all ease-in-out .25s;
+			padding: 10px 0;
+			cursor: pointer;
+
+			@include mobile {
+				margin: 0;
+				padding: 0;
+			}
+
+			@include desktop {
+				&:hover {
+					color: rgba(255, 255, 255, 1);
+
+					i {
+						top: -3px;
+					}
+				}
+			}
+
+			i {
+				transition: all ease-in-out .25s;
+				top: 0;
+				position: relative;
+				font-size: 1.6em;
+			}
+
+			p {
+				font-size: 12px;
+				text-align: center;
+				margin-top: 10px;
+			}
+		}
+	}
+
+	&__toggle {
+		background: transparent;
+		border: none;
+		color: inherit;
+		cursor: pointer;
+		padding: 5px 10px;
+		outline: none;
+
+		&:focus-visible {
+			outline: 2px solid rgba(255, 255, 255, .6);
+			outline-offset: 2px;
+		}
+	}
+
+	&__visible {
+		width: 100%;
+		height: 100%;
+		background: $dark;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-direction: column;
+		padding: 20px;
+		padding-top: 40px;
+		box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+		position: relative;
+		z-index: 2;
+
+		@include mobile {
+			width: 100vw;
+			height: $topbar-height;
+			min-height: auto;
+			padding: 7px 20px;
+			flex-direction: row;
+		}
+	}
+
+	// vysúvací panel s vyhľadávaním
+	&__container {
+		position: absolute;
+		width: $sidebar-panel-width;
+		height: 100vh;
+		top: 0;
+		right: 0;
+		z-index: 1;
+		background: $dark;
+		transition: right ease-in-out .4s, top ease-in-out .4s, box-shadow ease-in-out .4s;
+		padding: 40px;
+		padding-top: 80px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		color: white;
+
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-direction: column;
+
+		@include mobile {
+			width: 100vw;
+			height: 100vh;
+			padding: 60px 20px 40px;
+			top: -100vh;
+			right: 0;
+		}
+
+		&::after {
+			content: "";
+			position: absolute;
+			display: block;
+			top: 0;
+			right: 0;
+			width: 100%;
+			height: 100%;
+			background: $dark;
+			opacity: 1;
+			transition: all ease-in-out .4s;
+			pointer-events: none;
+		}
+
+		&--expanded {
+			right: -$sidebar-panel-width;
+			box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+
+			@include mobile {
+				right: 0;
+				top: 0;
+			}
+
+			&::after {
+				opacity: 0;
+				visibility: hidden;
+			}
+		}
+
+		a {
+			color: white;
+		}
+	}
+
+	&__close {
+		background: transparent;
+		border: none;
+		margin: 0;
+		outline: none;
+
+		position: absolute;
+		top: 30px;
+		right: 30px;
+		font-size: 1.5em;
+		color: rgba(255, 255, 255, 0.9);
+		cursor: pointer;
+		padding: 10px;
+		z-index: 2;
+
+		@include mobile {
+			display: none;
+		}
+
+		&:hover {
+			color: rgba(255, 255, 255, 1);
+		}
+	}
+
+	&__block {
+		width: 100%;
+		color: white;
+		margin-bottom: 30px;
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+
+		&_title {
+			font-size: 18px;
+			font-weight: 400;
+			margin-bottom: 7px;
+
+			@include mobile {
+				font-size: 16px;
+			}
+		}
+
+		&_input {
+			padding-left: 30px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			@include mobile {
+				padding-left: 0;
+			}
+
+			label {
+				@include visually-hidden;
+			}
+
+			input, button {
+				display: block;
+				background: transparent;
+				color: white;
+				border: none;
+				padding: 5px;
+				border-bottom: 1px solid $light;
+				font-size: 14px;
+				font-family: 'Open Sans', sans-serif;
+				border-radius: 0;
+			}
+
+			input {
+				width: 80%;
+				outline: none;
+
+				&::placeholder {
+					font-weight: 300;
+					color: #ebebeb;
+					opacity: 1;
+				}
+
+				&:focus {
+					border-bottom-color: $accent-2;
+				}
+
+				@include mobile {
+					width: 75%;
+				}
+			}
+
+			button {
+				width: 20%;
+				cursor: pointer;
+				background: $light;
+				color: $text;
+				transition: all ease-in-out .2s;
+
+				@include mobile {
+					width: 25%;
+				}
+
+				&:hover {
+					background: white;
+				}
+			}
+		}
+
+		&_hint {
+			padding-left: 30px;
+			font-size: 12px;
+			font-weight: 300;
+			color: rgba(255, 255, 255, .7);
+			margin-top: 4px;
+
+			@include mobile {
+				padding-left: 0;
+			}
+		}
+
+		&_content {
+			padding-left: 30px;
+			font-size: 14px;
+
+			@include mobile {
+				padding-left: 0;
+			}
+
+			ul {
+				padding-left: 10px;
+				list-style-position: inside;
+
+				li {
+					margin-bottom: 3px;
+				}
+			}
+
+			.error_list {
+				list-style: none;
+				padding: 0;
+				color: #ffb3b3;
+			}
+		}
+
+		&--links {
+			border-top: 1px solid rgba(255, 255, 255, .15);
+			padding-top: 20px;
+			margin-top: 10px;
+			font-size: 13px;
+			font-weight: 300;
+
+			ul {
+				list-style: none;
+				padding: 0;
+				display: flex;
+				flex-wrap: wrap;
+
+				li {
+					margin-right: 15px;
+					margin-bottom: 3px;
+				}
+			}
+		}
+	}
+
+	// indikátor prebiehajúceho AJAX vyhľadávania
+	&__throbber {
+		position: absolute;
+		top: 42px;
+		left: 40px;
+		font-size: 13px;
+		color: rgba(255, 255, 255, .7);
+		visibility: hidden;
+
+		&.active {
+			visibility: visible;
+		}
+
+		@include mobile {
+			top: 20px;
+			left: 20px;
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Obsah
+// ---------------------------------------------------------------------------
+
+.content {
+	background: $light;
+	width: 100%;
+	min-width: 0;
+	margin-left: $sidebar-width;
+	overflow: clip;
+
+	@include mobile {
+		margin-left: 0;
+		margin-top: $topbar-height;
+	}
+
+	&__header {
+		padding-left: 75px;
+		padding-bottom: 25px;
+		min-height: 100px;
+		background: linear-gradient(to bottom, #f9f9f9, #ffffff);
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+
+		@include mobile {
+			padding: 20px;
+			height: auto;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: flex-start;
+		}
+	}
+
+	&__header_name {
+		color: $heading;
+		display: block;
+		padding-top: 40px;
+		min-width: 0;
+
+		h1 {
+			font-size: 2em;
+			font-weight: 100;
+			margin: 0;
+			line-height: 1.2;
+			display: inline;
+		}
+
+		@include mobile {
+			padding: 0;
+			font-size: 1.1em;
+		}
+	}
+
+	&__header_controls {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		flex-direction: column;
+		margin-right: 50px;
+		flex-shrink: 0;
+
+		@include mobile {
+			width: 100%;
+			margin-right: 0;
+			padding-top: 20px;
+		}
+	}
+
+	&__header_user_row {
+		margin-bottom: 20px;
+		font-size: 14px;
+
+		@include mobile {
+			margin-bottom: 10px;
+		}
+
+		a:hover {
+			cursor: pointer;
+			color: darken($text, 50);
+		}
+
+		i {
+			font-size: 16px;
+			margin: 0 10px;
+
+			&:last-of-type {
+				margin-right: 0;
+			}
+		}
+
+		.username {
+			font-weight: 700;
+			margin-right: 10px;
+		}
+	}
+
+	&__header_controls_row {
+		@include mobile {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 500px;
+		}
+	}
+
+	&__body {
+		padding: 25px 50px 40px 75px;
+
+		@include mobile {
+			padding: 20px;
+		}
+	}
+
+	// telo s rozvrhom nemá vlastný odsek, rozvrh ide od kraja
+	&__body--timetable {
+		padding: 0;
+	}
+
+	&__timetable {
+		overflow: clip;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Akcie rozvrhu (ikony v hlavičke)
+// ---------------------------------------------------------------------------
+
+.actions {
+	list-style: none;
+	display: flex;
+	align-items: center;
+	margin: 0;
+	padding: 0;
+
+	@include mobile {
+		width: 100%;
+		justify-content: space-between;
+	}
+
+	li {
+		display: block;
+	}
+
+	&__link {
+		display: block;
+		font-size: 1.3em;
+		margin: 0 10px;
+		color: $text;
+		transition: color ease-in-out .15s;
+
+		@include mobile {
+			margin: 5px;
+		}
+
+		&:hover, &:focus {
+			cursor: pointer;
+			color: darken($text, 50);
+			text-decoration: none;
+		}
+
+		&--active {
+			color: $accent;
+		}
+	}
+
+	li:last-of-type &__link {
+		margin-right: 0;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Záložky s rozvrhmi používateľa
+// ---------------------------------------------------------------------------
+
+.tabs {
+	background: #ffffff;
+	padding: 0 50px 0 75px;
+	border-bottom: 1px solid $border;
+
+	@include mobile {
+		padding: 0 20px;
+		overflow-x: auto;
+	}
+
+	&__list {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0;
+		padding: 0;
+
+		@include mobile {
+			flex-wrap: nowrap;
+		}
+	}
+
+	&__item {
+		display: block;
+		white-space: nowrap;
+	}
+
+	&__link {
+		display: block;
+		padding: 10px 15px;
+		border-bottom: 3px solid transparent;
+		font-size: 14px;
+		color: $text;
+		transition: all ease-in-out .15s;
+
+		&:hover, &:focus {
+			text-decoration: none;
+			color: $heading;
+			border-bottom-color: $border;
+		}
+
+		&.selected {
+			color: $heading;
+			font-weight: 700;
+			border-bottom-color: $accent;
+		}
+
+		&--new {
+			font-style: italic;
+			font-weight: 300;
+
+			i {
+				margin-right: 5px;
+			}
+		}
+	}
+
+	.rozvrh_stav {
+		font-weight: 300;
+		font-size: 12px;
+		color: $accent;
+	}
+}
