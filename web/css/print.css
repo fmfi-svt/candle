@@ -1,174 +1,178 @@
-/* 
+/*
 
 Tlacovy styl
 
 */
 
-root { 
-    display: block;
+@page {
+    margin: 1cm;
 }
 
 body {
     font-size: 10pt;
+    background: white;
+    color: black;
 }
 
-#vrch, #panel, #panel_schovat, #vrch2, #vrch_riadok1 {
-    display: none;
+/* skryjeme vsetko okrem obsahu */
+.sidebar, .overlay, .content__header_controls, .tabs, .editor_bar,
+#timetable_full_url, .flash_notice, .flash_error, .timetableFooter,
+.disclaimer2, #rozvrhListTogglerContainer, .jshide, .pristupnost,
+.lecture_container__lecture_select, .timetable__current_time, .timetable__empty {
+    display: none !important;
 }
 
-.jshide {
-    display: none;
+.content {
+    margin: 0;
+    overflow: visible;
 }
 
-#timetable_editor_command_bar {
-    display: none;
+.content__header {
+    min-height: 0;
+    padding: 0 0 0.5em 0;
+    background: none;
 }
 
-#rozvrh input, #rozvrh label {
-    display: none;
+.content__header_name {
+    padding: 0;
+    color: black;
 }
 
-#rozvrh, #rozvrh td {
-    border-collapse: collapse;
+.content__header_name h1 {
+    font-size: 16pt;
+    font-weight: normal;
 }
 
-#rozvrh {
+.content__body {
+    padding: 0;
+}
+
+/* mriezka rozvrhu */
+.content__timetable {
+    overflow: visible;
+}
+
+.timetable__days {
+    position: static;
     border: 1px solid black;
+    border-bottom: none;
 }
 
-#rozvrh tr.startTimeHeader {
-    border-top: 1px solid black;
+.timetable__day {
+    height: 24pt;
+    line-height: 24pt;
+    min-width: 0;
+    border-bottom: 1px solid black;
+    background: white;
+    color: black;
+    font-weight: bold;
+    box-shadow: none;
 }
 
-#rozvrh .pristupnost{
-    display: none;
-}
-
-#rozvrh th {
-    width: 20%;
-}
-
-#rozvrh th.zaciatok {
-    width: auto;
-}
-
-#rozvrh td {
-    vertical-align: top;
-    height: 27pt;
-    /* Hm, spodny border sa renderoval vo FF aj do nasledujucej bunky,
-       ak sa v tabulke vyskytol rowspan. Nasledovne nastavenie vyzera, ze
-       problem potlaci.
-    */
-    /*border-bottom: 1px solid transparent;*/
-}
-
-#rozvrh td.startOfDayColumn {
+.timetable__day + .timetable__day {
     border-left: 1px solid black;
 }
 
-#rozvrh td.endOfDayColumn {
-    border-right: 1px solid black;
-}
-
-#rozvrh.precise td {
-    height: 3pt;
-}
-
-#rozvrh td.cas {
-    text-align: right;
-    padding: 0.2em;
-}
-
-#rozvrh td.hodina {
-    text-align: center;
+.timetable {
+    overflow: visible;
     border: 1px solid black;
-    border-top: 1px solid black;
-    padding: 0.2em;
+    border-top: none;
 }
 
-#rozvrh td.hodina .wrap {
-    position: relative;
-/*    height: 100%;*/
+.timetable__collum {
+    background: white;
+    min-width: 0;
 }
 
-#rozvrh td.hodina .miestnost {
-    position: absolute;
-    top: 0.1em;
-    left: 0.1em;
+.timetable__collum + .timetable__collum {
+    border-left: 1px solid black;
 }
 
-#rozvrh td.hodina .typ {
-    position: absolute;
-    top: 0.1em;
-    right: 0.1em;
+.timetable__collum--times {
+    color: black;
+    font-size: 9pt;
 }
 
-#rozvrh td.hodina .predmet_wrap {
-    padding-top: 0.2em;
+.timetable__cell::after {
+    width: 100%;
+    border-bottom: 1px solid #999;
 }
 
-#rozvrh td.hodina .predmet {
-    padding-top: 1em;
+/* karty hodin */
+.lecture_container__lecture {
+    background: white !important;
+    color: black;
+    border: 1px solid black;
+    border-radius: 0;
+    box-shadow: none !important;
+    font-size: 9pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 
-#rozvrh td.hodina a {
+.lecture_container__lecture.highlighted {
+    background: #eee !important;
+}
+
+.lecture_container__lecture_name {
+    font-size: 8.5pt;
+    font-weight: normal;
+}
+
+.lecture_container--size-1 .lecture_container__lecture_name {
+    white-space: normal;
+}
+
+.lecture_container__lecture_type {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.lecture_container__lecture a {
     color: black;
     text-decoration: none;
 }
 
-#rozvrh td.hodina .poznamka {
-    font-style: italic;
+/* zoznam hodin pod rozvrhom */
+.timetable_below {
+    padding: 1em 0 0;
 }
 
-abbr {
-    text-decoration: none;
-    border-bottom: none;
-}
-
-.flash_notice, .flash_error {
-    display: none;
-}
-
-.timetableFooter {
-    display: none;
-}
-
-.disclaimer2 {
-    display: none;
-}
-
-.footer {
-    font-size: 7pt;
-}
-
-.footer hr {
-    display: none;
-}
-
-#timetable_full_url {
-    display: none;
-}
-
-#obsah_in table.vysledky_podrobneho_hladania {
+#rozvrhList,
+table.vysledky_podrobneho_hladania {
     width: 100%;
     border: 1px solid black;
     border-collapse: collapse;
+    box-shadow: none;
+    font-size: 9pt;
 }
 
-#obsah_in table.vysledky_podrobneho_hladania th {
-    padding: 0.5em;
+#rozvrhList th,
+table.vysledky_podrobneho_hladania th {
+    padding: 0.3em 0.5em;
     font-weight: bold;
     border: 1px solid black;
+    background: white;
 }
 
-#obsah_in table.vysledky_podrobneho_hladania td {
-    padding: 0.3em;
+#rozvrhList td,
+table.vysledky_podrobneho_hladania td {
+    padding: 0.2em 0.5em;
     font-weight: normal;
     border: 1px solid black;
 }
 
-#rozvrhList {
-    margin-top: 1ex;
+.content__body a {
+    color: black;
+    text-decoration: none;
+}
+
+.footer {
+    font-size: 7pt;
+    margin: 1em 0 0 !important;
+    padding: 0.5em 0 0;
+    border-top: 1px solid #999;
+    color: #333;
 }
 
 .hidden {
@@ -177,8 +181,4 @@ abbr {
 
 .onNextPage {
     page-break-before: always;
-}
-
-#rozvrhListTogglerContainer {
-    display: none;
 }

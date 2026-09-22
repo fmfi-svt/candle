@@ -187,10 +187,10 @@ var TimetableEditor = new Class({
         return false;
     },
     getTimetableCell: function(el) {
-        // najdi bunku pre tento element (on sam, alebo najblizsi rodic typu td)
+        // najdi kartu hodiny pre tento element (on sam, alebo najblizsi rodic s triedou hodina)
         var element = $(el);
-        if (element.get('tag') == 'td') return element;
-        return element.getParent('td');
+        if (element.hasClass('hodina')) return element;
+        return element.getParent('.hodina');
     },
     getLessonSelectionCheckbox: function(lessonId) {
         return $('timetable_lesson_selection_cb_'+lessonId);
@@ -368,9 +368,11 @@ window.addEvent('domready', function() {
 
   if ($chk(timetable_editor_element) && $chk(timetableEditor_changeLessonsURL)) {
       var saveButton = $('menuSave');
-      saveButton.addEvent('click', function(e){
-          saving = true;
-      });
+      if ($chk(saveButton)) {
+          saveButton.addEvent('click', function(e){
+              saving = true;
+          });
+      }
       
       var editor = new TimetableEditor(timetable_editor_element, timetableEditor_changeLessonsURL);
       window.onbeforeunload = function() {

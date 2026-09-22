@@ -1,4 +1,5 @@
 <?php
+use_helper('Candle');
 if ($timetable):
     echo form_tag('@timetable_change_lessons?id='.$timetable_id, array('id'=>'panel_change_lessons'));
 endif
@@ -58,12 +59,12 @@ if ($timetable) {
                         <?php if ($subject['rozsah']): ?>
                             <td class="rozsah"><?php echo $subject['rozsah'] ?></td>
                         <?php else: ?>
-                            <td class="rozsah">&nbsp;</td
+                            <td class="rozsah">&nbsp;</td>
                         <?php endif; ?>
                         <?php if ($subjectInfoLink): ?>
                             <td class="odkazy"><a href="<?php echo $subjectInfoLink; ?>">viac info...</a></td>
                         <?php else: ?>
-                            <td class="odkazy">&nbsp;</td
+                            <td class="odkazy">&nbsp;</td>
                         <?php endif; ?>
                     </tr>
                 </tbody>
@@ -87,7 +88,7 @@ if ($timetable) {
       <tbody>
         <?php foreach ($lessons as $lesson): ?>
         <tr>
-            <td class="lesson-type-cell"><abbr class="lesson-type <?php echo Candle::getLessonTypeHTMLClass($lesson['LessonType']); ?>" title="<?php echo $lesson['LessonType']['name']?>"><span class="lesson-type-in"><?php echo $lesson['LessonType']['code'] ?></span><span class="lesson-type-image"></span></abbr></td>
+            <td class="lesson-type-cell"><?php echo candle_lesson_type_badge($lesson['LessonType']); ?></td>
           <td class="kedy"><?php echo Candle::formatShortDay($lesson['day']) ?>&nbsp;<?php echo Candle::formatTime($lesson['start']) ?></td>
           <td class="kde"><?php echo $lesson['Room']['name'] ?></td>
           <td class="kto"><?php foreach ($lesson['Teacher'] as $i => $teacher):

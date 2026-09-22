@@ -1,0 +1,128 @@
+// ---------------------------------------------------------------------------
+// Editor vlastného rozvrhu: lišta s hromadnými akciami, súčet kreditov,
+// prepínače zoznamu hodín
+// ---------------------------------------------------------------------------
+
+.editor_bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px 20px;
+	padding: 10px 50px 10px 75px;
+	background: #ffffff;
+	border-bottom: 1px solid $border;
+	font-size: 13px;
+
+	@include mobile {
+		padding: 10px 20px;
+	}
+
+	&__commands {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 6px;
+	}
+
+	// vyššia špecificita než všeobecné štýly tlačidiel v .content__body
+	.content__body & select {
+		background: white;
+		border: 1px solid $border;
+		border-radius: 2px;
+		padding: 4px 6px;
+		font-size: 13px;
+	}
+
+	.content__body & button {
+		background: transparent;
+		border: 1px solid $border;
+		border-radius: 2px;
+		padding: 4px 12px;
+		font-size: 13px;
+		color: $text;
+		cursor: pointer;
+		transition: all ease-in-out .15s;
+
+		&:hover, &:focus {
+			background: white;
+			border-color: $dark;
+			color: $heading;
+		}
+
+		&[disabled] {
+			opacity: .4;
+			cursor: default;
+		}
+
+		&.editor_bar__danger:hover {
+			border-color: #f8264f;
+			color: #f8264f;
+		}
+	}
+
+	&__info {
+		font-weight: 300;
+		color: lighten($text, 10);
+	}
+}
+
+#timetable_full_url {
+	padding: 10px 50px 0 75px;
+	font-size: 13px;
+	font-weight: 300;
+
+	@include mobile {
+		padding: 10px 20px 0;
+		word-break: break-all;
+	}
+}
+
+// pod rozvrhom: prepínače zoznamu hodín (vytvára timetable.js) a zoznam
+.timetable_below {
+	padding: 20px 50px 0 75px;
+
+	@include mobile {
+		padding: 20px 20px 0;
+	}
+}
+
+#rozvrhListTogglerContainer {
+	font-size: 13px;
+	margin-bottom: 10px;
+
+	label {
+		margin: 0 15px 0 4px;
+	}
+}
+
+.timetableFooter {
+	display: flex;
+	justify-content: space-between;
+	font-size: 13px;
+	padding: 15px 50px 0 75px;
+	flex-wrap: wrap;
+	gap: 10px;
+
+	@include mobile {
+		padding: 15px 20px 0;
+	}
+
+	a {
+		color: $text;
+	}
+}
+
+.timetableExportOptionsSmall a {
+	display: inline-block;
+	padding: 2px 8px;
+	background: white;
+	border-radius: 2px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+	margin-right: 4px;
+
+	&:hover {
+		text-decoration: none;
+		color: $heading;
+	}
+}

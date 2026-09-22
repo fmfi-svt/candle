@@ -1,0 +1,404 @@
+// ---------------------------------------------------------------------------
+// Bežné stránky v obsahu: texty, formuláre, tabuľky, pätička
+// ---------------------------------------------------------------------------
+
+.content__body {
+	h2 {
+		font-size: 1.3em;
+		font-weight: 400;
+		color: $heading;
+		margin: 25px 0 10px;
+
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+
+	p {
+		margin: 0 0 10px;
+	}
+
+	a {
+		color: $link;
+	}
+
+	ul, ol {
+		margin: 0 0 10px;
+		padding-left: 25px;
+	}
+
+	li {
+		margin: 3px 0;
+	}
+
+	hr {
+		border: none;
+		border-top: 1px solid $border;
+		margin: 25px 0;
+	}
+
+	// zoznamy (učitelia, miestnosti, krúžky) rozdelené podľa písmen
+	.letter_index {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+		padding: 0;
+		margin-bottom: 20px;
+
+		a {
+			display: inline-block;
+			min-width: 28px;
+			padding: 2px 6px;
+			text-align: center;
+			background: white;
+			border-radius: 2px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+			color: $text;
+
+			&:hover {
+				text-decoration: none;
+				color: $heading;
+				background: mix($accent, white, 15%);
+			}
+		}
+	}
+
+	.item_list {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		margin-bottom: 20px;
+
+		li {
+			margin: 0;
+		}
+
+		a {
+			display: block;
+			padding: 4px 10px;
+			background: white;
+			border-radius: 2px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+			color: $text;
+
+			&:hover {
+				text-decoration: none;
+				color: $heading;
+				box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+			}
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Formuláre
+// ---------------------------------------------------------------------------
+
+.content__body {
+	input[type=text],
+	input[type=password],
+	input[type=number],
+	textarea,
+	select {
+		background: white;
+		border: 1px solid $border;
+		border-radius: 2px;
+		padding: 6px 10px;
+		font-size: 14px;
+		max-width: 100%;
+		transition: border-color ease-in-out .15s;
+
+		&:focus {
+			outline: none;
+			border-color: $accent-2;
+		}
+	}
+
+	textarea.fullWidth {
+		width: 100%;
+	}
+
+	button,
+	input[type=submit] {
+		display: inline-block;
+		background: $dark;
+		color: white;
+		border: none;
+		border-radius: 2px;
+		padding: 7px 18px;
+		font-size: 14px;
+		cursor: pointer;
+		transition: background ease-in-out .15s;
+
+		&:hover, &:focus {
+			background: lighten($dark, 10);
+		}
+
+		&[disabled] {
+			opacity: .5;
+			cursor: default;
+		}
+	}
+
+	form {
+		margin-bottom: 20px;
+	}
+
+	// symfony formuláre vykreslené cez echo $form
+	form > table,
+	form table.sf_form {
+		border-collapse: collapse;
+		margin-bottom: 10px;
+
+		th {
+			text-align: left;
+			padding: 6px 15px 6px 0;
+			font-weight: 400;
+		}
+
+		td {
+			padding: 6px 0;
+		}
+	}
+
+	.form_box {
+		margin: 15px 0;
+
+		label {
+			display: block;
+			font-weight: 700;
+			margin-bottom: 4px;
+		}
+	}
+
+	.form_box_content {
+		padding-left: 0;
+
+		> div {
+			margin-bottom: 4px;
+		}
+	}
+
+	.error_list {
+		list-style: none;
+		padding: 0;
+		color: #d0342c;
+		font-size: 13px;
+	}
+
+	.nazov_policka {
+		display: inline-block;
+		width: 15em;
+		text-align: right;
+	}
+
+	span.example {
+		padding: 0.2em 0.4em;
+		font-family: monospace;
+		font-weight: bold;
+		border: 1px dotted $text;
+		display: inline-block;
+	}
+
+	span.bad.example {
+		text-decoration: line-through;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Tabuľky výsledkov
+// ---------------------------------------------------------------------------
+
+.content__body {
+	table.vysledky_podrobneho_hladania,
+	table.aktualne {
+		width: 100%;
+		border-collapse: collapse;
+		background: white;
+		border-radius: 2px;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+		margin-bottom: 15px;
+		font-size: 13px;
+
+		th {
+			text-align: left;
+			padding: 8px 10px;
+			font-weight: 700;
+			color: $heading;
+			border-bottom: 2px solid $border;
+			background: #fdfdfd;
+		}
+
+		td {
+			padding: 6px 10px;
+			border-bottom: 1px solid lighten($border, 4);
+			vertical-align: top;
+		}
+
+		tbody tr:hover td {
+			background: $timetable;
+		}
+
+		a.subjectName {
+			color: $text;
+		}
+	}
+
+	table.aktualne {
+		width: calc(50% - 10px);
+
+		&.stlpec0 {
+			float: left;
+			margin-right: 20px;
+		}
+
+		@include mobile {
+			width: 100%;
+
+			&.stlpec0 {
+				float: none;
+				margin-right: 0;
+			}
+		}
+	}
+
+	.aktualne_wrap {
+		&::after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+	}
+
+	// zoznam hodín pod rozvrhom
+	#rozvrhList {
+		margin: 0;
+	}
+}
+
+// prepínače "+0m +15m +30m" pri aktuálnej výučbe / voľných miestnostiach
+ul.quickswitch {
+	display: inline-flex;
+	padding: 0;
+	margin: 0 0 0 10px;
+	list-style: none;
+	vertical-align: middle;
+
+	li {
+		display: block;
+		margin: 0 3px;
+		padding: 0;
+	}
+
+	li a {
+		margin: 0;
+		padding: 2px 10px;
+		display: inline-block;
+		text-decoration: none;
+		border-radius: 12px;
+		background: white;
+		color: $text;
+		font-size: 13px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+
+		&:hover {
+			color: $heading;
+		}
+	}
+
+	li.active a {
+		background: $dark;
+		color: white;
+	}
+}
+
+.content__header_name {
+	.quickswitch {
+		@include mobile {
+			display: flex;
+			margin: 10px 0 0;
+		}
+	}
+
+	.header_subtitle {
+		font-weight: 300;
+		margin-left: 10px;
+
+		@include mobile {
+			display: block;
+			margin-left: 0;
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Hlášky
+// ---------------------------------------------------------------------------
+
+.flash_notice,
+.flash_error {
+	padding: 10px 15px;
+	margin: 0 0 20px;
+	border-radius: 2px;
+	border-left: 4px solid;
+	background: white;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+}
+
+.flash_notice {
+	border-left-color: $now;
+}
+
+.flash_error {
+	border-left-color: #f8264f;
+	font-weight: 700;
+}
+
+.content__body--timetable {
+	.flash_notice,
+	.flash_error {
+		margin: 15px 50px 0 75px;
+
+		@include mobile {
+			margin: 15px 20px 0;
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Pätička
+// ---------------------------------------------------------------------------
+
+.footer {
+	font-size: 12px;
+	font-weight: 300;
+	color: lighten($text, 20);
+	padding: 25px 0 0;
+	margin-top: 25px;
+	border-top: 1px solid $border;
+	clear: both;
+
+	a {
+		color: $text;
+	}
+
+	.last_update {
+		font-weight: 700;
+	}
+
+	.disclaimer2 {
+		display: block;
+		margin-top: 5px;
+	}
+}
+
+.content__body--timetable .footer {
+	margin: 25px 50px 0 75px;
+	padding-bottom: 40px;
+
+	@include mobile {
+		margin: 25px 20px 0;
+	}
+}

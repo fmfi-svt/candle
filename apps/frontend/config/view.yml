@@ -12,9 +12,10 @@ default:
     #language:     en
     #robots:       index, follow
 
-  stylesheets:    [main.css, print.css { media: print }, tty.css { media: tty }, dark.css { title: 'Tmavé farby' }, light.css { rel: 'alternate stylesheet' title: 'Svetlé farby' }, popup.css]
+  # style.css sa kompiluje zo zdrojov v web/scss (pozri README.md)
+  stylesheets:    [font-awesome.min.css { media: all }, style.css { media: all }, print.css { media: print }, tty.css { media: tty }, popup.css]
 
-  javascripts:    [mootools-1.2.4-core.js, element.js, layout.js, timetable_editor.js, timetable.js, search.js, styles.js, popup.js]
+  javascripts:    [mootools-1.2.4-core.js, element.js, layout.js, timetable_editor.js, timetable.js, search.js, popup.js]
 
   has_layout:     true
   layout:         layout
