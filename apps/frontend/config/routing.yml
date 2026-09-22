@@ -21,6 +21,11 @@ terms_of_use:
     requirements: {sf_method: get}
 
 # zobrazenie vsetkych hodin
+lesson_export_all:
+    url: /data.xml
+    param: { module: lesson, action: exportAll, sf_format: xml }
+    requirements: { sf_method: get }
+
 lesson_list_all:
     url: /hodina
     param: { module: lesson, action: index }

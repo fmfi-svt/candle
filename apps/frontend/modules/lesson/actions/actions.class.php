@@ -31,6 +31,12 @@ class lessonActions extends sfActions
         $this->subjects = Doctrine::getTable('Subject')->getActiveSubjects();
     }
   
+    public function executeExportAll(sfWebRequest $request) {
+        $this->lessons = Doctrine::getTable('Lesson')->fetchAllFullLessons();
+        $this->setLayout(false);
+        $this->getResponse()->setContentType('application/xml');
+    }
+
     public function executeQuery(sfWebRequest $request) {
         $searchText = $request->getParameter('q');
         if (!$searchText) {

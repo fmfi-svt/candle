@@ -62,6 +62,18 @@ class LessonTable extends Doctrine_Table
         return $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
     }
 
+    function fetchAllFullLessons() {
+        return Doctrine_Query::create()
+                ->select('l.id, l.day, l.start, l.end, l.note, s.name, s.short_code, r.name, t.name, t.code, tt.given_name, tt.family_name, tt.login')
+                ->from('Lesson l')
+                ->innerJoin('l.Subject s')
+                ->innerJoin('l.Room r')
+                ->innerJoin('l.LessonType t')
+                ->leftJoin('l.Teacher tt')
+                ->orderBy('l.day, l.start')
+                ->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
+    }
+
     function fetchTeacherLessonIds($teacherId) {
         $q = Doctrine_Query::create()
                 ->select('l.id')
