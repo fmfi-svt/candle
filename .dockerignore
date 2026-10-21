@@ -1,0 +1,9 @@
+.git
+.gitignore
+nbproject
+cache
+log
+config/databases.yml
+Dockerfile
+.dockerignore
+compose.yml
