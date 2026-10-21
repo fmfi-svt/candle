@@ -30,8 +30,15 @@ RUN printf '%s\n' \
     '    SetEnvIf X-Candle-User "^(.+)$" REMOTE_USER=$1' \
     '    <Directory /var/www/html/web>' \
     '        Options -Indexes +FollowSymLinks' \
-    '        AllowOverride All' \
+    '        AllowOverride None' \
     '        Require all granted' \
+    '        RewriteEngine On' \
+    '        RewriteRule ^(index|index2|frontend_dev|kiosk)\.php(/|$) - [L]' \
+    '        RewriteRule ^prihlasit/?$ index.php [QSA,L]' \
+    '        RewriteRule ^$ index.html [QSA]' \
+    '        RewriteRule ^([^.]+)$ $1.html [QSA]' \
+    '        RewriteCond %{REQUEST_FILENAME} !-f' \
+    '        RewriteRule ^(.*)$ index2.php [QSA,L]' \
     '    </Directory>' \
     '    ErrorLog /proc/self/fd/2' \
     '    CustomLog /proc/self/fd/1 combined' \
