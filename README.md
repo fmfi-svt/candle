@@ -69,6 +69,24 @@ Candle závisí na niekoľkých projektoch:
 Podobne ako vývojársku inštanciu, len sa použije namiesto `php -S` Apache + suphp + mod_cosign.
 Tiež treba nastaviť `session_name` + ukladanie sessions do DB v súbore `apps/frontend/config/factories.yml`
 
+## Ako upraviť vzhľad (CSS)?
+
+Štýly sú napísané v SCSS v adresári `web/scss/` a kompilujú sa do súboru
+`web/css/style.css`, ktorý je v repozitári uložený tiež (aplikácia nepotrebuje
+žiaden build krok). Po úprave SCSS súborov treba CSS znovu vygenerovať, napr.
+pomocou [Sass](https://sass-lang.com/install):
+
+```bash
+sass --style expanded web/scss/style.scss web/css/style.css
+```
+
+Farby, rozmery a farby typov hodín sú v `web/scss/_variables.scss`. Výška
+jedného riadku rozvrhu (`$slot-height`) musí sedieť s hodnotou `$slotHeight`
+v šablóne `apps/frontend/modules/timetable/templates/_table.php`.
+
+Ikony sú z [Font Awesome 4](https://fontawesome.com/v4/icons/)
+(`web/css/font-awesome.min.css`, `web/fonts/`).
+
 ## Ako aktualizovať rozvrh?
 
 Postup je rovnaký ako pri prvkom importe. Aktualizovaný rozvrh importujte pomocou príkazu:

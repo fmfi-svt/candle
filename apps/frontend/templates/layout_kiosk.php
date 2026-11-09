@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html class="kiosk">
+<html lang="sk" class="kiosk">
 <head>
     <?php include_http_metas() ?>
     <?php include_metas() ?>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><?php if (include_slot('title')) echo ' - ' ?>Rozvrh pre FMFI UK</title>
     <link rel="shortcut icon" href="<?php echo image_path('../favicon.ico') ?>" type="image/x-icon" />
     <script type="text/javascript">
@@ -13,11 +14,7 @@
     </script>
     <?php include_stylesheets() ?>
 
-    <!--[if lte IE 7]>
-    <?php echo stylesheet_tag('main_ie7'); ?>
-    <![endif]-->
-    
-    <?php echo stylesheet_tag('kiosk'); ?>
+    <?php include_slot('additionalHeadTags') ?>
 
     <?php include_javascripts() ?>
     <?php if (!has_slot('no_analytics')): ?>
@@ -25,55 +22,52 @@
     <?php endif; ?>
 </head>
 <body class="kiosk">
-<div id="vrch">
-<div id="vrch_logo"><?php echo link_to('Candle', '@homepage') ?></div>
-<div id="kiosk_vrch">
-    <?php if (has_slot('header_kiosk')):
-            include_slot('header_kiosk');
-          else:
-            include_slot('header');
-          endif;
-    ?>
-    <div style="clear: both"></div>
-</div>
-</div>
-<div id="hlavny">
-    <div id="obsah_wrap">
-        <div id="obsah_vrch">
-            <div id="obsah_vrch_lavy">
-                <div id="obsah_in">
-                    <?php if ($sf_user->hasFlash('notice')): ?>
-                      <div class="flash_notice">
-                        <?php echo $sf_user->getFlash('notice') ?>
-                      </div>
-                    <?php endif; ?>
-             
-                    <?php if ($sf_user->hasFlash('error')): ?>
-                      <div class="flash_error">
-                        <?php echo $sf_user->getFlash('error') ?>
-                      </div>
-                    <?php endif; ?>
+<div class="main_wraper">
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar__visible">
+            <a class="sidebar__logo_link" href="<?php echo url_for('@homepage') ?>" title="Candle"><img class="sidebar__logo" src="<?php echo image_path('logo.svg') ?>" alt="Candle" /></a>
+            <ul class="sidebar__elements" id="kiosk_menu">
+                <li class="sidebar__element"><?php echo link_to('<i class="fa fa-clock-o" aria-hidden="true"></i><p>Aktuálna výučba</p>', array('sf_route' => 'lessonSearch_current')) ?></li>
+                <li class="sidebar__element"><?php echo link_to('<i class="fa fa-key" aria-hidden="true"></i><p>Voľné miestnosti</p>', array('sf_route' => 'freeRoom_current')) ?></li>
+                <li class="sidebar__element"><?php echo link_to('<i class="fa fa-users" aria-hidden="true"></i><p>Krúžky</p>', array('sf_route' => 'studentGroup_list')) ?></li>
+                <li class="sidebar__element"><?php echo link_to('<i class="fa fa-map-marker" aria-hidden="true"></i><p>Miestnosti</p>', array('sf_route' => 'room_list')) ?></li>
+                <li class="sidebar__element"><?php echo link_to('<i class="fa fa-graduation-cap" aria-hidden="true"></i><p>Učitelia</p>', array('sf_route' => 'timetable_teacher_list')) ?></li>
+            </ul>
+        </div>
+    </div>
 
-                    <?php echo $sf_content ?>
+    <div class="content">
+        <div class="content__header">
+            <div class="content__header_name">
+                <?php if (has_slot('header_kiosk')):
+                        include_slot('header_kiosk');
+                      else:
+                        include_slot('header');
+                      endif;
+                ?>
+            </div>
+        </div>
+        <div class="content__body<?php if (has_slot('timetable_page')) echo ' content__body--timetable' ?>">
+            <?php if ($sf_user->hasFlash('notice')): ?>
+              <div class="flash_notice">
+                <?php echo $sf_user->getFlash('notice') ?>
+              </div>
+            <?php endif; ?>
 
-                    <div class="footer">
+            <?php if ($sf_user->hasFlash('error')): ?>
+              <div class="flash_error">
+                <?php echo $sf_user->getFlash('error') ?>
+              </div>
+            <?php endif; ?>
 
-                        <hr />
+            <?php echo $sf_content ?>
 
-                        <?php include_component('layout', 'lastUpdate', array('mode' => 'kiosk')); ?>
-                        Candle &copy; 2010,2011,2012 Martin Sucha. <?php echo link_to('Podmienky používania', '@terms_of_use'); ?>
-                    </div>
-                </div>
+            <div class="footer">
+                <?php include_component('layout', 'lastUpdate', array('mode' => 'kiosk')); ?>
+                Candle &copy; 2010,2011,2012 Martin Sucha. <?php echo link_to('Podmienky používania', '@terms_of_use'); ?>
             </div>
         </div>
     </div>
 </div>
-<ul id="sidebar">
-    <li class="button"><?php echo link_to('Aktuálna výučba', array('sf_route' => 'lessonSearch_current')) ?></li>
-    <li class="button"><?php echo link_to('Aktuálne voľné miestnosti', array('sf_route' => 'freeRoom_current')) ?></li>
-    <li class="button"><?php echo link_to('Krúžky', array('sf_route' => 'studentGroup_list')) ?></li>
-    <li class="button"><?php echo link_to('Miestnosti', array('sf_route' => 'room_list')) ?></li>
-    <li class="button"><?php echo link_to('Učitelia', array('sf_route' => 'timetable_teacher_list')) ?></li>
-</ul>
 </body>
 </html>

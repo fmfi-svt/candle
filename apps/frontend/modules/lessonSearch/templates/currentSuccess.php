@@ -1,4 +1,5 @@
 <?php
+use_helper('Candle');
 
 // Tato stranka sa automaticky refreshuje, takze vypiname analytics
 slot('no_analytics', '');
@@ -12,7 +13,7 @@ end_slot();
 slot('header');
 ?>
 <h1>Aktuálna výučba</h1>
-prebiehajúca o <?php echo date('H:i', $queryTime); ?>
+<span class="header_subtitle">prebiehajúca o <?php echo date('H:i', $queryTime); ?></span>
 <ul class="quickswitch">
     <?php $options = array(0,15,30,60);
         foreach ($options as $option) {
@@ -29,6 +30,7 @@ if (count($lessonIntervals) == 0):
 else:
 
 $cols = array(0, intval((count($lessonIntervals) + 1) / 2), count($lessonIntervals));
+echo '<div class="aktualne_wrap">';
 for ($j = 0; $j < count($cols) - 1; $j++):
 ?>
 <table class="aktualne <?php echo 'stlpec' . $j ?>">
@@ -49,7 +51,7 @@ for ($i = $cols[$j]; $i < $cols[$j + 1]; $i++) {
     echo link_to($lesson['Room']['name'], array('sf_route'=>'room_show', 'sf_subject'=>$lesson['Room']));
     echo '</td>';
     echo '<td>';
-    ?><abbr class="lesson-type <?php echo Candle::getLessonTypeHTMLClass($lesson['LessonType']); ?>" title="<?php echo $lesson['LessonType']['name']; ?>"><span class="lesson-type-in"><?php echo $lesson['LessonType']['code'] ?></span><span class="lesson-type-image"></span></abbr> <?php
+    echo candle_lesson_type_badge($lesson['LessonType']) . ' ';
     // TODO(anty): refactor this as it is duplicated
     $shortCode = $lesson['Subject']['short_code'];
     $subjectInfoLink = Candle::makeSubjectInfoLink($shortCode);
@@ -86,4 +88,5 @@ for ($i = $cols[$j]; $i < $cols[$j + 1]; $i++) {
     </tbody>
 </table>
 <?php endfor;
+echo '</div>';
 endif;

@@ -1,0 +1,59 @@
+// Farebná paleta nového dizajnu Candle
+
+$dark: #353d64;
+$light: #f9f9f9;
+$timetable: #f5f8fd;
+$text: #555f61;
+$heading: #36434a;
+$border: #dbdee3;
+$accent: #ff7043;      // oranžová z loga
+$accent-2: #00d0bd;    // tyrkysová z loga
+$link: #2f6fd6;
+$now: #85e34c;
+
+$sidebar-width: 100px;
+$sidebar-panel-width: 500px;
+$topbar-height: 40px;
+$mobile: 996px;
+
+// výška jedného 50-minútového bloku v rozvrhu (musí sedieť s data-slot-height v _table.php)
+$slot-height: 51px;
+$time-column-width: 75px;
+$time-column-width-mobile: 50px;
+$day-min-width: 160px;
+
+// farby typov hodín (kód typu hodiny -> farba)
+$lesson-colors: (
+	P: #34c3f9,   // prednáška
+	C: #f8264f,   // cvičenie
+	K: #fbb841,   // kurz
+	S: #d702ec,   // seminár
+	L: #3fbf4a,   // laboratórne cvičenie
+	V: #00b8a9,   // výberové / iné
+	N: #808080    // nezaradené
+);
+
+@mixin mobile {
+	@media screen and (max-width: $mobile) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media screen and (min-width: $mobile + 1px) {
+		@content;
+	}
+}
+
+// text, ktorý má byť dostupný len pre čítačky obrazovky
+@mixin visually-hidden {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}

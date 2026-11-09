@@ -1,9 +1,13 @@
 <?php
 
 slot('title', $timetable->getName());
+slot('timetable_page', '1');
 
 slot('top');
 include_component('timetable','top');
+end_slot();
+
+slot('actions');
 include_partial('timetablePublished/menu', array('timetable_slug'=>$timetable_slug));
 end_slot();
 

@@ -1,4 +1,4 @@
-<?php if ($mode != 'kiosk'): ?>Posledná aktualizácia rozvrhovej databázy:<?php endif; ?>
+<?php if ($mode != 'kiosk'): ?>Posledná aktualizácia rozvrhovej databázy: <?php endif; ?>
 <?php if ($lastUpdate !== false):
     echo '<span class="last_update">';
     echo $lastUpdate['datetime'];

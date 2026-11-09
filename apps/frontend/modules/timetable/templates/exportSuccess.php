@@ -4,6 +4,9 @@ slot('title', $timetable->getName());
 
 slot('top');
 include_component('timetable','top', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
+end_slot();
+
+slot('actions');
 include_component('timetable','editMenu', array('timetable'=>$timetable, 'timetable_id'=>$timetable_id));
 end_slot();
 

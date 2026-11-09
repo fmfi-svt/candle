@@ -1,0 +1,174 @@
+// ---------------------------------------------------------------------------
+// Výsledky vyhľadávania vo vysúvacom paneli
+// ---------------------------------------------------------------------------
+
+.sidebar__block_results {
+	padding-left: 30px;
+	margin-top: 10px;
+	font-size: 13px;
+	font-weight: 300;
+
+	@include mobile {
+		padding-left: 0;
+	}
+
+	p {
+		color: rgba(255, 255, 255, .7);
+		margin: 5px 0;
+	}
+
+	.other_links {
+		margin-top: 8px;
+		font-size: 12px;
+
+		a {
+			color: rgba(255, 255, 255, .7);
+
+			&:hover {
+				color: white;
+			}
+		}
+	}
+}
+
+ul.vysledky_hladania {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	max-height: 400px;
+	overflow: auto;
+	position: relative;
+
+	li {
+		display: block;
+		margin: 0;
+		padding: 4px 8px;
+		background: rgba(255, 255, 255, .06);
+		border-radius: 2px;
+
+		& + li {
+			margin-top: 4px;
+		}
+	}
+
+	> li > a {
+		display: block;
+	}
+}
+
+// predmet s rozpisom hodín
+.predmet {
+	padding: 0 !important;
+
+	.predmet_header {
+		display: block;
+		padding: 6px 8px;
+		position: relative;
+		background: rgba(255, 255, 255, .08);
+		border-radius: 2px 2px 0 0;
+	}
+
+	.predmet_nazov {
+		display: block;
+		font-weight: 700;
+		padding-right: 25px;
+	}
+
+	.predmet_check {
+		position: absolute;
+		z-index: 10;
+		top: 8px;
+		right: 8px;
+		cursor: pointer;
+	}
+
+	.predmet_info {
+		display: block;
+		font-size: 12px;
+		color: rgba(255, 255, 255, .7);
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+
+			td {
+				padding: 0;
+			}
+
+			td.predmet_kod {
+				width: 35%;
+			}
+
+			td.rozsah {
+				width: 35%;
+			}
+
+			td.odkazy {
+				width: 30%;
+				text-align: right;
+			}
+		}
+	}
+
+	table.vysledky {
+		border-collapse: collapse;
+		width: 100%;
+
+		th {
+			@include visually-hidden;
+		}
+
+		tr + tr {
+			border-top: 1px solid rgba(255, 255, 255, .1);
+		}
+
+		td {
+			padding: 4px 4px;
+			vertical-align: middle;
+		}
+
+		td.lesson-type-cell {
+			width: 28px;
+		}
+
+		td.kedy {
+			white-space: nowrap;
+		}
+
+		td.kde {
+			font-style: italic;
+		}
+
+		td.kto {
+			width: 45%;
+		}
+
+		td.last {
+			text-align: right;
+			padding-right: 6px;
+		}
+	}
+}
+
+// farebné písmeno typu hodiny (používa sa v paneli aj vo výpisoch)
+.lesson-type {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	border-radius: 3px;
+	text-align: center;
+	color: white;
+	font-weight: bold;
+	font-size: 12px;
+	font-style: normal;
+	vertical-align: middle;
+	background: map-get($lesson-colors, N);
+	cursor: help;
+
+	@each $code, $color in $lesson-colors {
+		&.lesson-type-#{$code} {
+			background: $color;
+		}
+	}
+}

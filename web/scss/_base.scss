@@ -1,0 +1,25 @@
+html {
+	background: $light;
+}
+
+body {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	line-height: 1.4;
+	color: $text;
+	background: $light;
+	min-height: 100vh;
+}
+
+.pristupnost {
+	@include visually-hidden;
+}
+
+.hidden {
+	display: none !important;
+}
+
+// skryté prvky, ak beží javascript (napr. tlačidlá formulárov nahradené AJAXom)
+.jsactive .jshide {
+	display: none;
+}

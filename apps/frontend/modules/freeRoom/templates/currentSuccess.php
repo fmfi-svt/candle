@@ -12,7 +12,7 @@ end_slot();
 slot('header');
 ?>
 <h1>Aktuálne voľné miestnosti</h1>
-v čase <?php echo date('H:i', $queryTime); ?>
+<span class="header_subtitle">v čase <?php echo date('H:i', $queryTime); ?></span>
 <ul class="quickswitch">
     <?php $options = array(0,15,30,60);
         foreach ($options as $option) {
@@ -32,6 +32,7 @@ else:
 <?php
 
 $cols = array(0, intval((count($freeRoomIntervals) + 1) / 2), count($freeRoomIntervals));
+echo '<div class="aktualne_wrap">';
 for ($j = 0; $j < count($cols) - 1; $j++):
 ?>
 <table class="aktualne <?php echo 'stlpec' . $j ?>">
@@ -59,4 +60,5 @@ for ($i = $cols[$j]; $i < $cols[$j + 1]; $i++) {
     </tbody>
 </table>
 <?php endfor;
+echo '</div>';
 endif;

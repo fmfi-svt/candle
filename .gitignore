@@ -9,3 +9,4 @@
 /plugins/.lock
 .DS_Store
 /nbproject/private/
+/.sass-cache/

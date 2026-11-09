@@ -1,0 +1,20 @@
+// Štýly Candle
+//
+// Zdrojové SCSS súbory, z ktorých sa kompiluje web/css/style.css:
+//
+//     sass web/scss/style.scss web/css/style.css
+//
+// (pozri README.md)
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,700&subset=latin-ext');
+
+@import 'variables';
+@import 'normalize';
+@import 'reset';
+@import 'base';
+@import 'layout';
+@import 'panel';
+@import 'timetable';
+@import 'editor';
+@import 'pages';
+@import 'kiosk';

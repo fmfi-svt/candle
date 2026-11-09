@@ -1,126 +1,86 @@
 <?php
+/*
+ * Mriežka rozvrhu: hlavička s dňami, stĺpec s časmi a päť stĺpcov dní.
+ * Hodiny sú karty umiestnené v stĺpci dňa absolútne podľa času začiatku
+ * a dĺžky. Hodiny, ktoré sa časovo prekrývajú, sú poukladané na seba.
+ *
+ * Premenné: $timetable (EditableTimetable), $layout (TimetableLayout), $editable (bool)
+ */
+use_helper('Candle');
 
-$days = $layout->tableLayout();
+$slotMinutes = 50; // jeden riadok mriežky = 50 minút (45 min hodina + 5 min prestávka)
+$slotHeight = 51;  // výška riadku v px, musí sedieť s $slot-height v web/scss/_variables.scss
+$pxPerMinute = $slotHeight / $slotMinutes;
+$stackOffset = 35; // o koľko px je každá ďalšia prekrývajúca sa karta užšia
 
-// pocitadla pre stlpce
-$counters = array();
-for ($i = 0; $i < 5; $i++) {
-    $col_counters = array();
+$mintime = 490;  // 8:10
+$maxtime = 1190; // 19:50
+$mintime = min($mintime, Candle::floorTo($layout->getLessonMinTime(), $slotMinutes, 40));
+$maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), $slotMinutes, 40));
+$slotCount = intval(($maxtime - $mintime) / $slotMinutes);
+$tableHeight = $slotCount * $slotHeight;
 
-    for ($j = 0; $j < count($days[$i]); $j++ ) {
-        $col_counters[] = 0;
-    }
-
-    $counters[] = $col_counters;
-}
-
-if ($layout->isFMPHLike()) {
-    $rowmins = 50; // pocet minut na jeden riadok tabulky
-    $rowspanmins = 45; // pocet minut dlzky, za ktore sa ma vygenerovat jeden rowspan
-    $time_header_spans = 1; // kolko riadkov zabera hlavicka s casom
-}
-else {
-    $rowmins = $rowspanmins = 5;
-    $time_header_spans = 10; // na kazdych 50 min
-}
-$mintime = 490;
-$maxtime = 1190;
-$mintime = min($mintime, Candle::floorTo($layout->getLessonMinTime(), 50, 40));
-$maxtime = max($maxtime, Candle::ceilTo($layout->getLessonMaxTime(), 50, 40));
+$byDays = $layout->groupByDays();
+$lessonCount = count($layout->getLessons());
 ?>
-<table id="rozvrh" <?php if (!$layout->isFMPHLike()) echo 'class="precise"' ?>>
-    <tr>
-        <th class="zaciatok"><span class="pristupnost">Začiatok</span></th>
-        <?php
-            for ($day = 0; $day < 5; $day++) {
-                $cols = count($days[$day]);
-                if ($cols == 1) {
-                    echo '<th>';
+<div class="content__timetable">
+    <div class="timetable__days" id="timetable__days">
+        <?php for ($day = 0; $day < 5; $day++): ?>
+        <div class="timetable__day" data-day="<?php echo $day ?>"><?php echo Candle::formatLongDay($day) ?></div>
+        <?php endfor; ?>
+    </div>
+    <div class="timetable" id="rozvrh"
+         data-start="<?php echo $mintime ?>" data-slot-minutes="<?php echo $slotMinutes ?>" data-slot-height="<?php echo $slotHeight ?>"
+         style="height: <?php echo $tableHeight ?>px;">
+        <div class="timetable__current_time hidden" id="timetable__current_time"></div>
+        <?php if ($lessonCount == 0): ?>
+        <div class="timetable__empty">
+            <?php if ($editable): ?>
+                Rozvrh je prázdny. Hodiny doň pridáte vyhľadaním predmetu v paneli vľavo a zaškrtnutím hodín, ktoré chcete v rozvrhu mať.
+            <?php else: ?>
+                V tomto rozvrhu nie sú žiadne hodiny.
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+        <div class="timetable__collum timetable__collum--times">
+            <?php for ($time = $mintime; $time < $maxtime; $time += $slotMinutes): ?>
+            <div class="timetable__cell"><?php echo Candle::formatTime($time) ?></div>
+            <?php endfor; ?>
+        </div>
+        <?php for ($day = 0; $day < 5; $day++): ?>
+        <div class="timetable__collum" data-day="<?php echo $day ?>">
+            <?php foreach (candle_timetable_clusters($byDays[$day], $layout) as $cluster):
+                $top = round(($cluster['start'] - $mintime) * $pxPerMinute);
+                $height = round(($cluster['end'] - $cluster['start']) * $pxPerMinute);
+                $stacked = count($cluster['lessons']) > 1;
+                $containerClasses = array('lecture_container');
+                if (!$stacked && $height <= $slotHeight) {
+                    $containerClasses[] = 'lecture_container--size-1';
                 }
-                else {
-                    echo '<th colspan="'.$cols.'">';
-                }
-                echo Candle::formatLongDay($day);
-                echo '</th>';
-            }
-        ?>
-    </tr>
-    <?php
-        for ($time = $mintime, $row_number = 0; $time < $maxtime; $time += $rowmins, $row_number++) {
-            $lineStartingTimeHeader = ($row_number % $time_header_spans) == 0;
-            if ($lineStartingTimeHeader) {
-                echo '<tr class="startTimeHeader">';
-                echo '<td '.Candle::formatRowspan($time_header_spans).' class="cas">'.Candle::formatTime($time).'</td>';
-            }
-            else {
-                echo '<tr>';
-            }
-            for ($day = 0; $day < 5; $day++) {
-                $column_count = count($days[$day]);
-                foreach ($days[$day] as $ix=>$col) {
-                    $cell_classes = array();
-
-                    if ($ix == 0) {
-                        $cell_classes[] = 'startOfDayColumn';
+            ?>
+            <div class="<?php echo implode(' ', $containerClasses) ?>" style="top: <?php echo $top ?>px; height: <?php echo $height ?>px;">
+                <?php foreach ($cluster['lessons'] as $index => $item):
+                    $lesson = $item['lesson'];
+                    $style = '';
+                    if ($stacked) {
+                        $lessonTop = round(($item['start'] - $cluster['start']) * $pxPerMinute) + 2;
+                        $lessonHeight = round(($item['end'] - $item['start']) * $pxPerMinute) - 5;
+                        $style = 'top: '.$lessonTop.'px; height: '.$lessonHeight.'px; bottom: auto; right: '.(4 + $stackOffset * $index).'px;';
                     }
-                    if ($ix == $column_count-1) {
-                        $cell_classes[] = 'endOfDayColumn';
-                    }
-                    
-                    $pos = $counters[$day][$ix];
-                    if ($pos >= count($days[$day][$ix])) {
-                        // tento stlpec je hotovy
-                        $cell_classes[] = 'emptyCell';
-                        echo Candle::formatTD($cell_classes).'</td>';
-                        continue;
-                    }
-                    $lesson = $days[$day][$ix][$pos];
-                    if ($lesson['end']+$lesson['breakTime']<=$time) {
-                        // je treba sa posunut dalej
-                        $counters[$day][$ix]++;
-                        $pos = $counters[$day][$ix];
-                        if ($pos >= count($days[$day][$ix])) {
-                            // tento stlpec je hotovy
-                            $cell_classes[] = 'emptyCell';
-                            echo Candle::formatTD($cell_classes).'</td>';
-                            continue;
-                        }
-                        $lesson = $days[$day][$ix][$pos];
-                    }
-                    // treba vypisat bunku?
-                    if ($lesson['start']==$time) {
-                        $rowspan = intval(($lesson['end']-$lesson['start']+$lesson['breakTime'])/$rowspanmins);
-                        $highlighted = $timetable->isLessonHighlighted($lesson['id']);
-                        $cell_classes[] = 'hodina';
-                        if ($highlighted) {
-                            $cell_classes[] = 'highlighted';
-                        }
-                        $teachers = Candle::formatShortNameList($lesson['Teacher']);
-                        $lessonTimeInfo = Candle::formatShortDay($lesson['day']) . ' ' .
-                                                Candle::formatTime($lesson['start']). '-' .
-                                                Candle::formatTime($lesson['end']);
-                        $lessonTitle = $lesson['Room']['name'] . ', ' .
-                                       $lessonTimeInfo . ', ' . 
-                                       $lesson['Subject']['short_code'] .
-                                       ': '.$teachers;
-
-                        $cell_classes[] = Candle::getLessonTypeHTMLClass($lesson['LessonType']);
-                        echo Candle::formatTD($cell_classes, $rowspan, $lessonTitle);
-                        include_partial('timetable/cell', array('lesson'=>$lesson, 'highlighted'=>$highlighted, 'editable'=>$editable));
-                        echo '</td>';
-                    }
-                    else if ($lesson['start']<$time && $lesson['end']+$lesson['breakTime']>$time) {
-                        // treba nevypisat nic
-                    }
-                    else {
-                        // treba vypisat prazdnu bunku
-                        $cell_classes[] = 'emptyCell';
-                        echo Candle::formatTD($cell_classes).'</td>';
-                    }
-                }
-            }
-            echo '</tr>';
-        }
-    ?>
-</table>
+                    include_partial('timetable/cell', array(
+                        'lesson' => $lesson,
+                        'highlighted' => $timetable->isLessonHighlighted($lesson['id']),
+                        'editable' => $editable,
+                        'stacked' => $stacked,
+                        'style' => $style,
+                    ));
+                endforeach; ?>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endfor; ?>
+    </div>
+</div>
+<div class="timetable_below">
 <?php include_partial('timetable/list', array('timetable'=>$timetable, 'layout'=>$layout)); ?>
+</div>

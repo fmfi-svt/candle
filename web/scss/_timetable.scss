@@ -1,0 +1,328 @@
+// ---------------------------------------------------------------------------
+// Rozvrh: hlavička s dňami, stĺpec s časmi a stĺpce dní s kartami hodín
+// ---------------------------------------------------------------------------
+
+.timetable {
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	width: 100%;
+	overflow: clip;
+	position: relative;
+	// výšku nastavuje _table.php podľa počtu riadkov (inline style)
+
+	@include mobile {
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+
+	&__current_time {
+		position: absolute;
+		width: 100%;
+		height: 2px;
+		background: $now;
+		top: 0;
+		left: 0;
+		z-index: 3;
+		box-shadow: 0 0 5px transparentize($now, 0.7);
+		transition: top ease-in-out .25s;
+		opacity: 0.8;
+		pointer-events: none;
+
+		@include mobile {
+			width: calc(#{$day-min-width} * 5 + #{$time-column-width-mobile});
+		}
+	}
+
+	&__days {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		background: #ffffff;
+		position: sticky;
+		top: 0;
+		z-index: 4;
+
+		@include mobile {
+			top: $topbar-height;
+		}
+	}
+
+	&__day {
+		width: calc((100% - #{$time-column-width}) / 5);
+		height: 50px;
+		text-align: center;
+		line-height: 46px;
+		min-width: $day-min-width;
+		background: #ffffff;
+		border-bottom: 1px solid $border;
+		flex-shrink: 0;
+
+		&:first-of-type {
+			margin-left: $time-column-width;
+		}
+
+		&--today {
+			font-weight: 700;
+			color: $heading;
+			box-shadow: inset 0 -3px 0 $now;
+		}
+
+		@include mobile {
+			height: 40px;
+			line-height: 36px;
+
+			&:first-of-type {
+				margin-left: $time-column-width-mobile;
+			}
+		}
+	}
+
+	&__collum {
+		width: calc((100% - #{$time-column-width}) / 5);
+		background: $timetable;
+		height: 100%;
+		min-width: $day-min-width;
+		position: relative;
+		flex-shrink: 0;
+
+		&--times {
+			width: $time-column-width;
+			font-weight: bold;
+			text-align: center;
+			font-size: 14px;
+			min-width: auto;
+
+			@include mobile {
+				width: $time-column-width-mobile;
+				font-size: 12px;
+			}
+
+			.timetable__cell {
+				padding: 10px;
+			}
+		}
+
+		@include mobile {
+			width: $day-min-width;
+		}
+	}
+
+	&__cell {
+		width: 100%;
+		height: $slot-height;
+		position: relative;
+
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			width: 100vw;
+			height: 0px;
+			border-bottom: 1px solid lighten($border, 4);
+			bottom: 0;
+			left: 0;
+
+			@include mobile {
+				width: calc(#{$day-min-width} * 5 + #{$time-column-width-mobile});
+			}
+		}
+	}
+
+	&__empty {
+		position: absolute;
+		top: 30px;
+		left: $time-column-width;
+		right: 0;
+		text-align: center;
+		color: lighten($text, 25);
+		font-weight: 300;
+		z-index: 2;
+		padding: 0 20px;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Karta hodiny
+// ---------------------------------------------------------------------------
+
+.lecture_container {
+	position: absolute;
+	left: 0;
+	right: 0;
+	// top a height nastavuje _table.php podľa času hodiny (inline style)
+	z-index: 2;
+
+	&:hover {
+		z-index: 3;
+	}
+
+	// hodiny dlhé 1 blok: názov sa skráti a po prejdení myšou sa karta rozbalí
+	&--size-1 {
+		.lecture_container__lecture_room {
+			margin-bottom: 0;
+			line-height: 1em;
+		}
+		.lecture_container__lecture_name {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.lecture_container__lecture_note {
+			display: none;
+		}
+
+		&:hover {
+			.lecture_container__lecture {
+				bottom: auto;
+				height: auto;
+				min-height: 100%;
+				padding-bottom: 12px;
+			}
+			.lecture_container__lecture_room {
+				margin-bottom: 10px;
+				line-height: 19px;
+			}
+			.lecture_container__lecture_name {
+				white-space: normal;
+				overflow: visible;
+				text-overflow: clip;
+			}
+			.lecture_container__lecture_note {
+				display: block;
+			}
+		}
+	}
+
+	&__lecture {
+		position: absolute;
+		top: 2px;
+		bottom: 3px;
+		left: 4px;
+		right: 4px;
+		background: lighten($light, 1);
+		border-radius: 2px;
+		box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
+		font-size: 14px;
+		padding: 5px 30px 5px 10px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+		transition: background ease-in-out 0.25s, right ease-in-out 0.25s;
+		overflow: hidden;
+		text-align: left;
+
+		@include mobile {
+			font-size: 12px;
+		}
+
+		&:hover {
+			z-index: 3;
+			background: white;
+		}
+
+		// farebný pásik vpravo
+		&::before {
+			content: "";
+			display: block;
+			width: 5px;
+			position: absolute;
+			top: 5px;
+			bottom: 8px;
+			right: 8px;
+			border-radius: 3px;
+			background: map-get($lesson-colors, N);
+		}
+
+		@each $code, $color in $lesson-colors {
+			&.lesson-type-#{$code} {
+				&::before,
+				.lecture_container__lecture_type {
+					background: $color;
+				}
+			}
+		}
+
+		// zvýraznená hodina (editor rozvrhu)
+		&.highlighted {
+			background: mix($accent-2, white, 18%);
+
+			&:hover {
+				background: mix($accent-2, white, 10%);
+			}
+		}
+
+		// hodina označená zaškrtávacím políčkom (editor rozvrhu)
+		&.selected {
+			box-shadow: 0 0 0 2px $accent, 0 1px 4px 0 rgba(0,0,0,0.14);
+		}
+
+		// viac hodín v rovnakom čase: karty sa ukladajú na seba, každá odsadená
+		// o kúsok viac zľava, aby bolo vidieť farebný pásik všetkých hodín
+		&--stacked {
+			&:hover {
+				right: 4px !important;
+				z-index: 3;
+				background: white;
+			}
+		}
+
+		a {
+			color: inherit;
+		}
+	}
+
+	&__lecture_room {
+		transition: all ease-in-out 0.25s;
+		margin-bottom: 10px;
+		font-weight: bold;
+		line-height: 19px;
+	}
+
+	&__lecture_name {
+		font-size: 13px;
+		width: 100%;
+		line-height: 1.3em;
+		font-weight: 300;
+
+		@include mobile {
+			font-size: 12px;
+		}
+	}
+
+	&__lecture_note {
+		font-size: 12px;
+		font-style: italic;
+		font-weight: 300;
+		margin-top: 4px;
+		color: lighten($text, 10);
+	}
+
+	// písmeno typu hodiny v pravom hornom rohu
+	&__lecture_type {
+		display: block;
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		top: 5px;
+		right: 8px;
+		border-radius: 3px;
+		text-align: center;
+		color: white;
+		font-weight: bold;
+		font-size: 14px;
+		line-height: 19px;
+		background: map-get($lesson-colors, N);
+		cursor: help;
+	}
+
+	// zaškrtávacie políčko na označenie hodiny (editor rozvrhu)
+	&__lecture_select {
+		position: absolute;
+		right: 6px;
+		bottom: 6px;
+		margin: 0;
+		cursor: pointer;
+	}
+}
