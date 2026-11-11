@@ -12,9 +12,7 @@ class CandleArchiveSessionStorage extends sfSessionStorage
         $directory = $sessionRoot
             ? rtrim($sessionRoot, '/').'/archives/candle-archive-'.$scope
             : sys_get_temp_dir().'/candle-archive-'.$scope;
-        if (!is_dir($directory) && !mkdir($directory, 0700, true) && !is_dir($directory)) {
-            throw new sfStorageException('Cannot create archive session directory.');
-        }
+        CandleSessionStorage::ensureDirectory($directory);
 
         // Never inherit database storage or accept a session ID from request parameters.
         ini_set('session.save_handler', 'files');
