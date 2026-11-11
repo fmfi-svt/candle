@@ -21,6 +21,18 @@ RUN apt-get update \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
+# Keep native PHP sessions and isolated archive sessions on the same persistent volume.
+ENV CANDLE_SESSION_DIR=/var/lib/candle/sessions
+RUN mkdir -p /var/lib/candle/sessions/default /var/lib/candle/sessions/archives \
+    && chown -R www-data:www-data /var/lib/candle/sessions \
+    && chmod 0700 /var/lib/candle/sessions /var/lib/candle/sessions/default /var/lib/candle/sessions/archives \
+    && printf '%s\n' \
+        'session.save_path = "/var/lib/candle/sessions/default"' \
+        'session.gc_probability = 1' \
+        'session.gc_divisor = 100' \
+        > /etc/php/5.6/mods-available/candle-sessions.ini \
+    && phpenmod -v 5.6 candle-sessions
+
 WORKDIR /var/www/html
 
 # Only web/ is public; Symfony's configuration and libraries stay outside the document root.

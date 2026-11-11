@@ -1,3 +1,4 @@
+<?php if (!CandleArchive::isActive()): ?>
 <h2 class="pristupnost">Menu používateľa</h2>
 <span class="username"><?php
 
@@ -20,3 +21,5 @@ if (!$username) {
 ?>
      </li>
    </ul>
+
+<?php endif; ?>

@@ -14,7 +14,7 @@ function createDiv(){
       <div class="anketa__wrap">
         <div class="anketa__container">
           <div class="anketa__text-block">
-            <img src="${candleFrontendAbsoluteUrl}images/smile.svg" class="anketa__image">
+            <img src="${candleSmileImageUrl}" class="anketa__image">
             <div class="anketa__subtitle">
               Daj semestru ešte chvíľu
             </div>

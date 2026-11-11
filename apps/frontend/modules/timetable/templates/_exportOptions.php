@@ -1,9 +1,11 @@
 <?php $rawUrl = $sf_data->getRaw('url'); ?>
 <p>Môžete si vybrať niektorý z nasledujúcich výstupných formátov:</p>
 <ul>
+    <?php if (!CandleArchive::isActive()): ?>
     <li><?php echo link_to('iCalendar (.ics)', Candle::addFormat($rawUrl, 'ics'), array('rel' => 'nofollow')); ?>
         - kalendárový formát podporovaný vačšinou kalendárových klientov ako
         Google Calendar, MS Outlook, Mozilla Sunbird, Mozilla Thunderbird+Lightning, Evolution, KOrganizer a ďaľšími</li>
+    <?php endif; ?>
     <li><?php echo link_to('Comma Separated Values (.csv)', Candle::addFormat($rawUrl, 'csv'), array('rel' => 'nofollow')); ?>
         - jednoduchý tabuľkový formát podporovaný vačšinou tabuľkových aplikácii ako
         OpenOffice.org Calc, MS Excel, Google Docs, KOffice KSpread a ďaľšie</li>

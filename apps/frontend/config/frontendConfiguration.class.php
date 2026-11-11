@@ -2,7 +2,8 @@
 
 class frontendConfiguration extends sfApplicationConfiguration
 {
-  public function configure()
+  public function initialize()
   {
+    CandleArchive::initialize($this->dispatcher);
   }
 }

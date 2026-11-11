@@ -8,6 +8,7 @@
     <script type="text/javascript">
         var candleFrontendRelativeUrl = "<?php echo url_for('@homepage');?>";
         var candleFrontendAbsoluteUrl = "<?php echo url_for('@homepage', true);?>";
+        var candleSmileImageUrl = <?php echo json_encode(image_path('smile.svg')); ?>;
         var candleFrontendDomain = "<?php echo $sf_request->getHost();?>";
         <?php include_slot('additionalRawJavascript') ?>
     </script>

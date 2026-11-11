@@ -29,8 +29,11 @@ dev:
       delivery_strategy: none
 
 all:
+  request:
+    class: CandleWebRequest
+
   routing:
-    class: sfPatternRouting
+    class: CandlePatternRouting
     param:
       generate_shortest_url:            true
       extra_parameters_as_query_string: true

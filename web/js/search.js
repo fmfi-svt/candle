@@ -9,7 +9,7 @@ function addSearch(url, input, target, error, useEditor) {
     var throbber = $('panel_throbber');
     var oldValue;
     var searchRequest = new Request.HTML({
-        url: candleFrontendAbsoluteUrl+url,
+        url: candleFrontendAbsoluteUrl.replace(/\/$/, '')+url,
         link: 'cancel',
         onSuccess: function(responseTree, responseElements,
             responseHTML, responseJavaScript) {

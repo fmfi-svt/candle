@@ -368,18 +368,21 @@ window.addEvent('domready', function() {
 
   if ($chk(timetable_editor_element) && $chk(timetableEditor_changeLessonsURL)) {
       var saveButton = $('menuSave');
-      saveButton.addEvent('click', function(e){
-          saving = true;
-      });
-      
+      // Archives have a session-backed editor, but no database Save action.
+      if ($chk(saveButton)) {
+          saveButton.addEvent('click', function(e){
+              saving = true;
+          });
+          window.onbeforeunload = function() {
+              if (saving !== true) {
+                  saving = false;
+                  if (modified)
+                      return "Zmeny v rozvrhu ešte neboli uložené. Chcete naozaj odísť?";
+              }
+          };
+      }
+
       var editor = new TimetableEditor(timetable_editor_element, timetableEditor_changeLessonsURL);
-      window.onbeforeunload = function() {
-          if (saving !== true) {
-              saving = false;
-              if (modified)
-                  return "Zmeny v rozvrhu ešte neboli uložené. Chcete naozaj odísť?";
-          }
-      };
 
       editor.addEvent('change', function() {
           tabManager.setState('upravený');

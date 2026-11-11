@@ -30,6 +30,15 @@ class myUser extends sfBasicSecurityUser
     /** @var User $user */
     private $user;
     
+    public function initialize(sfEventDispatcher $dispatcher, sfStorage $storage, $options = array()) {
+        parent::initialize($dispatcher, $storage, $options);
+        if (CandleArchive::isActive()) {
+            $this->setAuthenticated(false);
+            $this->clearCredentials();
+            $this->getAttributeHolder()->removeNamespace('CandleUser');
+        }
+    }
+
     /**
      * Create or return timetable manager
      * @return EditableTimetableManager user's timetable manager
@@ -60,6 +69,9 @@ class myUser extends sfBasicSecurityUser
     * @param Doctrine_Connection $con A Doctrine_Connection object
     */
     public function signIn($user) {
+        if (CandleArchive::isActive()) {
+            throw new sfError404Exception('Login is unavailable in archive mode.');
+        }
         
         $this->setAttribute('user_id', $user->getId(), 'CandleUser');
         $this->setAuthenticated(true);
@@ -103,6 +115,9 @@ class myUser extends sfBasicSecurityUser
      * @throws Exception 
      */
     public function getDBUser() {
+        if (CandleArchive::isActive()) {
+            return null;
+        }
         $id = $this->getAttribute('user_id', null, 'CandleUser');
         if ($id === null) {
             return null;

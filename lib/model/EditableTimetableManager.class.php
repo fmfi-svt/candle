@@ -85,7 +85,7 @@ class EditableTimetableManager {
         $timetable = false;
         if (isset($this->timetables[$index])) {
             $timetable = $this->timetables[$index];
-            if ($timetable->isPersisted()) {
+            if ($timetable->isPersisted() && !CandleArchive::isActive()) {
                 $timetable->delete();
             }
             unset($this->timetables[$index]);

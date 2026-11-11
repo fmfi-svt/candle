@@ -83,7 +83,7 @@ class lessonSearchActions extends sfActions {
         list($day, $time) = Candle::setupRefreshTimeSlot($request, $this->response, $this);
         $sem_start = sfConfig::get('app_semester_start');
         $sem_end = sfConfig::get('app_semester_end');
-        if ($this->queryTime >= $sem_start && $this->queryTime <= $sem_end+86400) {
+        if (!CandleArchive::isActive() && $this->queryTime >= $sem_start && $this->queryTime <= $sem_end+86400) {
             $lessons = Doctrine::getTable('Lesson')
                     ->findIntervals(array(array($day, $time, $time)),
                             /* broadMatch = */ true,

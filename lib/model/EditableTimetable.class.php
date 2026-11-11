@@ -54,6 +54,9 @@ class EditableTimetable {
     }
     
     public function save($userId) {
+        if (CandleArchive::isActive()) {
+            throw new LogicException('Archive timetables cannot be saved to the database.');
+        }
         $connection = Doctrine_Manager::connection();
 
         $connection->beginTransaction();
@@ -93,6 +96,9 @@ class EditableTimetable {
     }
 
     public function delete() {
+        if (CandleArchive::isActive()) {
+            throw new LogicException('Archive timetables cannot be deleted from the database.');
+        }
         Doctrine::getTable('UserTimetable')->deleteById($this->userTimetableId);
     }
     
